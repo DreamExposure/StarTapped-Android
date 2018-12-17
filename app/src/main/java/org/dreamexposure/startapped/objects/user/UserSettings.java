@@ -18,12 +18,28 @@ public class UserSettings {
     private String refreshToken;
     private long tokenExpire;
 
+    //General account settings
+    private String username;
+    private boolean safeSearch;
+    private boolean emailConfirmed;
+    private boolean verified;
+    private String birthday;
+    private String phoneNumber;
+
+
     public UserSettings(JSONObject rawSettings) {
         try {
             privacyAgree = rawSettings.getBoolean("privacy_agree");
             accessToken = rawSettings.getString("access_token");
             refreshToken = rawSettings.getString("refresh_token");
             tokenExpire = rawSettings.getLong("token_expire");
+
+            username = rawSettings.getString("username");
+            safeSearch = rawSettings.getBoolean("safe_search");
+            emailConfirmed = rawSettings.getBoolean("email_confirmed");
+            verified = rawSettings.getBoolean("verified");
+            birthday = rawSettings.getString("birthday");
+            phoneNumber = rawSettings.getString("phone_number");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -34,6 +50,13 @@ public class UserSettings {
         accessToken = "N/a";
         refreshToken = "N/a";
         tokenExpire = 0;
+
+        username = "N/a";
+        safeSearch = false;
+        emailConfirmed = false;
+        verified = false;
+        birthday = "01-01-1970";
+        phoneNumber = "000-000-0000";
     }
 
     //Getters
@@ -53,6 +76,30 @@ public class UserSettings {
         return tokenExpire;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public boolean isSafeSearch() {
+        return safeSearch;
+    }
+
+    public boolean isEmailConfirmed() {
+        return emailConfirmed;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
     //Setters
     public void setPrivacyAgree(boolean _agree) {
         privacyAgree = _agree;
@@ -70,12 +117,43 @@ public class UserSettings {
         tokenExpire = _expire;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setSafeSearch(boolean safeSearch) {
+        this.safeSearch = safeSearch;
+    }
+
+    public void setEmailConfirmed(boolean emailConfirmed) {
+        this.emailConfirmed = emailConfirmed;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public JSONObject asJson() throws JSONException {
         JSONObject json = new JSONObject();
         json.put("privacy_agree", privacyAgree);
         json.put("access_token", accessToken);
         json.put("refresh_token", refreshToken);
         json.put("token_expire", tokenExpire);
+
+        json.put("username", username);
+        json.put("safe_search", safeSearch);
+        json.put("email_confirmed", emailConfirmed);
+        json.put("verified", verified);
+        json.put("birthday", birthday);
+        json.put("phone_number", phoneNumber);
 
         return json;
     }

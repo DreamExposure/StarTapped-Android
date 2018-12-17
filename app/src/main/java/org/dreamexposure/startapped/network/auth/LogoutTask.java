@@ -61,6 +61,13 @@ public class LogoutTask extends AsyncTask<Object, Void, String> {
                 SettingsManager.getManager().getSettings().setRefreshToken("N/a");
                 SettingsManager.getManager().getSettings().setAccessToken("N/a");
                 SettingsManager.getManager().getSettings().setTokenExpire(0);
+
+                SettingsManager.getManager().getSettings().setUsername("N/a");
+                SettingsManager.getManager().getSettings().setSafeSearch(false);
+                SettingsManager.getManager().getSettings().setEmailConfirmed(false);
+                SettingsManager.getManager().getSettings().setVerified(false);
+                SettingsManager.getManager().getSettings().setBirthday("01-01-1970");
+                SettingsManager.getManager().getSettings().setPhoneNumber("000.000.0000");
                 SettingsManager.getManager().saveSettings();
 
                 status = new AuthStatus(true, source).setCode(200).setMessage(responseBody.getString("message"));

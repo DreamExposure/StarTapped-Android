@@ -66,6 +66,21 @@ public class SettingsManager {
         }
     }
 
+    public void updateSettings(JSONObject json) {
+        try {
+            getSettings().setUsername(json.getString("username"));
+            getSettings().setSafeSearch(json.getBoolean("safe_search"));
+            getSettings().setEmailConfirmed(json.getBoolean("email_confirmed"));
+            getSettings().setVerified(json.getBoolean("verified"));
+            getSettings().setPhoneNumber(json.getString("phone_number"));
+            getSettings().setBirthday(json.getString("birthday"));
+
+            saveSettings();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void saveSettings() {
         String FILENAME = "user.prefs";
         try {
