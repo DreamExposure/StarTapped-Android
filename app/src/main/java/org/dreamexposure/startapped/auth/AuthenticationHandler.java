@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import org.dreamexposure.startapped.network.auth.LoginTask;
 import org.dreamexposure.startapped.network.auth.LogoutTask;
+import org.dreamexposure.startapped.network.auth.RegisterTask;
 
 /**
  * @author NovaFox161
@@ -24,6 +25,10 @@ public class AuthenticationHandler {
         if (instance == null)
             instance = new AuthenticationHandler();
         return instance;
+    }
+
+    public void register(String user, String email, String pass, String birthday, String gCap, Activity source) {
+        new RegisterTask().execute(user, email, pass, birthday, gCap, source);
     }
 
     public void login(String email, String password, String gCap, Activity source) {

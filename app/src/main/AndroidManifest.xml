@@ -29,10 +29,11 @@
         </activity>
         <activity android:name=".activities.MainActivity" />
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".activities.auth.LoginActivity"
             android:theme="@style/NoActionBarTheme" />
         <activity android:name=".activities.settings.SettingsActivity" />
-        <activity android:name=".activities.settings.AccountSettingsActivity"></activity>
+        <activity android:name=".activities.settings.AccountSettingsActivity" />
+        <activity android:name=".activities.auth.RegisterActivity"></activity>
     </application>
 
 </manifest>

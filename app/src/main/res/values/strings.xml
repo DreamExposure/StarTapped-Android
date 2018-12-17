@@ -9,4 +9,10 @@
     <string name="data_network"><![CDATA[Data & Network]]></string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_account">Account</string>
+    <string name="off">Off</string>
+    <string name="on">On</string>
+    <string name="use_safe_search">Use Safe Search</string>
+    <string name="register_username">Username</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="or">Or</string>
 </resources>

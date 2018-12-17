@@ -1,5 +1,6 @@
-package org.dreamexposure.startapped.activities;
+package org.dreamexposure.startapped.activities.auth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -37,6 +38,13 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+    }
+
+    @OnClick(R.id.signUpButton)
+    public void handleSignUp() {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @OnClick(R.id.signInButton)
