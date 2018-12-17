@@ -1,11 +1,18 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorDark</item>
-        <item name="colorAccent">@color/colorSecondary</item>
+    <style name="NoActionBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/Primary</item>
+        <item name="colorPrimaryDark">@color/Dark</item>
+        <item name="colorAccent">@color/Secondary</item>
+        <item name="dividerHorizontal">@color/Dark</item>
+        <item name="android:divider">@color/Dark</item>
+        <item name="android:horizontalDivider">@color/Dark</item>
+        <item name="dividerVertical">@color/Dark</item>
+        <item name="android:listDivider">@color/Dark</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
     </style>
 
 </resources>
