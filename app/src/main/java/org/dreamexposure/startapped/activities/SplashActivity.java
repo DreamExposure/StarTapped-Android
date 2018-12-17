@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import org.dreamexposure.startapped.activities.auth.LoginActivity;
-import org.dreamexposure.startapped.network.account.GetAccountTask;
+import org.dreamexposure.startapped.network.auth.TokenReauthTask;
 import org.dreamexposure.startapped.utils.SettingsManager;
 
 /**
@@ -26,15 +26,8 @@ public class SplashActivity extends AppCompatActivity {
 
         //Determine if user is logged in
         if (!SettingsManager.getManager().getSettings().getRefreshToken().equalsIgnoreCase("N/a")) {
-            //TODO: Attempt token reauthorizing...
-
-            //Lets load the settings from database
-            new GetAccountTask().execute(this);
-
-            //Auth successful...
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            //Make sure tokens aren't revoked. This method will handle logic once the request is done
+            new TokenReauthTask().execute(this);
         } else {
             //Send to login/register activity
             Intent intent = new Intent(this, LoginActivity.class);
