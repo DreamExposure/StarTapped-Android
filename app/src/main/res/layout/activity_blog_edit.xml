@@ -2,9 +2,20 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/blog_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".activities.blog.self.BlogEditActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/blog_background_image"
@@ -14,8 +25,8 @@
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:src="@tools:sample/backgrounds/scenic[17]"
         tools:srcCompat="@tools:sample/backgrounds/scenic[17]" />
 
@@ -29,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/blog_background_image"
         tools:src="@tools:sample/avatars"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -46,34 +57,18 @@
         android:textColor="@color/Link"
         android:typeface="sans"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/blog_background_image"
         tools:ignore="KeyboardInaccessibleWidget" />
 
-    <Button
-        android:id="@+id/edit_blog_button"
-        android:layout_width="40dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/Warning"
-        android:fontFamily="sans-serif-condensed"
-        android:text="@string/edit"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/Light"
-        android:textStyle="bold"
-        android:typeface="sans"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
+    <EditText
         android:id="@+id/blog_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/blog_title_placeholder"
+        android:hint="@string/blog_title_placeholder"
+        android:inputType="text"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="@color/Primary"
@@ -81,22 +76,25 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/blog_icon_image" />
+        app:layout_constraintTop_toBottomOf="@+id/blog_icon_image"
+        tools:ignore="Autofill" />
 
-    <TextView
+    <EditText
         android:id="@+id/blog_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/blog_description_placeholder"
+        android:hint="@string/blog_description_placeholder"
+        android:inputType="text"
         android:textAlignment="center"
         android:textColor="@color/Dark"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/blog_title" />
+        app:layout_constraintTop_toBottomOf="@+id/blog_title"
+        tools:ignore="Autofill" />
 
     <TextView
         android:id="@+id/nsfw_badge"
@@ -105,6 +103,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/Danger"
+        android:clickable="true"
         android:fontFamily="sans-serif-condensed"
         android:text="@string/nsfw"
         android:textAlignment="center"
@@ -113,7 +112,8 @@
         android:textStyle="bold"
         android:typeface="sans"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/blog_background_image" />
+        app:layout_constraintTop_toBottomOf="@+id/blog_background_image"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/adult_only_badge"
@@ -122,6 +122,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/Danger"
+        android:clickable="true"
         android:fontFamily="sans-serif-condensed"
         android:text="@string/_18_only"
         android:textAlignment="center"
@@ -129,13 +130,6 @@
         android:textStyle="bold"
         android:typeface="sans"
         app:layout_constraintStart_toEndOf="@+id/nsfw_badge"
-        app:layout_constraintTop_toBottomOf="@+id/blog_background_image" />
-
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/blog_description" />
-
+        app:layout_constraintTop_toBottomOf="@+id/blog_background_image"
+        android:focusable="true" />
 </android.support.constraint.ConstraintLayout>

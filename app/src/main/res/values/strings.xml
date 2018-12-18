@@ -22,4 +22,9 @@
     <string name="blog_background_image">Blog Background Image</string>
     <string name="blog_url_placeholder">blog-url</string>
     <string name="action_new_blog">New Blog</string>
+    <string name="confirm_changes_action">Confirm Changes</string>
+    <string name="cancel_action">Cancel</string>
+    <string name="_18_only">18+ Only</string>
+    <string name="nsfw">NSFW</string>
+    <string name="edit">Edit</string>
 </resources>

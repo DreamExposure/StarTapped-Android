@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        toolbar.setTitle("Dashboard");
+        toolbar.setTitle("Hub");
         setSupportActionBar(toolbar);
     }
 

@@ -1,5 +1,7 @@
 package org.dreamexposure.startapped.activities.blog.self;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -7,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,19 +60,45 @@ public class BlogListSelfActivity extends AppCompatActivity {
                     if (iBlog.getType() == BlogType.PERSONAL) {
                         PersonalBlog blog = new PersonalBlog().fromJson(jBlogs.getJSONObject(i));
 
-                        //Get all the android views and stuffs
+                        //Get all the android views
                         View view = LayoutInflater.from(this).inflate(R.layout.self_blog_container, null);
+                        view.setBackgroundColor(Color.parseColor(blog.getBackgroundColor()));
                         GifImageView background = view.findViewById(R.id.blog_background_image);
                         GifImageView icon = view.findViewById(R.id.blog_icon_image);
                         TextView url = view.findViewById(R.id.blog_url);
                         TextView title = view.findViewById(R.id.blog_title);
                         TextView desc = view.findViewById(R.id.blog_description);
-                        //TODO: Edit button
+                        TextView nsfwBadge = view.findViewById(R.id.nsfw_badge);
+                        TextView adultOnlyBadge = view.findViewById(R.id.adult_only_badge);
+                        Button editBlogButton = view.findViewById(R.id.edit_blog_button);
 
+                        //Setup actual data
                         title.setText(blog.getName());
                         desc.setText(blog.getDescription());
                         url.setText(blog.getBaseUrl());
+                        if (blog.isNsfw())
+                            nsfwBadge.setVisibility(View.VISIBLE);
+                        else
+                            nsfwBadge.setVisibility(View.INVISIBLE);
+                        if (blog.isAllowUnder18())
+                            adultOnlyBadge.setVisibility(View.INVISIBLE);
+                        else
+                            adultOnlyBadge.setVisibility(View.VISIBLE);
+
+                        //Edit Blog button click handler
+                        editBlogButton.setOnClickListener(v -> {
+                            Intent intent = new Intent(this, BlogEditActivity.class);
+                            Bundle b = new Bundle();
+                            b.putString("blog", blog.getBlogId().toString());
+                            intent.putExtras(b);
+                            startActivity(intent);
+                            finish();
+                        });
+
                         //TODO: Add on click listener for url text
+
+
+                        //Download images
                         new DownloadImageTask(background).execute(blog.getBackgroundUrl());
                         new DownloadImageTask(icon).execute(blog.getIconUrl());
 
@@ -85,11 +114,22 @@ public class BlogListSelfActivity extends AppCompatActivity {
                         TextView url = view.findViewById(R.id.blog_url);
                         TextView title = view.findViewById(R.id.blog_title);
                         TextView desc = view.findViewById(R.id.blog_description);
-                        //TODO: Edit Button
+                        TextView nsfwBadge = view.findViewById(R.id.nsfw_badge);
+                        TextView adultOnlyBadge = view.findViewById(R.id.adult_only_badge);
+                        Button editBlogButton = view.findViewById(R.id.edit_blog_button);
+                        //TODO: TODO: Add click listener for edit blog button.
 
                         title.setText(blog.getName());
                         desc.setText(blog.getDescription());
                         url.setText(blog.getBaseUrl());
+                        if (blog.isNsfw())
+                            nsfwBadge.setVisibility(View.VISIBLE);
+                        else
+                            nsfwBadge.setVisibility(View.INVISIBLE);
+                        if (blog.isAllowUnder18())
+                            adultOnlyBadge.setVisibility(View.INVISIBLE);
+                        else
+                            adultOnlyBadge.setVisibility(View.VISIBLE);
                         //TODO: Add on click listener for url text
                         new DownloadImageTask(background).execute(blog.getBackgroundUrl());
                         new DownloadImageTask(icon).execute(blog.getIconUrl());
