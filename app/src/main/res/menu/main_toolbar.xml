@@ -4,6 +4,10 @@
 
     <!-- Settings, should always be in the overflow -->
     <item
+        android:id="@+id/action_blogs"
+        android:title="@string/action_your_blogs"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
         app:showAsAction="never" />

@@ -14,5 +14,12 @@
     <string name="use_safe_search">Use Safe Search</string>
     <string name="register_username">Username</string>
     <string name="sign_up">Sign Up</string>
-    <string name="or">Or</string>
+    <string name="or">OR</string>
+    <string name="action_your_blogs">Your Blogs</string>
+    <string name="blog_description_placeholder">Blog Description</string>
+    <string name="blog_title_placeholder">Blog Title</string>
+    <string name="blog_icon_image">Blog Icon Image</string>
+    <string name="blog_background_image">Blog Background Image</string>
+    <string name="blog_url_placeholder">blog-url</string>
+    <string name="action_new_blog">New Blog</string>
 </resources>

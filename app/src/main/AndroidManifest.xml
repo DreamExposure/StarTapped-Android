@@ -33,7 +33,8 @@
             android:theme="@style/NoActionBarTheme" />
         <activity android:name=".activities.settings.SettingsActivity" />
         <activity android:name=".activities.settings.AccountSettingsActivity" />
-        <activity android:name=".activities.auth.RegisterActivity"></activity>
+        <activity android:name=".activities.auth.RegisterActivity" />
+        <activity android:name=".activities.blog.self.BlogListSelfActivity" />
     </application>
 
 </manifest>

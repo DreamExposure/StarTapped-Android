@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.dreamexposure.startapped.R;
+import org.dreamexposure.startapped.activities.blog.self.BlogListSelfActivity;
 import org.dreamexposure.startapped.activities.settings.SettingsActivity;
 
 import butterknife.BindView;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        toolbar.setTitle("Dashboard");
         setSupportActionBar(toolbar);
     }
 
@@ -37,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_blogs:
+                startActivity(new Intent(this, BlogListSelfActivity.class));
+                return true;
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
