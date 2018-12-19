@@ -4,10 +4,12 @@
 
     <item
         android:id="@+id/action-confirm_edit"
+        android:icon="@drawable/check_256px"
         android:title="@string/confirm_changes_action"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_cancel"
+        android:icon="@drawable/close_256px"
         android:title="@string/cancel_action"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 </menu>
