@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Light">
+
+    <TextView
+        android:id="@+id/blog_url_latest"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/Dark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="blog-url-latest" />
+
+    <TextView
+        android:id="@+id/blog_url_second"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/Dark"
+        app:layout_constraintStart_toEndOf="@+id/reblog_icon"
+        app:layout_constraintTop_toTopOf="@+id/reblog_icon"
+        tools:text="blog-url" />
+
+    <ImageView
+        android:id="@+id/reblog_icon"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:contentDescription="@string/reblog_icon"
+        android:scaleType="fitXY"
+        app:layout_constraintStart_toEndOf="@+id/blog_url_latest"
+        app:layout_constraintTop_toTopOf="@+id/blog_url_latest"
+        app:srcCompat="@drawable/reblog_256px" />
+
+    <TextView
+        android:id="@+id/post_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/Primary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reblog_icon"
+        tools:text="Post Title" />
+
+    <TextView
+        android:id="@+id/post_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:textAlignment="textStart"
+        android:textColor="@color/Dark"
+        android:textSize="14sp"
+        android:typeface="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/post_title"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Purus viverra accumsan in nisl nisi. Integer quis auctor elit sed vulputate mi sit amet mauris. Convallis aenean et tortor at risus viverra adipiscing at. Neque viverra justo nec ultrices dui sapien eget mi." />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/post_text" />
+
+    <TextView
+        android:id="@+id/source"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:textAlignment="textStart"
+        android:textColor="@color/Dark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider3"
+        tools:text="Source: blog-url" />
+
+    <ImageView
+        android:id="@+id/bookmark_post"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:clickable="true"
+        android:contentDescription="@string/bookmark_post"
+        android:focusable="true"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider3"
+        app:srcCompat="@drawable/bookmark_256px" />
+
+    <ImageView
+        android:id="@+id/reblog_post"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/reblog_post"
+        app:layout_constraintEnd_toStartOf="@+id/bookmark_post"
+        app:layout_constraintTop_toBottomOf="@+id/divider3"
+        app:srcCompat="@drawable/reblog_256px" />
+
+    <Space
+        android:id="@+id/space"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/source" />
+</android.support.constraint.ConstraintLayout>

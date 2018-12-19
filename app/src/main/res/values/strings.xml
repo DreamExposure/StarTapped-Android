@@ -31,4 +31,10 @@
     <string name="go_back">Go back</string>
     <string name="nsfw_content_block_text">This blog is marked as NSFW. Please disable safe search to view this blog.</string>
     <string name="change_settings">Change Settings</string>
+    <string name="post_image">Post Image</string>
+    <string name="post_video">Post Video</string>
+    <string name="reblog_icon">reblog_icon</string>
+    <string name="post_source">Source: %s</string>
+    <string name="bookmark_post">Bookmark Post</string>
+    <string name="reblog_post">Reblog Post</string>
 </resources>
