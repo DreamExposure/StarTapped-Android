@@ -16,15 +16,19 @@
     <string name="sign_up">Sign Up</string>
     <string name="or">OR</string>
     <string name="action_your_blogs">Your Blogs</string>
-    <string name="blog_description_placeholder">Blog Description</string>
-    <string name="blog_title_placeholder">Blog Title</string>
     <string name="blog_icon_image">Blog Icon Image</string>
     <string name="blog_background_image">Blog Background Image</string>
-    <string name="blog_url_placeholder">blog-url</string>
     <string name="action_new_blog">New Blog</string>
     <string name="confirm_changes_action">Confirm Changes</string>
     <string name="cancel_action">Cancel</string>
     <string name="_18_only">18+ Only</string>
     <string name="nsfw">NSFW</string>
     <string name="edit">Edit</string>
+    <string name="blog_description_hint">Blog description</string>
+    <string name="blog_title_hint">Blog Title</string>
+    <string name="content_alert">Content Alert</string>
+    <string name="adult_only_content_alert_text">This blog does not allow minors to view. Please come back when you are at least 18 years old.</string>
+    <string name="go_back">Go back</string>
+    <string name="nsfw_content_block_text">This blog is marked as NSFW. Please disable safe search to view this blog.</string>
+    <string name="change_settings">Change Settings</string>
 </resources>

@@ -39,32 +39,16 @@
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:clickable="true"
+        android:clickable="false"
         android:fontFamily="sans-serif-condensed"
         android:textAlignment="textStart"
         android:textColor="@color/Link"
         android:typeface="sans"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="KeyboardInaccessibleWidget"
         tools:text="blog-url" />
-
-    <Button
-        android:id="@+id/edit_blog_button"
-        android:layout_width="40dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/Warning"
-        android:fontFamily="sans-serif-condensed"
-        android:text="@string/edit"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/Light"
-        android:textStyle="bold"
-        android:typeface="sans"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/blog_title"
@@ -81,7 +65,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/blog_icon_image"
-        tools:text="blog title" />
+        tools:text="Blog Title" />
 
     <TextView
         android:id="@+id/blog_description"

@@ -52,13 +52,13 @@
         android:layout_marginTop="8dp"
         android:clickable="true"
         android:fontFamily="sans-serif-condensed"
-        android:text="@string/blog_url_placeholder"
         android:textAlignment="textStart"
         android:textColor="@color/Link"
         android:typeface="sans"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/blog_background_image"
-        tools:ignore="KeyboardInaccessibleWidget" />
+        tools:ignore="KeyboardInaccessibleWidget"
+        tools:text="blog-url" />
 
     <EditText
         android:id="@+id/blog_title"
@@ -67,7 +67,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:hint="@string/blog_title_placeholder"
+        android:hint="@string/blog_title_hint"
         android:inputType="text"
         android:textAlignment="center"
         android:textAllCaps="true"
@@ -86,7 +86,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:hint="@string/blog_description_placeholder"
+        android:hint="@string/blog_description_hint"
         android:inputType="text"
         android:textAlignment="center"
         android:textColor="@color/Dark"
