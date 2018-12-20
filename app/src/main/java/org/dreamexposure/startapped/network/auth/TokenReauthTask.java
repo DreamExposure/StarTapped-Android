@@ -7,7 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.dreamexposure.startapped.StarTappedApp;
-import org.dreamexposure.startapped.activities.MainActivity;
+import org.dreamexposure.startapped.activities.HubActivity;
 import org.dreamexposure.startapped.activities.auth.LoginActivity;
 import org.dreamexposure.startapped.conf.GlobalConst;
 import org.dreamexposure.startapped.network.account.GetAccountTask;
@@ -88,7 +88,7 @@ public class TokenReauthTask extends AsyncTask<Object, Void, String> {
     @Override
     protected void onPostExecute(String response) {
         if (status.isSuccess()) {
-            Intent intent = new Intent(status.getSource(), MainActivity.class);
+            Intent intent = new Intent(status.getSource(), HubActivity.class);
             status.getSource().startActivity(intent);
             status.getSource().finish();
 

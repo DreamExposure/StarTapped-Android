@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.HubActivity" />
         <activity
             android:name=".activities.auth.LoginActivity"
             android:theme="@style/NoActionBarTheme" />
@@ -36,7 +36,7 @@
         <activity android:name=".activities.auth.RegisterActivity" />
         <activity android:name=".activities.blog.self.BlogListSelfActivity" />
         <activity android:name=".activities.blog.self.BlogEditActivity" />
-        <activity android:name=".activities.blog.ViewBlogActivity"></activity>
+        <activity android:name=".activities.blog.ViewBlogActivity" />
     </application>
 
 </manifest>
