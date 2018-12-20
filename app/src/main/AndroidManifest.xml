@@ -37,6 +37,7 @@
         <activity android:name=".activities.blog.self.BlogListSelfActivity" />
         <activity android:name=".activities.blog.self.BlogEditActivity" />
         <activity android:name=".activities.blog.ViewBlogActivity" />
+        <activity android:name=".activities.blog.self.BlogCreateActivity"></activity>
     </application>
 
 </manifest>

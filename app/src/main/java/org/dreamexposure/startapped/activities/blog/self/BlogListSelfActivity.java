@@ -142,7 +142,9 @@ public class BlogListSelfActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_create_blog:
-                //TODO: Send to create Blog activity
+                Intent intent = new Intent(this, BlogCreateActivity.class);
+                startActivity(intent);
+                finish();
                 return true;
             default:
                 // If we got here, the user's action was not recognized.

@@ -37,4 +37,7 @@
     <string name="post_source">Source: %s</string>
     <string name="bookmark_post">Bookmark Post</string>
     <string name="reblog_post">Reblog Post</string>
+    <string name="create_blog_url_hint">Blog URL   (ex. my-cool-blog.startapped.com)</string>
+    <string name="blog_create_url_input_hint">my-cool-blog</string>
+    <string name="create_exclaim_button">Create!</string>
 </resources>
