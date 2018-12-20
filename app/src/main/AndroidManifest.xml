@@ -3,10 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.dreamexposure.startapped">
 
+    <!--Already allowed-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!--Need to request-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".StarTappedApp"
@@ -37,7 +42,7 @@
         <activity android:name=".activities.blog.self.BlogListSelfActivity" />
         <activity android:name=".activities.blog.self.BlogEditActivity" />
         <activity android:name=".activities.blog.ViewBlogActivity" />
-        <activity android:name=".activities.blog.self.BlogCreateActivity"></activity>
+        <activity android:name=".activities.blog.self.BlogCreateActivity" />
     </application>
 
 </manifest>

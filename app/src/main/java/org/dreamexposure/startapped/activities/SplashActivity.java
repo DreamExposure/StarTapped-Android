@@ -17,6 +17,7 @@ import org.dreamexposure.startapped.utils.SettingsManager;
  * Contact: nova@dreamexposure.org
  */
 public class SplashActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
