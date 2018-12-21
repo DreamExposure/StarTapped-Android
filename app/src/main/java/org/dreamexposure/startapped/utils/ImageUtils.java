@@ -1,10 +1,14 @@
 package org.dreamexposure.startapped.utils;
 
 import android.graphics.Movie;
+import android.util.Base64;
 import android.util.Log;
 
 import org.dreamexposure.startapped.StarTappedApp;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -72,5 +76,30 @@ public class ImageUtils {
             Log.e(StarTappedApp.TAG, "Gif from Gallery lookup failed", ie);
         }
         return false;
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public static JSONObject fileToBase64(File file) {
+        try {
+            FileInputStream fileInputStreamReader = new FileInputStream(file);
+            InputStream is = new BufferedInputStream(new FileInputStream(file));
+            byte[] bytes = new byte[(int) file.length()];
+            fileInputStreamReader.read(bytes);
+            String base = Base64.encodeToString(bytes, Base64.NO_WRAP);
+            String mimeType = URLConnection.guessContentTypeFromStream(is);
+
+            JSONObject json = new JSONObject();
+            json.put("type", mimeType);
+            json.put("encoded", base);
+
+            //Close streams
+            fileInputStreamReader.close();
+            is.close();
+
+            return json;
+        } catch (IOException | JSONException e) {
+            Log.e(StarTappedApp.TAG, "Failed to encode file to Base64", e);
+        }
+        return null;
     }
 }

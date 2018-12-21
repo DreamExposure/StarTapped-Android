@@ -41,6 +41,8 @@ public class SettingsManager {
 
     //Getters
     public UserSettings getSettings() {
+        if (settings == null)
+            readSettings();
         return settings;
     }
 

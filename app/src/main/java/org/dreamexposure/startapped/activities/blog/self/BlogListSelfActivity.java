@@ -53,10 +53,20 @@ public class BlogListSelfActivity extends AppCompatActivity {
         new GetBlogsSelfTask().execute(this, this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Load blogs...
+        new GetBlogsSelfTask().execute(this, this);
+    }
+
     @SuppressLint("SetTextI18n")
     public void callbackOnBlogGet(NetworkCallStatus status) {
         try {
             if (status.isSuccess()) {
+                //Remove old stuffs
+                rootLayout.removeAllViews();
+
                 JSONArray jBlogs = status.getBody().getJSONArray("blogs");
 
                 for (int i = 0; i < status.getBody().getInt("count"); i++) {
@@ -107,7 +117,6 @@ public class BlogListSelfActivity extends AppCompatActivity {
                         b.putString("blog", blog.getBlogId().toString());
                         intent.putExtras(b);
                         startActivity(intent);
-                        finish();
                     });
 
                     //Blog url click handler
@@ -144,7 +153,6 @@ public class BlogListSelfActivity extends AppCompatActivity {
             case R.id.action_create_blog:
                 Intent intent = new Intent(this, BlogCreateActivity.class);
                 startActivity(intent);
-                finish();
                 return true;
             default:
                 // If we got here, the user's action was not recognized.

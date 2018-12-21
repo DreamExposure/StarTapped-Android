@@ -1,21 +1,21 @@
 package org.dreamexposure.startapped.network.blog.self;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
 import org.dreamexposure.startapped.StarTappedApp;
-import org.dreamexposure.startapped.activities.blog.self.BlogListSelfActivity;
 import org.dreamexposure.startapped.conf.GlobalConst;
 import org.dreamexposure.startapped.objects.blog.IBlog;
 import org.dreamexposure.startapped.objects.blog.PersonalBlog;
 import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
+import org.dreamexposure.startapped.utils.ImageUtils;
 import org.dreamexposure.startapped.utils.SettingsManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 
 import okhttp3.OkHttpClient;
@@ -31,8 +31,16 @@ import okhttp3.Response;
  * Company Website: https://www.dreamexposure.org
  * Contact: nova@dreamexposure.org
  */
+@SuppressWarnings("ConstantConditions")
 public class UpdateBlogTask extends AsyncTask<Object, Void, String> {
     private NetworkCallStatus status;
+    private String backgroundPath;
+    private String iconPath;
+
+    public UpdateBlogTask(String _iconPath, String _backgroundPath) {
+        iconPath = _iconPath;
+        backgroundPath = _backgroundPath;
+    }
 
 
     @Override
@@ -54,7 +62,13 @@ public class UpdateBlogTask extends AsyncTask<Object, Void, String> {
                 requestJson.put("display_age", ((PersonalBlog) blog).isDisplayAge());
             }
 
-            //TODO: Support background and icon image
+            //background and icon image
+            if (backgroundPath.length() > 0 && !backgroundPath.isEmpty()) {
+                requestJson.put("background_image", ImageUtils.fileToBase64(new File(backgroundPath)));
+            }
+            if (iconPath.length() > 0 && !iconPath.isEmpty()) {
+                requestJson.put("icon_image", ImageUtils.fileToBase64(new File(iconPath)));
+            }
 
 
             RequestBody requestBody = RequestBody.create(GlobalConst.JSON, requestJson.toString());
@@ -99,8 +113,6 @@ public class UpdateBlogTask extends AsyncTask<Object, Void, String> {
     @Override
     protected void onPostExecute(String response) {
         if (status.isSuccess()) {
-            Intent intent = new Intent(status.getSource(), BlogListSelfActivity.class);
-            status.getSource().startActivity(intent);
             status.getSource().finish();
         } else {
             Toast.makeText(status.getSource().getApplicationContext(), status.getMessage(), Toast.LENGTH_LONG).show();

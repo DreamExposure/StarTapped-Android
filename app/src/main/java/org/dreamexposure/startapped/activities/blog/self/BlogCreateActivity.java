@@ -1,6 +1,5 @@
 package org.dreamexposure.startapped.activities.blog.self;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -59,8 +58,6 @@ public class BlogCreateActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_cancel:
                 //Cancel creation, go past Go, do not collect $200. Go to self blog list.
-                Intent intent = new Intent(this, BlogListSelfActivity.class);
-                startActivity(intent);
                 finish();
             default:
                 // If we got here, the user's action was not recognized.

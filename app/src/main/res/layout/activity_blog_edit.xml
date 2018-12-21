@@ -21,6 +21,7 @@
         android:id="@+id/blog_background_image"
         android:layout_width="0dp"
         android:layout_height="200dp"
+        android:clickable="false"
         android:contentDescription="@string/blog_background_image"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,6 +36,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="150dp"
+        android:clickable="false"
         android:contentDescription="@string/blog_icon_image"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,13 +46,31 @@
         tools:src="@tools:sample/avatars"
         tools:srcCompat="@tools:sample/avatars" />
 
+    <Button
+        android:id="@+id/change_background_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/edit_256px"
+        app:layout_constraintEnd_toEndOf="@+id/blog_background_image"
+        app:layout_constraintTop_toTopOf="@+id/blog_background_image" />
+
+    <Button
+        android:id="@+id/change_icon_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/edit_256px"
+        app:layout_constraintEnd_toEndOf="@+id/blog_icon_image"
+        app:layout_constraintTop_toTopOf="@+id/blog_icon_image" />
+
     <TextView
         android:id="@+id/blog_url"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:clickable="true"
+        android:clickable="false"
         android:fontFamily="sans-serif-condensed"
         android:textAlignment="textStart"
         android:textColor="@color/Link"
@@ -83,11 +103,12 @@
         android:id="@+id/blog_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="19dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:hint="@string/blog_description_hint"
-        android:inputType="text"
+        android:inputType="text|textMultiLine"
+        android:singleLine="false"
         android:textAlignment="center"
         android:textColor="@color/Dark"
         android:textSize="16sp"
@@ -103,7 +124,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/Danger"
-        android:clickable="true"
+        android:clickable="false"
         android:fontFamily="sans-serif-condensed"
         android:text="@string/nsfw"
         android:textAlignment="center"
@@ -112,8 +133,7 @@
         android:textStyle="bold"
         android:typeface="sans"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/blog_background_image"
-        android:focusable="true" />
+        app:layout_constraintTop_toBottomOf="@+id/blog_background_image" />
 
     <TextView
         android:id="@+id/adult_only_badge"
@@ -122,7 +142,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/Danger"
-        android:clickable="true"
+        android:clickable="false"
         android:fontFamily="sans-serif-condensed"
         android:text="@string/_18_only"
         android:textAlignment="center"
@@ -130,6 +150,60 @@
         android:textStyle="bold"
         android:typeface="sans"
         app:layout_constraintStart_toEndOf="@+id/nsfw_badge"
-        app:layout_constraintTop_toBottomOf="@+id/blog_background_image"
-        android:focusable="true" />
+        app:layout_constraintTop_toBottomOf="@+id/blog_background_image" />
+
+    <TextView
+        android:id="@+id/age_badge"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/Danger"
+        android:clickable="false"
+        android:fontFamily="sans-serif-condensed"
+        android:textAlignment="center"
+        android:textColor="@color/Light"
+        android:typeface="sans"
+        app:layout_constraintEnd_toEndOf="@+id/blog_icon_image"
+        app:layout_constraintTop_toTopOf="@+id/blog_icon_image"
+        tools:text="18" />
+
+    <CheckBox
+        android:id="@+id/nsfw_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/is_nsfw"
+        android:textAlignment="viewStart"
+        android:textColor="@color/Dark"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/blog_description" />
+
+    <CheckBox
+        android:id="@+id/allow_minors_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/allow_minors_to_view"
+        android:textAlignment="viewStart"
+        android:textColor="@color/Dark"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nsfw_check_box" />
+
+    <CheckBox
+        android:id="@+id/display_age_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/display_your_age"
+        android:textAlignment="viewStart"
+        android:textColor="@color/Dark"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/allow_minors_check_box" />
 </android.support.constraint.ConstraintLayout>

@@ -1,13 +1,11 @@
 package org.dreamexposure.startapped.network.blog.self;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
 import org.dreamexposure.startapped.StarTappedApp;
-import org.dreamexposure.startapped.activities.blog.self.BlogListSelfActivity;
 import org.dreamexposure.startapped.conf.GlobalConst;
 import org.dreamexposure.startapped.enums.blog.BlogType;
 import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
@@ -91,8 +89,6 @@ public class CreateBlogTask extends AsyncTask<Object, Void, String> {
     protected void onPostExecute(String response) {
         if (status.isSuccess()) {
             Toast.makeText(status.getSource().getApplicationContext(), status.getMessage(), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(status.getSource(), BlogListSelfActivity.class);
-            status.getSource().startActivity(intent);
             status.getSource().finish();
         } else {
             Toast.makeText(status.getSource().getApplicationContext(), status.getMessage(), Toast.LENGTH_LONG).show();

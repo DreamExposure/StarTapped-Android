@@ -40,4 +40,10 @@
     <string name="create_blog_url_hint">Blog URL   (ex. my-cool-blog.startapped.com)</string>
     <string name="blog_create_url_input_hint">my-cool-blog</string>
     <string name="create_exclaim_button">Create!</string>
+    <string name="display_your_age">Display your Age</string>
+    <string name="allow_minors_to_view">Allow minors to view</string>
+    <string name="is_nsfw">is NSFW</string>
+    <string name="error_over_10mb">Files cannot be larger than 10MB</string>
+    <string name="pick_icon_image">Pick Icon Image</string>
+    <string name="pick_background_image">Pick Background Image</string>
 </resources>
