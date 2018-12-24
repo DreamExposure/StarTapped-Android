@@ -1,12 +1,12 @@
 package org.dreamexposure.startapped.network.account;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.dreamexposure.startapped.StarTappedApp;
+import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.conf.GlobalConst;
+import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 import org.dreamexposure.startapped.utils.SettingsManager;
 import org.json.JSONException;
@@ -27,14 +27,16 @@ import okhttp3.Response;
  * Company Website: https://www.dreamexposure.org
  * Contact: nova@dreamexposure.org
  */
-public class UpdateAccountTask extends AsyncTask<Object, Void, String> {
-    private NetworkCallStatus status;
+public class UpdateAccountTask extends AsyncTask<Object, Void, NetworkCallStatus> {
+    private TaskCallback callback;
+
+    public UpdateAccountTask(TaskCallback _callback) {
+        callback = _callback;
+    }
 
 
     @Override
-    protected String doInBackground(Object... objects) {
-        Activity source = (Activity) objects[0];
-
+    protected NetworkCallStatus doInBackground(Object... objects) {
         OkHttpClient client = new OkHttpClient();
 
         try {
@@ -59,38 +61,29 @@ public class UpdateAccountTask extends AsyncTask<Object, Void, String> {
 
             if (response.code() == 200) {
                 //Success
-                status = new NetworkCallStatus(true, source)
+                return new NetworkCallStatus(true, TaskType.ACCOUNT_UPDATE)
                         .setCode(response.code())
                         .setMessage(responseBody.getString("message"))
                         .setBody(responseBody);
-                return status.getMessage();
             } else {
                 Log.d(StarTappedApp.TAG, response.code() + " " + responseBody.toString());
 
-                status = new NetworkCallStatus(false, source)
+                return new NetworkCallStatus(false, TaskType.ACCOUNT_UPDATE)
                         .setCode(response.code())
                         .setMessage(responseBody.getString("message"))
                         .setBody(responseBody);
-                return status.getMessage();
             }
         } catch (JSONException | IOException | IllegalStateException e) {
             e.printStackTrace();
-            status = new NetworkCallStatus(false, source)
+            return new NetworkCallStatus(false, TaskType.ACCOUNT_UPDATE)
                     .setCode(1)
                     .setMessage("Error");
-            return status.getMessage();
         }
     }
 
     @Override
-    protected void onPostExecute(String response) {
-        if (status.isSuccess()) {
-            //Save settings
-            SettingsManager.getManager().saveSettings();
-            Toast.makeText(status.getSource(), status.getMessage(), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(status.getSource().getApplicationContext(), status.getMessage(), Toast.LENGTH_LONG).show();
-        }
+    protected void onPostExecute(NetworkCallStatus response) {
+        callback.taskCallback(response);
     }
 }
 

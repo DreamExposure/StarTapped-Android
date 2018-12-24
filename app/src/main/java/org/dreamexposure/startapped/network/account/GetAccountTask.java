@@ -1,12 +1,12 @@
 package org.dreamexposure.startapped.network.account;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
 import org.dreamexposure.startapped.StarTappedApp;
 import org.dreamexposure.startapped.conf.GlobalConst;
+import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 import org.dreamexposure.startapped.utils.SettingsManager;
 import org.json.JSONException;
@@ -27,14 +27,10 @@ import okhttp3.Response;
  * Company Website: https://www.dreamexposure.org
  * Contact: nova@dreamexposure.org
  */
-public class GetAccountTask extends AsyncTask<Object, Void, String> {
-    private NetworkCallStatus status;
-
+public class GetAccountTask extends AsyncTask<Object, Void, NetworkCallStatus> {
 
     @Override
-    protected String doInBackground(Object... objects) {
-        Activity source = (Activity) objects[0];
-
+    protected NetworkCallStatus doInBackground(Object... objects) {
         OkHttpClient client = new OkHttpClient();
 
         try {
@@ -56,41 +52,38 @@ public class GetAccountTask extends AsyncTask<Object, Void, String> {
 
             if (response.code() == 200) {
                 //Success
-                status = new NetworkCallStatus(true, source)
+                return new NetworkCallStatus(true, TaskType.ACCOUNT_GET_SELF)
                         .setCode(response.code())
                         .setMessage(responseBody.getString("message"))
                         .setBody(responseBody);
-                return status.getMessage();
             } else {
                 Log.d(StarTappedApp.TAG, response.code() + " " + responseBody.toString());
 
-                status = new NetworkCallStatus(false, source)
+                return new NetworkCallStatus(false, TaskType.ACCOUNT_GET_SELF)
                         .setCode(response.code())
                         .setMessage(responseBody.getString("message"))
                         .setBody(responseBody);
-                return status.getMessage();
             }
         } catch (JSONException | IOException | IllegalStateException e) {
             e.printStackTrace();
-            status = new NetworkCallStatus(false, source)
+            return new NetworkCallStatus(false, TaskType.ACCOUNT_GET_SELF)
                     .setCode(1)
                     .setMessage("Error");
-            return status.getMessage();
         }
     }
 
     @Override
-    protected void onPostExecute(String response) {
-        if (status.isSuccess()) {
+    protected void onPostExecute(NetworkCallStatus response) {
+        if (response.isSuccess()) {
             //Save settings
             try {
-                SettingsManager.getManager().updateSettings(status.getBody().getJSONObject("account"));
+                SettingsManager.getManager().updateSettings(response.getBody().getJSONObject("account"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             //Don't show toast, its a background process.
         } else {
-            Toast.makeText(status.getSource().getApplicationContext(), status.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(StarTappedApp.getContext(), response.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -7,15 +7,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.dreamexposure.startapped.R;
+import org.dreamexposure.startapped.activities.auth.LoginActivity;
+import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.auth.AuthenticationHandler;
+import org.dreamexposure.startapped.enums.TaskType;
+import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity implements TaskCallback {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -60,5 +65,18 @@ public class SettingsActivity extends AppCompatActivity {
     @OnClick(R.id.account_settings_button)
     void setAccountSettingsButton() {
         startActivity(new Intent(this, AccountSettingsActivity.class));
+    }
+
+    @Override
+    public void taskCallback(NetworkCallStatus status) {
+        if (status.getType() == TaskType.AUTH_LOGOUT) {
+            if (status.isSuccess()) {
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

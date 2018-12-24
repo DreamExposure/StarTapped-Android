@@ -1,15 +1,13 @@
 package org.dreamexposure.startapped.network.auth;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.dreamexposure.startapped.StarTappedApp;
-import org.dreamexposure.startapped.activities.auth.LoginActivity;
+import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.conf.GlobalConst;
-import org.dreamexposure.startapped.objects.auth.AuthStatus;
+import org.dreamexposure.startapped.enums.TaskType;
+import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 import org.dreamexposure.startapped.utils.SettingsManager;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,14 +27,15 @@ import okhttp3.Response;
  * Company Website: https://www.dreamexposure.org
  * Contact: nova@dreamexposure.org
  */
-public class LogoutTask extends AsyncTask<Object, Void, String> {
-    private AuthStatus status;
+public class LogoutTask extends AsyncTask<Object, Void, NetworkCallStatus> {
+    private TaskCallback callback;
 
+    public LogoutTask(TaskCallback _callback) {
+        callback = _callback;
+    }
 
     @Override
-    protected String doInBackground(Object... objects) {
-        Activity source = (Activity) objects[0];
-
+    protected NetworkCallStatus doInBackground(Object... objects) {
         OkHttpClient client = new OkHttpClient();
 
         try {
@@ -70,29 +69,20 @@ public class LogoutTask extends AsyncTask<Object, Void, String> {
                 SettingsManager.getManager().getSettings().setPhoneNumber("000.000.0000");
                 SettingsManager.getManager().saveSettings();
 
-                status = new AuthStatus(true, source).setCode(200).setMessage(responseBody.getString("message"));
-                return status.getMessage();
+                return new NetworkCallStatus(true, TaskType.AUTH_LOGOUT).setCode(200).setMessage(responseBody.getString("message"));
             } else {
                 Log.d(StarTappedApp.TAG, response.code() + " " + responseBody.toString());
 
-                status = new AuthStatus(false, source).setCode(response.code()).setMessage(responseBody.getString("message"));
-                return status.getMessage();
+                return new NetworkCallStatus(false, TaskType.AUTH_LOGOUT).setCode(response.code()).setMessage(responseBody.getString("message"));
             }
         } catch (JSONException | IOException | IllegalStateException e) {
             e.printStackTrace();
-            status = new AuthStatus(false, source).setCode(1).setMessage("Error");
-            return status.getMessage();
+            return new NetworkCallStatus(false, TaskType.AUTH_LOGOUT).setCode(1).setMessage("Error");
         }
     }
 
     @Override
-    protected void onPostExecute(String response) {
-        if (status.isSuccess()) {
-            Intent intent = new Intent(status.getSource(), LoginActivity.class);
-            status.getSource().startActivity(intent);
-            status.getSource().finish();
-        } else {
-            Toast.makeText(status.getSource().getApplicationContext(), status.getMessage(), Toast.LENGTH_LONG).show();
-        }
+    protected void onPostExecute(NetworkCallStatus response) {
+        callback.taskCallback(response);
     }
 }

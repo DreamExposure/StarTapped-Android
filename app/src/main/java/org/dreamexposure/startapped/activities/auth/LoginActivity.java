@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -14,13 +15,18 @@ import com.google.android.gms.safetynet.SafetyNet;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.StarTappedApp;
+import org.dreamexposure.startapped.activities.HubActivity;
+import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.auth.AuthenticationHandler;
+import org.dreamexposure.startapped.enums.TaskType;
+import org.dreamexposure.startapped.network.account.GetAccountTask;
+import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements TaskCallback {
 
     //Sign in objects
     @BindView(R.id.signInEmail)
@@ -83,8 +89,19 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    @OnClick(R.id.signUpButton)
-    public void launchSignUp() {
-        //TODO: Launch sign up activity.
+    @Override
+    public void taskCallback(NetworkCallStatus status) {
+        if (status.getType() == TaskType.AUTH_LOGIN) {
+            if (status.isSuccess()) {
+                Intent intent = new Intent(this, HubActivity.class);
+                startActivity(intent);
+                finish();
+
+                //Get the account settings
+                new GetAccountTask().execute();
+            } else {
+                Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

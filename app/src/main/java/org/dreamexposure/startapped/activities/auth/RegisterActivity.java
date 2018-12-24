@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
@@ -16,7 +17,12 @@ import com.google.android.gms.safetynet.SafetyNet;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.StarTappedApp;
+import org.dreamexposure.startapped.activities.HubActivity;
+import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.auth.AuthenticationHandler;
+import org.dreamexposure.startapped.enums.TaskType;
+import org.dreamexposure.startapped.network.account.GetAccountTask;
+import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 
 import java.util.Calendar;
 
@@ -24,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements TaskCallback {
 
     @BindView(R.id.signUpUsername)
     EditText signUpUsername;
@@ -78,9 +84,6 @@ public class RegisterActivity extends AppCompatActivity {
                         String pass = signUpPassword.getText().toString();
                         String birthday = getBirthday();
 
-                        //signInEmail.getRootView().setSelected(false);
-                        //signInPassword.getRootView().setSelected(false);
-
                         //Async login...
                         AuthenticationHandler.get().register(user, email, pass, birthday, response.getTokenResult(), this);
                     }
@@ -127,5 +130,21 @@ public class RegisterActivity extends AppCompatActivity {
 
     private String getBirthday() {
         return year + "-" + month + "-" + day;
+    }
+
+    @Override
+    public void taskCallback(NetworkCallStatus status) {
+        if (status.getType() == TaskType.AUTH_REGISTER) {
+            if (status.isSuccess()) {
+                Intent intent = new Intent(this, HubActivity.class);
+                startActivity(intent);
+                finish();
+
+                //Get the account settings
+                new GetAccountTask().execute();
+            } else {
+                Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

@@ -1,12 +1,12 @@
 package org.dreamexposure.startapped.network.relation;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.dreamexposure.startapped.StarTappedApp;
+import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.conf.GlobalConst;
+import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 import org.dreamexposure.startapped.utils.SettingsManager;
 import org.json.JSONException;
@@ -28,14 +28,15 @@ import okhttp3.Response;
  * Contact: nova@dreamexposure.org
  */
 @SuppressWarnings("ConstantConditions")
-public class GetFollowingBlogsTask extends AsyncTask<Object, Void, String> {
-    private NetworkCallStatus status;
+public class GetFollowingBlogsTask extends AsyncTask<Object, Void, NetworkCallStatus> {
+    private TaskCallback callback;
 
-    //TODO: ADD CALLBACK FUNCTION REQUIREMENT!!!!!!!!1
+    public GetFollowingBlogsTask(TaskCallback _callback) {
+        callback = _callback;
+    }
+
     @Override
-    protected String doInBackground(Object... objects) {
-        Activity source = (Activity) objects[0];
-
+    protected NetworkCallStatus doInBackground(Object... objects) {
         OkHttpClient client = new OkHttpClient();
 
         try {
@@ -58,36 +59,28 @@ public class GetFollowingBlogsTask extends AsyncTask<Object, Void, String> {
 
             if (response.code() == 200) {
                 //Success
-                status = new NetworkCallStatus(true, source)
+                return new NetworkCallStatus(true, TaskType.FOLLOW_GET_FOLLOWING)
                         .setCode(response.code())
                         .setMessage(responseBody.getString("message"))
                         .setBody(responseBody);
-                return status.getMessage();
             } else {
                 Log.d(StarTappedApp.TAG, response.code() + " " + responseBody.toString());
 
-                status = new NetworkCallStatus(false, source)
+                return new NetworkCallStatus(false, TaskType.FOLLOW_GET_FOLLOWING)
                         .setCode(response.code())
                         .setMessage(responseBody.getString("message"))
                         .setBody(responseBody);
-                return status.getMessage();
             }
         } catch (JSONException | IOException | IllegalStateException e) {
             e.printStackTrace();
-            status = new NetworkCallStatus(false, source)
+            return new NetworkCallStatus(false, TaskType.FOLLOW_GET_FOLLOWING)
                     .setCode(1)
                     .setMessage("Error");
-            return status.getMessage();
         }
     }
 
     @Override
-    protected void onPostExecute(String response) {
-        if (status.isSuccess()) {
-            Toast.makeText(status.getSource().getApplicationContext(), status.getMessage(), Toast.LENGTH_SHORT).show();
-            status.getSource().finish();
-        } else {
-            Toast.makeText(status.getSource().getApplicationContext(), status.getMessage(), Toast.LENGTH_LONG).show();
-        }
+    protected void onPostExecute(NetworkCallStatus response) {
+        callback.taskCallback(response);
     }
 }

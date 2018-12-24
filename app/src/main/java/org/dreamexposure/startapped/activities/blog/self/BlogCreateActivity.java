@@ -8,15 +8,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.dreamexposure.startapped.R;
+import org.dreamexposure.startapped.async.TaskCallback;
+import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.network.blog.self.CreateBlogTask;
+import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BlogCreateActivity extends AppCompatActivity {
+public class BlogCreateActivity extends AppCompatActivity implements TaskCallback {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -44,7 +48,7 @@ public class BlogCreateActivity extends AppCompatActivity {
     public void handleCreateClick() {
         //handle creation task..
         if (!TextUtils.isEmpty(blogUrl.getText().toString().trim()))
-            new CreateBlogTask().execute(this, blogUrl.getText().toString());
+            new CreateBlogTask(this, blogUrl.getText().toString().trim()).execute();
     }
 
     @Override
@@ -63,6 +67,18 @@ public class BlogCreateActivity extends AppCompatActivity {
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void taskCallback(NetworkCallStatus status) {
+        if (status.getType() == TaskType.BLOG_CREATE) {
+            if (status.isSuccess()) {
+                Toast.makeText(this, status.getMessage(), Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

@@ -17,10 +17,12 @@ import android.widget.Toast;
 import com.felipecsl.gifimageview.library.GifImageView;
 
 import org.dreamexposure.startapped.R;
+import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.async.load.LoadImageFromFileTask;
+import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.enums.blog.BlogType;
-import org.dreamexposure.startapped.network.blog.self.GetBlogSelfForEditTask;
 import org.dreamexposure.startapped.network.blog.self.UpdateBlogTask;
+import org.dreamexposure.startapped.network.blog.view.GetBlogViewTask;
 import org.dreamexposure.startapped.network.download.DownloadImageTask;
 import org.dreamexposure.startapped.objects.blog.Blog;
 import org.dreamexposure.startapped.objects.blog.GroupBlog;
@@ -42,7 +44,7 @@ import butterknife.OnClick;
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
 
-public class BlogEditActivity extends AppCompatActivity {
+public class BlogEditActivity extends AppCompatActivity implements TaskCallback {
     private final int BACKGROUND_CODE = 1122;
     private final int ICON_CODE = 2211;
 
@@ -98,7 +100,7 @@ public class BlogEditActivity extends AppCompatActivity {
         UUID blogId = UUID.fromString(b.getString("blog"));
 
         //Get the very latest from backend.
-        new GetBlogSelfForEditTask().execute(this, this, blogId);
+        new GetBlogViewTask(this, blogId).execute();
     }
 
     @SuppressLint("SetTextI18n")
@@ -175,7 +177,7 @@ public class BlogEditActivity extends AppCompatActivity {
 
                     //TODO: Handle blog background color
 
-                    new UpdateBlogTask(iconImagePath, backgroundImagePath).execute(this, pBlogFromResponse);
+                    new UpdateBlogTask(this, iconImagePath, backgroundImagePath).execute(pBlogFromResponse);
                 } else {
                     gBlogFromResponse.setName(title.getText().toString().trim());
                     gBlogFromResponse.setDescription(desc.getText().toString().trim());
@@ -184,7 +186,7 @@ public class BlogEditActivity extends AppCompatActivity {
 
                     //TODO: Handle blog background color
 
-                    new UpdateBlogTask(iconImagePath, backgroundImagePath).execute(this, gBlogFromResponse);
+                    new UpdateBlogTask(this, iconImagePath, backgroundImagePath).execute(gBlogFromResponse);
                 }
                 return true;
             case R.id.action_cancel:
@@ -293,6 +295,19 @@ public class BlogEditActivity extends AppCompatActivity {
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void taskCallback(NetworkCallStatus status) {
+        if (status.getType() == TaskType.BLOG_GET_VIEW) {
+            callbackOnBlogGet(status);
+        } else if (status.getType() == TaskType.BLOG_UPDATE_SELF) {
+            if (status.isSuccess()) {
+                finish();
+            } else {
+                Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

@@ -1,7 +1,6 @@
 package org.dreamexposure.startapped.objects.network;
 
-import android.app.Activity;
-
+import org.dreamexposure.startapped.enums.TaskType;
 import org.json.JSONObject;
 
 /**
@@ -14,15 +13,15 @@ import org.json.JSONObject;
  */
 public class NetworkCallStatus {
     private final boolean success;
-    private final Activity source;
+    private final TaskType type;
     private int code;
     private String message;
 
     private JSONObject body;
 
-    public NetworkCallStatus(boolean _success, Activity _source) {
+    public NetworkCallStatus(boolean _success, TaskType _type) {
         success = _success;
-        source = _source;
+        type = _type;
     }
 
     //Getters
@@ -31,8 +30,8 @@ public class NetworkCallStatus {
         return success;
     }
 
-    public Activity getSource() {
-        return source;
+    public TaskType getType() {
+        return type;
     }
 
     public int getCode() {

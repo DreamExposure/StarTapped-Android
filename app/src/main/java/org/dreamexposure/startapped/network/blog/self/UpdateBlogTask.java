@@ -1,12 +1,12 @@
 package org.dreamexposure.startapped.network.blog.self;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.dreamexposure.startapped.StarTappedApp;
+import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.conf.GlobalConst;
+import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.objects.blog.IBlog;
 import org.dreamexposure.startapped.objects.blog.PersonalBlog;
 import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
@@ -32,21 +32,20 @@ import okhttp3.Response;
  * Contact: nova@dreamexposure.org
  */
 @SuppressWarnings("ConstantConditions")
-public class UpdateBlogTask extends AsyncTask<Object, Void, String> {
-    private NetworkCallStatus status;
+public class UpdateBlogTask extends AsyncTask<IBlog, Void, NetworkCallStatus> {
+    private TaskCallback callback;
     private String backgroundPath;
     private String iconPath;
 
-    public UpdateBlogTask(String _iconPath, String _backgroundPath) {
+    public UpdateBlogTask(TaskCallback _callback, String _iconPath, String _backgroundPath) {
+        callback = _callback;
         iconPath = _iconPath;
         backgroundPath = _backgroundPath;
     }
 
-
     @Override
-    protected String doInBackground(Object... objects) {
-        Activity source = (Activity) objects[0];
-        IBlog blog = (IBlog) objects[1];
+    protected NetworkCallStatus doInBackground(IBlog... params) {
+        IBlog blog = params[0];
 
         OkHttpClient client = new OkHttpClient();
 
@@ -87,35 +86,28 @@ public class UpdateBlogTask extends AsyncTask<Object, Void, String> {
 
             if (response.code() == 200) {
                 //Success
-                status = new NetworkCallStatus(true, source)
+                return new NetworkCallStatus(true, TaskType.BLOG_UPDATE_SELF)
                         .setCode(response.code())
                         .setMessage(responseBody.getString("message"))
                         .setBody(responseBody);
-                return status.getMessage();
             } else {
                 Log.d(StarTappedApp.TAG, response.code() + " " + responseBody.toString());
 
-                status = new NetworkCallStatus(false, source)
+                return new NetworkCallStatus(false, TaskType.BLOG_UPDATE_SELF)
                         .setCode(response.code())
                         .setMessage(responseBody.getString("message"))
                         .setBody(responseBody);
-                return status.getMessage();
             }
         } catch (JSONException | IOException | IllegalStateException e) {
             e.printStackTrace();
-            status = new NetworkCallStatus(false, source)
+            return new NetworkCallStatus(false, TaskType.BLOG_UPDATE_SELF)
                     .setCode(1)
                     .setMessage("Error");
-            return status.getMessage();
         }
     }
 
     @Override
-    protected void onPostExecute(String response) {
-        if (status.isSuccess()) {
-            status.getSource().finish();
-        } else {
-            Toast.makeText(status.getSource().getApplicationContext(), status.getMessage(), Toast.LENGTH_LONG).show();
-        }
+    protected void onPostExecute(NetworkCallStatus response) {
+        callback.taskCallback(response);
     }
 }

@@ -4,16 +4,20 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import org.dreamexposure.startapped.R;
+import org.dreamexposure.startapped.async.TaskCallback;
+import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.network.account.UpdateAccountTask;
+import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 import org.dreamexposure.startapped.utils.SettingsManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 
-public class AccountSettingsActivity extends AppCompatActivity {
+public class AccountSettingsActivity extends AppCompatActivity implements TaskCallback {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -40,7 +44,20 @@ public class AccountSettingsActivity extends AppCompatActivity {
     protected void onSafeSearchChange() {
         if (safeSearchSwitch.isPressed()) {
             SettingsManager.getManager().getSettings().setSafeSearch(safeSearchSwitch.isChecked());
-            new UpdateAccountTask().execute(this);
+            new UpdateAccountTask(this).execute();
+        }
+    }
+
+    @Override
+    public void taskCallback(NetworkCallStatus status) {
+        if (status.getType() == TaskType.ACCOUNT_UPDATE) {
+            if (status.isSuccess()) {
+                //Save settings
+                SettingsManager.getManager().saveSettings();
+                Toast.makeText(this, status.getMessage(), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

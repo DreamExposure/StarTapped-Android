@@ -1,16 +1,13 @@
 package org.dreamexposure.startapped.network.auth;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.dreamexposure.startapped.StarTappedApp;
-import org.dreamexposure.startapped.activities.HubActivity;
+import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.conf.GlobalConst;
-import org.dreamexposure.startapped.network.account.GetAccountTask;
-import org.dreamexposure.startapped.objects.auth.AuthStatus;
+import org.dreamexposure.startapped.enums.TaskType;
+import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 import org.dreamexposure.startapped.utils.SettingsManager;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,18 +27,21 @@ import okhttp3.Response;
  * Company Website: https://www.dreamexposure.org
  * Contact: nova@dreamexposure.org
  */
-public class RegisterTask extends AsyncTask<Object, Void, String> {
-    private AuthStatus status;
+public class RegisterTask extends AsyncTask<String, Void, NetworkCallStatus> {
+    private TaskCallback callback;
+
+    public RegisterTask(TaskCallback _callback) {
+        callback = _callback;
+    }
 
 
     @Override
-    protected String doInBackground(Object... objects) {
-        String user = (String) objects[0];
-        String email = (String) objects[1];
-        String pass = (String) objects[2];
-        String birthday = (String) objects[3];
-        String gcap = (String) objects[4];
-        Activity source = (Activity) objects[5];
+    protected NetworkCallStatus doInBackground(String... params) {
+        String user = params[0];
+        String email = params[1];
+        String pass = params[2];
+        String birthday = params[3];
+        String gcap = params[4];
 
         OkHttpClient client = new OkHttpClient();
 
@@ -73,32 +73,20 @@ public class RegisterTask extends AsyncTask<Object, Void, String> {
                 SettingsManager.getManager().getSettings().setTokenExpire(credentials.getLong("expire"));
                 SettingsManager.getManager().saveSettings();
 
-                status = new AuthStatus(true, source).setCode(200).setMessage(responseBody.getString("message"));
-                return status.getMessage();
+                return new NetworkCallStatus(true, TaskType.AUTH_REGISTER).setCode(200).setMessage(responseBody.getString("message"));
             } else {
                 Log.d(StarTappedApp.TAG, response.code() + " " + responseBody.toString());
 
-                status = new AuthStatus(false, source).setCode(response.code()).setMessage(responseBody.getString("message"));
-                return status.getMessage();
+                return new NetworkCallStatus(false, TaskType.AUTH_REGISTER).setCode(response.code()).setMessage(responseBody.getString("message"));
             }
         } catch (JSONException | IOException | IllegalStateException e) {
             e.printStackTrace();
-            status = new AuthStatus(false, source).setCode(1).setMessage("Error");
-            return status.getMessage();
+            return new NetworkCallStatus(false, TaskType.AUTH_REGISTER).setCode(1).setMessage("Error");
         }
     }
 
     @Override
-    protected void onPostExecute(String response) {
-        if (status.isSuccess()) {
-            Intent intent = new Intent(status.getSource(), HubActivity.class);
-            status.getSource().startActivity(intent);
-            status.getSource().finish();
-
-            //Get the account settings
-            new GetAccountTask().execute(status.getSource());
-        } else {
-            Toast.makeText(status.getSource().getApplicationContext(), status.getMessage(), Toast.LENGTH_LONG).show();
-        }
+    protected void onPostExecute(NetworkCallStatus response) {
+        callback.taskCallback(response);
     }
 }

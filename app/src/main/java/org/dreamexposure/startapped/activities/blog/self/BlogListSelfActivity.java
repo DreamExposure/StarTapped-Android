@@ -19,6 +19,8 @@ import com.felipecsl.gifimageview.library.GifImageView;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.activities.blog.ViewBlogActivity;
+import org.dreamexposure.startapped.async.TaskCallback;
+import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.enums.blog.BlogType;
 import org.dreamexposure.startapped.network.blog.self.GetBlogsSelfTask;
 import org.dreamexposure.startapped.network.download.DownloadImageTask;
@@ -34,7 +36,7 @@ import org.json.JSONException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BlogListSelfActivity extends AppCompatActivity {
+public class BlogListSelfActivity extends AppCompatActivity implements TaskCallback {
     @BindView(R.id.self_blog_linear)
     LinearLayout rootLayout;
     @BindView(R.id.toolbar)
@@ -50,14 +52,14 @@ public class BlogListSelfActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Load blogs...
-        new GetBlogsSelfTask().execute(this, this);
+        new GetBlogsSelfTask(this).execute();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         //Load blogs...
-        new GetBlogsSelfTask().execute(this, this);
+        new GetBlogsSelfTask(this).execute();
     }
 
     @SuppressLint("SetTextI18n")
@@ -159,6 +161,13 @@ public class BlogListSelfActivity extends AppCompatActivity {
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
 
+        }
+    }
+
+    @Override
+    public void taskCallback(NetworkCallStatus status) {
+        if (status.getType() == TaskType.BLOG_GET_SELF_ALL) {
+            callbackOnBlogGet(status);
         }
     }
 }

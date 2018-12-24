@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.felipecsl.gifimageview.library.GifImageView;
 
 import org.dreamexposure.startapped.R;
+import org.dreamexposure.startapped.async.TaskCallback;
+import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.enums.blog.BlogType;
 import org.dreamexposure.startapped.network.account.blog.GetAccountForBlogViewTask;
 import org.dreamexposure.startapped.network.blog.view.GetBlogViewTask;
@@ -33,7 +35,7 @@ import java.util.UUID;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ViewBlogActivity extends AppCompatActivity {
+public class ViewBlogActivity extends AppCompatActivity implements TaskCallback {
     //TODO: Handle getting more posts when "buffer" runs out.
 
     @BindView(R.id.blog_view_linear)
@@ -56,8 +58,8 @@ public class ViewBlogActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         UUID blogId = UUID.fromString(b.getString("blog"));
 
-        //TODO: Get blog...
-        new GetBlogViewTask().execute(this, this, blogId);
+        //Get blog...
+        new GetBlogViewTask(this, blogId).execute();
     }
 
     @SuppressLint("SetTextI18n")
@@ -132,7 +134,7 @@ public class ViewBlogActivity extends AppCompatActivity {
                         PersonalBlog pBlog = new PersonalBlog().fromJson(status.getBody().getJSONObject("blog"));
                         if (pBlog.isDisplayAge()) {
                             //Get blog owner's age...
-                            new GetAccountForBlogViewTask().execute(this, this, pBlog.getOwnerId());
+                            new GetAccountForBlogViewTask(this, pBlog.getOwnerId()).execute();
                             ageBadge.setVisibility(View.VISIBLE);
                         } else {
                             ageBadge.setVisibility(View.INVISIBLE);
@@ -170,5 +172,11 @@ public class ViewBlogActivity extends AppCompatActivity {
 
     public void getPostsCallback(NetworkCallStatus status) {
         //TODO: Display posts
+    }
+
+    @Override
+    public void taskCallback(NetworkCallStatus status) {
+        if (status.getType() == TaskType.ACCOUNT_GET_BLOG) getBlogOwnerAge(status);
+        else if (status.getType() == TaskType.BLOG_GET_VIEW) getBlogCallback(status);
     }
 }

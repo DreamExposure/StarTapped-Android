@@ -1,17 +1,13 @@
 package org.dreamexposure.startapped.network.auth;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.dreamexposure.startapped.StarTappedApp;
-import org.dreamexposure.startapped.activities.HubActivity;
-import org.dreamexposure.startapped.activities.auth.LoginActivity;
+import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.conf.GlobalConst;
-import org.dreamexposure.startapped.network.account.GetAccountTask;
-import org.dreamexposure.startapped.objects.auth.AuthStatus;
+import org.dreamexposure.startapped.enums.TaskType;
+import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 import org.dreamexposure.startapped.utils.SettingsManager;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,14 +27,15 @@ import okhttp3.Response;
  * Company Website: https://www.dreamexposure.org
  * Contact: nova@dreamexposure.org
  */
-public class TokenReauthTask extends AsyncTask<Object, Void, String> {
-    private AuthStatus status;
+public class TokenReauthTask extends AsyncTask<Object, Void, NetworkCallStatus> {
+    private TaskCallback callback;
 
+    public TokenReauthTask(TaskCallback _callback) {
+        callback = _callback;
+    }
 
     @Override
-    protected String doInBackground(Object... objects) {
-        Activity source = (Activity) objects[0];
-
+    protected NetworkCallStatus doInBackground(Object... objects) {
         OkHttpClient client = new OkHttpClient();
 
         try {
@@ -66,52 +63,23 @@ public class TokenReauthTask extends AsyncTask<Object, Void, String> {
                 SettingsManager.getManager().getSettings().setTokenExpire(credentials.getLong("expire"));
                 SettingsManager.getManager().saveSettings();
 
-                status = new AuthStatus(true, source).setCode(200).setMessage(responseBody.getString("message"));
-                return status.getMessage();
+                return new NetworkCallStatus(true, TaskType.AUTH_TOKEN_REAUTH).setCode(200).setMessage(responseBody.getString("message"));
             } else if (response.code() == 201) {
                 //Success, credentials do not need to be refreshed..
-                status = new AuthStatus(true, source).setCode(201).setMessage(responseBody.getString("message"));
-                return status.getMessage();
+                return new NetworkCallStatus(true, TaskType.AUTH_TOKEN_REAUTH).setCode(201).setMessage(responseBody.getString("message"));
             } else {
                 Log.d(StarTappedApp.TAG, response.code() + " " + responseBody.toString());
 
-                status = new AuthStatus(false, source).setCode(response.code()).setMessage(responseBody.getString("message"));
-                return status.getMessage();
+                return new NetworkCallStatus(false, TaskType.AUTH_TOKEN_REAUTH).setCode(response.code()).setMessage(responseBody.getString("message"));
             }
         } catch (JSONException | IOException | IllegalStateException e) {
             e.printStackTrace();
-            status = new AuthStatus(false, source).setCode(1).setMessage("Error");
-            return status.getMessage();
+            return new NetworkCallStatus(false, TaskType.AUTH_TOKEN_REAUTH).setCode(1).setMessage("Error");
         }
     }
 
     @Override
-    protected void onPostExecute(String response) {
-        if (status.isSuccess()) {
-            Intent intent = new Intent(status.getSource(), HubActivity.class);
-            status.getSource().startActivity(intent);
-            status.getSource().finish();
-
-            //Get the account settings
-            new GetAccountTask().execute(status.getSource());
-        } else {
-            Toast.makeText(status.getSource().getApplicationContext(), status.getMessage(), Toast.LENGTH_LONG).show();
-            //Go back to login page, and invalidate saved credentials...
-            SettingsManager.getManager().getSettings().setRefreshToken("N/a");
-            SettingsManager.getManager().getSettings().setAccessToken("N/a");
-            SettingsManager.getManager().getSettings().setTokenExpire(0);
-
-            SettingsManager.getManager().getSettings().setUsername("N/a");
-            SettingsManager.getManager().getSettings().setSafeSearch(false);
-            SettingsManager.getManager().getSettings().setEmailConfirmed(false);
-            SettingsManager.getManager().getSettings().setVerified(false);
-            SettingsManager.getManager().getSettings().setBirthday("01-01-1970");
-            SettingsManager.getManager().getSettings().setPhoneNumber("000.000.0000");
-            SettingsManager.getManager().saveSettings();
-
-            Intent intent = new Intent(status.getSource(), LoginActivity.class);
-            status.getSource().startActivity(intent);
-            status.getSource().finish();
-        }
+    protected void onPostExecute(NetworkCallStatus response) {
+        callback.taskCallback(response);
     }
 }
