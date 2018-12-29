@@ -1,6 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
+    <LinearLayout
+        android:id="@+id/content_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/Light"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="horizontal">
+
+        <com.felipecsl.gifimageview.library.GifImageView
+            android:id="@+id/blog_icon_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:clickable="false"
+            android:contentDescription="@string/blog_icon_image"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/avatars"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/blog_url"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="8sp"
+            android:singleLine="true"
+            android:textAllCaps="false"
+            android:textColor="@color/Dark"
+            android:textSize="18sp"
+            android:typeface="sans"
+            tools:text="blog-url" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        android:clickable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/content_container" />
 </android.support.constraint.ConstraintLayout>

@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.dreamexposure.startapped.R;
+import org.dreamexposure.startapped.activities.account.ViewFollowingActivity;
 import org.dreamexposure.startapped.activities.blog.self.BlogListSelfActivity;
 import org.dreamexposure.startapped.activities.settings.SettingsActivity;
 import org.dreamexposure.startapped.utils.RequestPermissionHandler;
@@ -71,7 +72,7 @@ public class HubActivity extends AppCompatActivity {
                 startActivity(new Intent(this, BlogListSelfActivity.class));
                 return true;
             case R.id.action_following:
-                //TODO: Start view following activity
+                startActivity(new Intent(this, ViewFollowingActivity.class));
                 return true;
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
