@@ -46,4 +46,5 @@
     <string name="error_over_10mb">Files cannot be larger than 10MB</string>
     <string name="pick_icon_image">Pick Icon Image</string>
     <string name="pick_background_image">Pick Background Image</string>
+    <string name="action_following">Following</string>
 </resources>

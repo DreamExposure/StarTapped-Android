@@ -8,6 +8,10 @@
         android:title="@string/action_your_blogs"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_following"
+        android:title="@string/action_following"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
         app:showAsAction="never" />

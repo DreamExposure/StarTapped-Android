@@ -70,6 +70,9 @@ public class HubActivity extends AppCompatActivity {
             case R.id.action_blogs:
                 startActivity(new Intent(this, BlogListSelfActivity.class));
                 return true;
+            case R.id.action_following:
+                //TODO: Start view following activity
+                return true;
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
