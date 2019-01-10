@@ -3,7 +3,9 @@ package org.dreamexposure.startapped.async.load;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.AsyncTask;
+import android.support.media.ExifInterface;
 import android.util.Log;
 
 import com.felipecsl.gifimageview.library.GifImageView;
@@ -25,18 +27,21 @@ import java.io.InputStream;
  */
 public class LoadImageFromFileTask extends AsyncTask<String, Void, Boolean> {
     @SuppressLint("StaticFieldLeak")
-    private GifImageView bmImage;
+    private GifImageView imageView;
     private byte[] bytes = null;
     private Bitmap bitmap = null;
 
-    public LoadImageFromFileTask(GifImageView bmImage) {
-        this.bmImage = bmImage;
+    private String filePath;
+
+    public LoadImageFromFileTask(GifImageView imageView) {
+        this.imageView = imageView;
     }
 
     protected Boolean doInBackground(String... filePaths) {
-        if (ImageUtils.isGifFromGallery(filePaths[0])) {
+        filePath = filePaths[0];
+        if (ImageUtils.isGifFromGallery(filePath)) {
             try {
-                InputStream in = new FileInputStream(new File(filePaths[0]));
+                InputStream in = new FileInputStream(new File(filePath));
                 bytes = IOUtils.toByteArray(in);
 
                 return true;
@@ -46,7 +51,7 @@ public class LoadImageFromFileTask extends AsyncTask<String, Void, Boolean> {
             }
         } else {
             try {
-                InputStream in = new FileInputStream(new File(filePaths[0]));
+                InputStream in = new FileInputStream(new File(filePath));
                 bitmap = BitmapFactory.decodeStream(in);
                 return true;
             } catch (Exception e) {
@@ -58,18 +63,36 @@ public class LoadImageFromFileTask extends AsyncTask<String, Void, Boolean> {
     }
 
     protected void onPostExecute(Boolean result) {
-        bmImage.setImageBitmap(null);
+        imageView.setImageBitmap(null);
 
         if (bitmap != null) {
-            if (bmImage.isAnimating())
-                bmImage.clear();
-            bmImage.setImageBitmap(bitmap);
+            if (imageView.isAnimating())
+                imageView.clear();
+
+            //Fix rotation...
+            try {
+                ExifInterface exif = new ExifInterface(new File(filePath).getAbsolutePath());
+                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+                Log.d("EXIF", "Exif: " + orientation);
+                Matrix matrix = new Matrix();
+                if (orientation == 6)
+                    matrix.postRotate(90);
+                else if (orientation == 3)
+                    matrix.postRotate(180);
+                else if (orientation == 8)
+                    matrix.postRotate(270);
+
+                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            } catch (Exception ignore) {
+            }
+
+            imageView.setImageBitmap(bitmap);
         }
         if (bytes != null) {
-            bmImage.setBytes(bytes);
-            bmImage.gotoFrame(0);
-            if (!bmImage.isAnimating())
-                bmImage.startAnimation();
+            imageView.setBytes(bytes);
+            imageView.gotoFrame(0);
+            if (!imageView.isAnimating())
+                imageView.startAnimation();
         }
     }
 }

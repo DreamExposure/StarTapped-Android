@@ -1,7 +1,7 @@
 package org.dreamexposure.startapped.objects.post;
 
 import org.dreamexposure.startapped.enums.post.PostType;
-import org.dreamexposure.startapped.objects.blog.Blog;
+import org.dreamexposure.startapped.objects.blog.IBlog;
 import org.dreamexposure.startapped.objects.user.Account;
 import org.json.JSONObject;
 
@@ -22,7 +22,7 @@ public interface IPost {
 
     Account getCreator();
 
-    Blog getOriginBlog();
+    IBlog getOriginBlog();
 
     String getPermaLink();
 
@@ -38,12 +38,14 @@ public interface IPost {
 
     boolean isNsfw();
 
+    UUID getParent();
+
     //Setters
     void setId(UUID _id);
 
     void setCreator(Account _creator);
 
-    void setOriginBlog(Blog _blog);
+    void setOriginBlog(IBlog _blog);
 
     void setPermaLink(String _permaLink);
 
@@ -58,6 +60,8 @@ public interface IPost {
     void setBody(String _body);
 
     void setNsfw(boolean _nsfw);
+
+    void setParent(UUID _parent);
 
     JSONObject toJson();
 

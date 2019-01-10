@@ -3,6 +3,8 @@ package org.dreamexposure.startapped.objects.user;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.UUID;
+
 /**
  * @author NovaFox161
  * Date Created: 12/16/2018
@@ -19,6 +21,7 @@ public class UserSettings {
     private long tokenExpire;
 
     //General account settings
+    private UUID accountId;
     private String username;
     private boolean safeSearch;
     private boolean emailConfirmed;
@@ -34,6 +37,7 @@ public class UserSettings {
             refreshToken = rawSettings.getString("refresh_token");
             tokenExpire = rawSettings.getLong("token_expire");
 
+            accountId = UUID.fromString(rawSettings.getString("account_id"));
             username = rawSettings.getString("username");
             safeSearch = rawSettings.getBoolean("safe_search");
             emailConfirmed = rawSettings.getBoolean("email_confirmed");
@@ -51,6 +55,7 @@ public class UserSettings {
         refreshToken = "N/a";
         tokenExpire = 0;
 
+        accountId = UUID.randomUUID(); //Doesn't really matter, it will get overwritten with a real ID once logged in.
         username = "N/a";
         safeSearch = false;
         emailConfirmed = false;
@@ -74,6 +79,10 @@ public class UserSettings {
 
     public long getTokenExpire() {
         return tokenExpire;
+    }
+
+    public UUID getAccountId() {
+        return accountId;
     }
 
     public String getUsername() {
@@ -117,6 +126,10 @@ public class UserSettings {
         tokenExpire = _expire;
     }
 
+    public void setAccountId(UUID _id) {
+        accountId = _id;
+    }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -148,6 +161,7 @@ public class UserSettings {
         json.put("refresh_token", refreshToken);
         json.put("token_expire", tokenExpire);
 
+        json.put("account_id", accountId.toString());
         json.put("username", username);
         json.put("safe_search", safeSearch);
         json.put("email_confirmed", emailConfirmed);

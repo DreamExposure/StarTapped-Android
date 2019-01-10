@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -66,6 +67,7 @@ public class LoginTask extends AsyncTask<String, Void, NetworkCallStatus> {
                 SettingsManager.getManager().getSettings().setAccessToken(credentials.getString("access_token"));
                 SettingsManager.getManager().getSettings().setRefreshToken(credentials.getString("refresh_token"));
                 SettingsManager.getManager().getSettings().setTokenExpire(credentials.getLong("expire"));
+                SettingsManager.getManager().getSettings().setAccountId(UUID.fromString(credentials.getString("account_id")));
                 SettingsManager.getManager().saveSettings();
 
                 return new NetworkCallStatus(true, TaskType.AUTH_LOGIN).setCode(200).setMessage(responseBody.getString("message"));

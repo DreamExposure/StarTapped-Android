@@ -2,6 +2,7 @@ package org.dreamexposure.startapped.objects.post;
 
 import org.dreamexposure.startapped.enums.post.PostType;
 import org.dreamexposure.startapped.objects.blog.Blog;
+import org.dreamexposure.startapped.objects.blog.IBlog;
 import org.dreamexposure.startapped.objects.user.Account;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +20,7 @@ import java.util.UUID;
 public class Post implements IPost {
     private UUID id;
     private Account creator;
-    private Blog originBlog;
+    private IBlog originBlog;
     private String permaLink;
     private String fullUrl;
     private PostType type;
@@ -29,6 +30,8 @@ public class Post implements IPost {
     private String body;
 
     private boolean nsfw;
+
+    private UUID parent;
 
 
     //Getters
@@ -40,7 +43,7 @@ public class Post implements IPost {
         return creator;
     }
 
-    public Blog getOriginBlog() {
+    public IBlog getOriginBlog() {
         return originBlog;
     }
 
@@ -73,6 +76,11 @@ public class Post implements IPost {
         return nsfw;
     }
 
+    @Override
+    public UUID getParent() {
+        return parent;
+    }
+
     //Setters
     public void setId(UUID _id) {
         id = _id;
@@ -82,7 +90,7 @@ public class Post implements IPost {
         creator = _creator;
     }
 
-    public void setOriginBlog(Blog _blog) {
+    public void setOriginBlog(IBlog _blog) {
         originBlog = _blog;
     }
 
@@ -112,6 +120,11 @@ public class Post implements IPost {
 
     public void setNsfw(boolean _nsfw) {
         nsfw = _nsfw;
+    }
+
+    @Override
+    public void setParent(UUID _parent) {
+        parent = _parent;
     }
 
     public JSONObject toJson() {

@@ -1,6 +1,7 @@
 package org.dreamexposure.startapped;
 
 import android.app.Application;
+import android.content.ClipboardManager;
 import android.content.Context;
 
 /**
@@ -14,6 +15,8 @@ import android.content.Context;
 public class StarTappedApp extends Application {
     private static Application sApplication;
     private static StarTappedApp instance;
+
+    private ClipboardManager clipboard;
 
     public static final String TAG = StarTappedApp.class.getSimpleName();
 
@@ -34,5 +37,10 @@ public class StarTappedApp extends Application {
         super.onCreate();
         sApplication = this;
         instance = this;
+        clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+    }
+
+    public ClipboardManager getClipboard() {
+        return clipboard;
     }
 }

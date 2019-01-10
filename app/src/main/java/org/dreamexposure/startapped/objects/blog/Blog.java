@@ -1,9 +1,12 @@
 package org.dreamexposure.startapped.objects.blog;
 
 import org.dreamexposure.startapped.enums.blog.BlogType;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -31,6 +34,8 @@ public class Blog implements IBlog {
 
     private boolean allowUnder18;
     private boolean nsfw;
+
+    private List<UUID> followers = new ArrayList<>();
 
     //Getters
     public UUID getBlogId() {
@@ -75,6 +80,10 @@ public class Blog implements IBlog {
 
     public boolean isNsfw() {
         return nsfw;
+    }
+
+    public List<UUID> getFollowers() {
+        return followers;
     }
 
     //Setters
@@ -136,6 +145,13 @@ public class Blog implements IBlog {
             json.put("background_url", backgroundUrl);
             json.put("allow_under_18", allowUnder18);
             json.put("nsfw", nsfw);
+
+            JSONArray jFollowers = new JSONArray();
+            for (UUID u : followers) {
+                jFollowers.put(u.toString());
+            }
+
+            json.put("followers", jFollowers);
         } catch (JSONException ignore) {
         }
         return json;
@@ -154,6 +170,11 @@ public class Blog implements IBlog {
             backgroundUrl = json.getString("background_url");
             allowUnder18 = json.getBoolean("allow_under_18");
             nsfw = json.getBoolean("nsfw");
+
+            JSONArray jFollowers = json.getJSONArray("followers");
+            for (int i = 0; i < jFollowers.length(); i++) {
+                followers.add(UUID.fromString(jFollowers.getString(i)));
+            }
         } catch (JSONException ignore) {
         }
         return this;

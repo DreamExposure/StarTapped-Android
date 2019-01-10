@@ -15,4 +15,32 @@
         <item name="android:windowBackground">@drawable/splash</item>
     </style>
 
+    <style name="FullScreenDialogStyle" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorPrimaryDark">@color/Dark</item>
+        <item name="colorPrimary">@color/Primary</item>
+
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">false</item>
+
+        <item name="android:windowBackground">@color/White</item>
+    </style>
+
+    <style name="FullScreenDialogStyle.Transparent" parent="FullScreenDialogStyle">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="DialogAnimation" />
+
+    <style name="DialogAnimation.Slide">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
+    </style>
+
+    <style name="MySeekBar" parent="Widget.AppCompat.SeekBar">
+        <item name="android:progressBackgroundTint">@color/Dark</item>
+        <item name="android:progressTint">@color/Primary</item>
+        <item name="android:colorControlActivated">@color/Light</item>
+        <item name="android:colorControlNormal">@color/Primary</item>
+    </style>
 </resources>

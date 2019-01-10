@@ -23,12 +23,12 @@ import java.io.InputStream;
  */
 public class DownloadImageTask extends AsyncTask<String, Void, Boolean> {
     @SuppressLint("StaticFieldLeak")
-    private GifImageView bmImage;
+    private GifImageView imageView;
     private byte[] bytes = null;
     private Bitmap bitmap = null;
 
-    public DownloadImageTask(GifImageView bmImage) {
-        this.bmImage = bmImage;
+    public DownloadImageTask(GifImageView imageView) {
+        this.imageView = imageView;
     }
 
     protected Boolean doInBackground(String... urls) {
@@ -46,6 +46,7 @@ public class DownloadImageTask extends AsyncTask<String, Void, Boolean> {
             try {
                 InputStream in = new java.net.URL(urls[0]).openStream();
                 bitmap = BitmapFactory.decodeStream(in);
+
                 return true;
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
@@ -56,12 +57,18 @@ public class DownloadImageTask extends AsyncTask<String, Void, Boolean> {
     }
 
     protected void onPostExecute(Boolean result) {
+        imageView.setImageBitmap(null);
+
         if (bitmap != null) {
-            bmImage.setImageBitmap(bitmap);
+            if (imageView.isAnimating())
+                imageView.clear();
+            imageView.setImageBitmap(bitmap);
         }
         if (bytes != null) {
-            bmImage.setBytes(bytes);
-            bmImage.startAnimation();
+            imageView.setBytes(bytes);
+            imageView.gotoFrame(0);
+            if (!imageView.isAnimating())
+                imageView.startAnimation();
         }
     }
 }

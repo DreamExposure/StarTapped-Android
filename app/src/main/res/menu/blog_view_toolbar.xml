@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/share_256px"
+        android:title="@string/action_share"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_followers"
+        android:title="@string/action_followers"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_follow"
+        android:title="@string/action_follow"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_unfollow"
+        android:title="@string/action_unfollow"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_report"
+        android:title="@string/action_report"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_block"
+        android:title="@string/action_block"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_unblock"
+        android:title="@string/action_unblock"
+        app:showAsAction="never" />
+</menu>

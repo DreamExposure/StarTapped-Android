@@ -46,6 +46,21 @@
     <string name="error_over_10mb">Files cannot be larger than 10MB</string>
     <string name="pick_icon_image">Pick Icon Image</string>
     <string name="pick_background_image">Pick Background Image</string>
+    <string name="pick_post_image">Pick Post Image</string>
+    <string name="pick_post_audio">Pick Post Audio</string>
+    <string name="pick_post_video">Pick Post Video</string>
     <string name="action_following">Following</string>
     <string name="following_title">Following</string>
+    <string name="action_report">Report</string>
+    <string name="action_block">Block</string>
+    <string name="action_unblock">Unblock</string>
+    <string name="action_share">Share</string>
+    <string name="action_follow">Follow</string>
+    <string name="action_unfollow">Unfollow</string>
+    <string name="action_followers">Followers</string>
+    <string name="post_create_body_hint">Go on, say something</string>
+    <string name="post_create_title_hint">Title, if you want one</string>
+    <string name="post">Post</string>
+
+    <string name="select_media_type_audio">Audio</string>
 </resources>

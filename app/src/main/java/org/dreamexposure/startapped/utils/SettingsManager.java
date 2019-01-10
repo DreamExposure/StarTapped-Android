@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 /**
  * @author NovaFox161
@@ -70,6 +71,7 @@ public class SettingsManager {
 
     public void updateSettings(JSONObject json) {
         try {
+            getSettings().setAccountId(UUID.fromString(json.getString("id")));
             getSettings().setUsername(json.getString("username"));
             getSettings().setSafeSearch(json.getBoolean("safe_search"));
             getSettings().setEmailConfirmed(json.getBoolean("email_confirmed"));

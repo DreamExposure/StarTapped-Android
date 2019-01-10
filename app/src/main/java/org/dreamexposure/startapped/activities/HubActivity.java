@@ -3,6 +3,8 @@ package org.dreamexposure.startapped.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -10,15 +12,20 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.dreamexposure.startapped.R;
+import org.dreamexposure.startapped.StarTappedApp;
 import org.dreamexposure.startapped.activities.account.ViewFollowingActivity;
 import org.dreamexposure.startapped.activities.blog.self.BlogListSelfActivity;
 import org.dreamexposure.startapped.activities.settings.SettingsActivity;
+import org.dreamexposure.startapped.async.TaskCallback;
+import org.dreamexposure.startapped.dialogs.post.CreatePostDialogFragment;
+import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 import org.dreamexposure.startapped.utils.RequestPermissionHandler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class HubActivity extends AppCompatActivity {
+public class HubActivity extends AppCompatActivity implements TaskCallback {
     private RequestPermissionHandler mRequestPermissionHandler;
     String[] permissions = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -27,6 +34,9 @@ public class HubActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.action_create_post)
+    FloatingActionButton createPostFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +53,13 @@ public class HubActivity extends AppCompatActivity {
         doPermissionsCheck();
 
         //TODO: Get posts from blogs user is following.
+    }
+
+    @OnClick(R.id.action_create_post)
+    void onCreatePostFabClick() {
+        CreatePostDialogFragment dialog = new CreatePostDialogFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        dialog.show(ft, StarTappedApp.TAG);
     }
 
     private void doPermissionsCheck() {
@@ -83,5 +100,10 @@ public class HubActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    @Override
+    public void taskCallback(NetworkCallStatus status) {
+        //TODO: Handle post create, and post gets
     }
 }
