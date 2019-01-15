@@ -1,5 +1,7 @@
 package org.dreamexposure.startapped.objects.post;
 
+import android.support.annotation.NonNull;
+
 import org.dreamexposure.startapped.enums.post.PostType;
 import org.dreamexposure.startapped.objects.blog.IBlog;
 import org.dreamexposure.startapped.objects.user.Account;
@@ -15,7 +17,7 @@ import java.util.UUID;
  * Company Website: https://www.dreamexposure.org
  * Contact: nova@dreamexposure.org
  */
-public interface IPost {
+public interface IPost extends Comparable<IPost> {
 
     //Getters
     UUID getId();
@@ -66,4 +68,7 @@ public interface IPost {
     JSONObject toJson();
 
     IPost fromJson(JSONObject json);
+
+    @Override
+    int compareTo(@NonNull IPost iPost);
 }

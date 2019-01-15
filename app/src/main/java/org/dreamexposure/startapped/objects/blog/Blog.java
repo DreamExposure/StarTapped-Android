@@ -150,7 +150,6 @@ public class Blog implements IBlog {
             for (UUID u : followers) {
                 jFollowers.put(u.toString());
             }
-
             json.put("followers", jFollowers);
         } catch (JSONException ignore) {
         }

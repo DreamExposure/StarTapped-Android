@@ -1,5 +1,7 @@
 package org.dreamexposure.startapped.objects.post;
 
+import android.support.annotation.NonNull;
+
 import org.dreamexposure.startapped.enums.post.PostType;
 import org.dreamexposure.startapped.objects.blog.Blog;
 import org.dreamexposure.startapped.objects.blog.IBlog;
@@ -17,7 +19,7 @@ import java.util.UUID;
  * Company Website: https://www.dreamexposure.org
  * Contact: nova@dreamexposure.org
  */
-public class Post implements IPost {
+public class Post implements IPost, Comparable<IPost> {
     private UUID id;
     private Account creator;
     private IBlog originBlog;
@@ -32,7 +34,6 @@ public class Post implements IPost {
     private boolean nsfw;
 
     private UUID parent;
-
 
     //Getters
     public UUID getId() {
@@ -90,7 +91,12 @@ public class Post implements IPost {
         creator = _creator;
     }
 
+    @Override
     public void setOriginBlog(IBlog _blog) {
+        originBlog = _blog;
+    }
+
+    public void setOriginBlog(Blog _blog) {
         originBlog = _blog;
     }
 
@@ -141,6 +147,9 @@ public class Post implements IPost {
             json.put("title", title);
             json.put("body", body);
             json.put("nsfw", nsfw);
+            if (parent != null)
+                json.put("parent", parent);
+
         } catch (JSONException ignore) {
         }
 
@@ -159,9 +168,17 @@ public class Post implements IPost {
             title = json.getString("title");
             body = json.getString("body");
             nsfw = json.getBoolean("nsfw");
+            if (json.has("parent"))
+                parent = UUID.fromString(json.getString("parent"));
+
         } catch (JSONException ignore) {
         }
 
         return this;
+    }
+
+    @Override
+    public int compareTo(@NonNull IPost iPost) {
+        return Long.compare(getTimestamp(), iPost.getTimestamp());
     }
 }

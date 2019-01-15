@@ -32,17 +32,31 @@ import org.dreamexposure.startapped.objects.blog.GroupBlog;
 import org.dreamexposure.startapped.objects.blog.IBlog;
 import org.dreamexposure.startapped.objects.blog.PersonalBlog;
 import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
+import org.dreamexposure.startapped.objects.post.AudioPost;
+import org.dreamexposure.startapped.objects.post.IPost;
+import org.dreamexposure.startapped.objects.post.ImagePost;
+import org.dreamexposure.startapped.objects.post.TextPost;
+import org.dreamexposure.startapped.objects.post.VideoPost;
+import org.dreamexposure.startapped.objects.time.TimeIndex;
 import org.dreamexposure.startapped.utils.MathUtils;
+import org.dreamexposure.startapped.utils.PostUtils;
+import org.dreamexposure.startapped.utils.PostViewUtils;
 import org.dreamexposure.startapped.utils.SettingsManager;
+import org.joda.time.DateTime;
+import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+@SuppressLint("InflateParams")
 public class ViewBlogActivity extends AppCompatActivity implements TaskCallback {
-    //TODO: Handle getting more posts when "buffer" runs out.
+    //TODO: Handle getting more posts when at bottom
+    //TODO: Display loading icon when getting posts (cuz it may take some time to load that data)
 
     @BindView(R.id.blog_view_linear)
     LinearLayout rootLayout;
@@ -57,6 +71,8 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
 
     private IBlog theBlog;
 
+    private TimeIndex index;
+
     @SuppressWarnings("ConstantConditions")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +86,9 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
 
         //Load the toolbar
         setSupportActionBar(toolbar);
+
+        DateTime now = DateTime.now();
+        index = new TimeIndex(now.getMonthOfYear(), now.getYear());
 
         //Get blog...
         new GetBlogViewTask(this, blogId).execute();
@@ -272,7 +291,47 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
     }
 
     public void getPostsCallback(NetworkCallStatus status) {
-        //TODO: Display posts
+        try {
+            if (status.isSuccess()) {
+                JSONArray jPosts = status.getBody().getJSONArray("posts");
+                List<IPost> posts = PostUtils.getPostsFromArray(jPosts);
+                Collections.sort(posts);
+                for (IPost p : posts) {
+                    //Skip posts not in range. Probably a parent post which will be handled correctly.
+                    if (p.getTimestamp() > index.getStart().getMillis() && p.getTimestamp() < index.getStop().getMillis()) {
+                        if (p.getParent() != null) {
+                            View view = PostViewUtils.generatePostViewFromTree(p, posts, this);
+
+                            rootLayout.addView(view);
+                        } else {
+                            if (p instanceof TextPost) {
+                                //Handle single post (no parent)
+                                View view = PostViewUtils.generateTextPostView((TextPost)p, null, true, true, this);
+                                rootLayout.addView(view);
+                            } else if (p instanceof ImagePost) {
+                                //Handle single post (no parent)
+                                View view = PostViewUtils.generateImagePostView((ImagePost)p, null, true, true, this);
+                                rootLayout.addView(view);
+                            } else if (p instanceof AudioPost) {
+                                //Handle single post (no parent)
+                                View view = PostViewUtils.generateAudioPostView((AudioPost)p, null, true, true, this);
+                                rootLayout.addView(view);
+                            } else if (p instanceof VideoPost) {
+                                //Handle single post (no parent)
+                                View view = PostViewUtils.generateVideoPostView((VideoPost)p, null, true, true, this);
+                                rootLayout.addView(view);
+                            }
+                        }
+                    }
+                }
+
+                index.backwardOneMonth();
+            } else {
+                Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        } catch (JSONException ignore) {
+            Toast.makeText(this, R.string.error_bad_return, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -290,11 +349,13 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
             case FOLLOW_UNFOLLOW_BLOG:
                 restart();
                 break;
+            case POST_GET_FOR_BLOG:
+                getPostsCallback(status);
+                break;
             default:
                 //Unsupported callback...
                 break;
         }
-        //TODO: Handle posts callback...
     }
 
     @Override
