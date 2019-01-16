@@ -108,7 +108,6 @@ public class RegisterActivity extends AppCompatActivity implements TaskCallback 
 
     @Override
     protected Dialog onCreateDialog(int id) {
-        // TODO Auto-generated method stub
         if (id == 999) {
             return new DatePickerDialog(this,
                     myDateListener, year, month, day);

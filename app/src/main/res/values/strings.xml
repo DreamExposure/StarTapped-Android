@@ -44,6 +44,7 @@
     <string name="allow_minors_to_view">Allow minors to view</string>
     <string name="is_nsfw">is NSFW</string>
     <string name="error_over_10mb">Files cannot be larger than 10MB</string>
+    <string name="error_audio_load_fail">Failed to load audio file.</string>
     <string name="pick_icon_image">Pick Icon Image</string>
     <string name="pick_background_image">Pick Background Image</string>
     <string name="pick_post_image">Pick Post Image</string>

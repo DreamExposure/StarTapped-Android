@@ -38,22 +38,66 @@
         app:layout_constraintTop_toTopOf="@+id/blog_url_latest"
         app:srcCompat="@drawable/reblog_256px" />
 
-    <!--TODO: Replace with audio once I figure that out-->
-    <com.felipecsl.gifimageview.library.GifImageView
-        android:id="@+id/post_image"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/audio_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_marginTop="8dp"
-        android:clickable="true"
-        android:contentDescription="@string/post_image"
-        android:focusable="true"
-        android:scaleType="centerCrop"
+        android:background="@color/Gray500"
+        android:orientation="horizontal"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/blog_url_latest"
-        tools:src="@tools:sample/backgrounds/scenic[17]"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        app:layout_constraintTop_toBottomOf="@+id/blog_url_latest">
+
+        <Button
+            android:id="@+id/play_pause_audio"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/baseline_play_arrow_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/audio_file_name_display"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center_vertical"
+            android:textAlignment="center"
+            android:textColor="@color/Dark"
+            app:layout_constraintBottom_toTopOf="@+id/audio_progress_bar"
+            app:layout_constraintEnd_toStartOf="@+id/mute_unmute_audio"
+            app:layout_constraintStart_toEndOf="@+id/play_pause_audio"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Audio file Name" />
+
+        <SeekBar
+            android:id="@+id/audio_progress_bar"
+            style="@style/MySeekBar"
+
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:progress="0"
+            android:progressDrawable="@drawable/seekbar_progress"
+            android:thumb="@drawable/seekbar_thumb"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/mute_unmute_audio"
+            app:layout_constraintStart_toEndOf="@+id/play_pause_audio" />
+
+        <Button
+            android:id="@+id/mute_unmute_audio"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:background="@drawable/baseline_volume_up_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
     <TextView
         android:id="@+id/post_title"
@@ -69,7 +113,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/post_image"
+        app:layout_constraintTop_toBottomOf="@+id/audio_container"
         tools:text="Post Title" />
 
     <TextView

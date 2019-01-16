@@ -37,6 +37,8 @@ public class DownloadImageTask extends AsyncTask<String, Void, Boolean> {
                 InputStream in = new java.net.URL(urls[0]).openStream();
                 bytes = IOUtils.toByteArray(in);
 
+                in.close();
+
                 return true;
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
@@ -46,6 +48,8 @@ public class DownloadImageTask extends AsyncTask<String, Void, Boolean> {
             try {
                 InputStream in = new java.net.URL(urls[0]).openStream();
                 bitmap = BitmapFactory.decodeStream(in);
+
+                in.close();
 
                 return true;
             } catch (Exception e) {

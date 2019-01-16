@@ -44,6 +44,7 @@ public class LoadImageFromFileTask extends AsyncTask<String, Void, Boolean> {
                 InputStream in = new FileInputStream(new File(filePath));
                 bytes = IOUtils.toByteArray(in);
 
+                in.close();
                 return true;
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
@@ -53,6 +54,8 @@ public class LoadImageFromFileTask extends AsyncTask<String, Void, Boolean> {
             try {
                 InputStream in = new FileInputStream(new File(filePath));
                 bitmap = BitmapFactory.decodeStream(in);
+
+                in.close();
                 return true;
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
@@ -73,7 +76,6 @@ public class LoadImageFromFileTask extends AsyncTask<String, Void, Boolean> {
             try {
                 ExifInterface exif = new ExifInterface(new File(filePath).getAbsolutePath());
                 int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-                Log.d("EXIF", "Exif: " + orientation);
                 Matrix matrix = new Matrix();
                 if (orientation == 6)
                     matrix.postRotate(90);

@@ -49,7 +49,6 @@ public class LoadVideoFromFileTask extends AsyncTask<String, Void, Boolean> {
         video.stopPlayback();
         if (result) {
             video.setVideoPath(videoPath);
-            video.start();
         }
     }
 }

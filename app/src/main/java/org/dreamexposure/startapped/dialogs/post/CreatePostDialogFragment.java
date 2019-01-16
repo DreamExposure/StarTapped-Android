@@ -2,12 +2,10 @@ package org.dreamexposure.startapped.dialogs.post;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,19 +18,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.felipecsl.gifimageview.library.GifImageView;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.StarTappedApp;
 import org.dreamexposure.startapped.async.TaskCallback;
-import org.dreamexposure.startapped.async.load.LoadImageFromFileTask;
-import org.dreamexposure.startapped.async.load.LoadVideoFromFileTask;
-import org.dreamexposure.startapped.dialogs.image.ImageDialog;
 import org.dreamexposure.startapped.enums.blog.BlogType;
 import org.dreamexposure.startapped.enums.post.PostType;
 import org.dreamexposure.startapped.network.blog.self.GetBlogsSelfTask;
@@ -41,6 +33,9 @@ import org.dreamexposure.startapped.network.post.PostCreateTask;
 import org.dreamexposure.startapped.objects.blog.GroupBlog;
 import org.dreamexposure.startapped.objects.blog.IBlog;
 import org.dreamexposure.startapped.objects.blog.PersonalBlog;
+import org.dreamexposure.startapped.objects.container.AudioContainer;
+import org.dreamexposure.startapped.objects.container.ImageContainer;
+import org.dreamexposure.startapped.objects.container.VideoContainer;
 import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 import org.dreamexposure.startapped.objects.post.Post;
 import org.dreamexposure.startapped.utils.ImageUtils;
@@ -66,12 +61,6 @@ import droidninja.filepicker.FilePickerConst;
  */
 @SuppressWarnings("ConstantConditions")
 public class CreatePostDialogFragment extends DialogFragment implements TaskCallback {
-    //TODO: Handle audio playback
-    //TODO: Handle audio seekbar sync to audio playback time
-    //TODO: Handle audio seekbar seek
-    //TODO: Handle audio mute/unmute + button
-    //TODO: Handle audio play/pause + button
-
     View mainView;
 
     Toolbar toolbar;
@@ -84,19 +73,11 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
     AppCompatSpinner blogSelectSpinner;
 
     GifImageView postImage;
+    ImageContainer imageContainer;
 
-    ConstraintLayout videoContainer;
-    VideoView postVideo;
-    View videoBackground;
-    MediaPlayer videoPlayer;
+    VideoContainer videoContainer;
 
-    ConstraintLayout audioContainer;
-    Button playPauseAudioButton;
-    SeekBar audioProgressBar;
-    Button muteUnmuteAudioButton;
-    TextView audioNameDisplay;
-    MediaPlayer audioPlayer;
-
+    AudioContainer audioContainer;
 
     EditText postTitle;
     EditText postBody;
@@ -110,12 +91,6 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
     private PostType postType = PostType.TEXT;
 
     private LinkedList<IBlog> blogs = new LinkedList<>();
-
-    private int initialHeight = -1;
-    private int initialWidth = -1;
-
-    private boolean audioPlaying = false;
-    private boolean audioMuted = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -144,16 +119,12 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
         blogSelectSpinner = mainView.findViewById(R.id.pick_blog_spinner);
 
         postImage = mainView.findViewById(R.id.post_image);
+        imageContainer = new ImageContainer(postImage, getFragmentManager(), true);
+        videoContainer = new VideoContainer(mainView);
+        videoContainer.setAutoPlay(true);
 
-        videoContainer = mainView.findViewById(R.id.video_container);
-        postVideo = mainView.findViewById(R.id.post_video);
-        videoBackground = mainView.findViewById(R.id.post_video_background);
-
-        audioContainer = mainView.findViewById(R.id.audio_container);
-        playPauseAudioButton = mainView.findViewById(R.id.play_pause_audio);
-        audioProgressBar = mainView.findViewById(R.id.audio_progress_bar);
-        muteUnmuteAudioButton = mainView.findViewById(R.id.mute_unmute_audio);
-        audioNameDisplay = mainView.findViewById(R.id.audio_file_name_display);
+        audioContainer = new AudioContainer(mainView, getActivity());
+        audioContainer.setAutoPlay(true);
 
         postTitle = mainView.findViewById(R.id.post_title);
         postBody = mainView.findViewById(R.id.post_body);
@@ -173,24 +144,10 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
         actionSelectAudio.setOnClickListener(v -> onSelectAudioClick());
         actionSelectVideo.setOnClickListener(v -> onSelectVideoClick());
 
-        postImage.setOnClickListener(v -> onPostImageClick());
-        videoContainer.setOnClickListener(v -> {
-            if (videoPlayer.isPlaying())
-                videoPlayer.pause();
-            else
-                videoPlayer.start();
-        });
-
-        muteUnmuteAudioButton.setOnClickListener(v -> onAudioMuteButtonClick());
-        playPauseAudioButton.setOnClickListener(v -> onAudioPlayButtonClick());
-
         //Hide everything just in case...
         postImage.setVisibility(View.GONE);
-        videoContainer.setVisibility(View.GONE);
-        audioContainer.setVisibility(View.GONE);
-
-        //Handle misc additional stuffs
-
+        videoContainer.makeGone();
+        audioContainer.makeGone();
 
         return mainView;
     }
@@ -205,6 +162,17 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             dialog.getWindow().setLayout(width, height);
         }
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        if (videoContainer.getVideoPlayer() != null)
+            videoContainer.getVideoPlayer().release();
+        if (audioContainer.getAudioPlayer() != null) {
+            audioContainer.stop();
+            audioContainer.getAudioPlayer().release();
+        }
+        super.onDismiss(dialog);
     }
 
     @Override
@@ -244,7 +212,6 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
             case BLOG_GET_SELF_ALL:
                 if (status.isSuccess())
                     setupBlogSelection(status);
-
                 break;
             case POST_CREATE:
                 if (status.isSuccess()) {
@@ -348,43 +315,6 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
                 .pickPhoto(this, VIDEO_CODE);
     }
 
-    void onPostImageClick() {
-        ImageDialog dialog = new ImageDialog();
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Bundle b = new Bundle();
-        b.putString("file_path", filePath);
-        dialog.setArguments(b);
-        dialog.show(ft, StarTappedApp.TAG);
-    }
-
-    void onAudioPlayButtonClick() {
-        if (audioPlaying) {
-            audioPlaying = false;
-            playPauseAudioButton.setBackground(getResources().getDrawable(R.drawable.baseline_pause_24));
-
-            //TODO: Pause audio...
-        } else {
-            audioPlaying = true;
-            playPauseAudioButton.setBackground(getResources().getDrawable(R.drawable.baseline_play_arrow_24));
-
-            //TODO: Play audio...
-        }
-    }
-
-    void onAudioMuteButtonClick() {
-        if (audioMuted) {
-            audioMuted = false;
-            muteUnmuteAudioButton.setBackground(getResources().getDrawable(R.drawable.baseline_volume_up_24));
-
-            //TODO: Unmute audio...
-        } else {
-            audioMuted = true;
-            muteUnmuteAudioButton.setBackground(getResources().getDrawable(R.drawable.baseline_volume_off_24));
-
-            //TODO: Mute audio...
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -401,22 +331,25 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
                         filePath = null;
                         postType = PostType.TEXT;
                         postImage.setVisibility(View.GONE);
-                        videoContainer.setVisibility(View.GONE);
-                        postVideo.stopPlayback();
-                        audioContainer.setVisibility(View.GONE);
+                        videoContainer.makeGone();
+                        videoContainer.getPostVideo().stopPlayback();
+                        audioContainer.makeGone();
+                        audioContainer.stop();
                         return;
                     }
 
                     //Hide other views
-                    videoContainer.setVisibility(View.GONE);
-                    postVideo.stopPlayback();
-                    audioContainer.setVisibility(View.GONE);
+                    videoContainer.makeGone();
+                    videoContainer.getPostVideo().stopPlayback();
+                    audioContainer.makeGone();
+                    audioContainer.stop();
 
                     //Display image
                     postType = PostType.IMAGE;
 
                     postImage.setVisibility(View.VISIBLE);
-                    new LoadImageFromFileTask(postImage).execute(filePath);
+
+                    imageContainer.fromFile(filePath);
                 }
                 break;
             case AUDIO_CODE:
@@ -432,23 +365,23 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
                         filePath = null;
                         postType = PostType.TEXT;
                         postImage.setVisibility(View.GONE);
-                        videoContainer.setVisibility(View.GONE);
-                        postVideo.stopPlayback();
-                        audioContainer.setVisibility(View.GONE);
+                        videoContainer.makeGone();
+                        videoContainer.getPostVideo().stopPlayback();
+                        audioContainer.makeGone();
+                        audioContainer.getAudioPlayer().stop();
                         return;
                     }
 
                     //Hide other views
                     postImage.setVisibility(View.GONE);
-                    videoContainer.setVisibility(View.GONE);
-                    postVideo.stopPlayback();
+                    videoContainer.makeGone();
+                    videoContainer.getPostVideo().stopPlayback();
 
                     //Display audio
                     postType = PostType.AUDIO;
 
-                    audioNameDisplay.setText(new File(filePath).getName());
-
-                    audioContainer.setVisibility(View.VISIBLE);
+                    audioContainer.makeVisible();
+                    audioContainer.fromPath(filePath);
                 }
                 break;
             case VIDEO_CODE:
@@ -464,68 +397,27 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
                         filePath = null;
                         postType = PostType.TEXT;
                         postImage.setVisibility(View.GONE);
-                        videoContainer.setVisibility(View.GONE);
-                        postVideo.stopPlayback();
-                        audioContainer.setVisibility(View.GONE);
+                        videoContainer.makeGone();
+                        videoContainer.getPostVideo().stopPlayback();
+                        audioContainer.makeGone();
+                        audioContainer.getAudioPlayer().stop();
                         return;
                     }
 
                     //Hide other views
                     postImage.setVisibility(View.GONE);
-                    audioContainer.setVisibility(View.GONE);
+                    audioContainer.makeGone();
+                    audioContainer.getAudioPlayer().stop();
 
                     //Display video
                     postType = PostType.VIDEO;
 
-                    videoContainer.setVisibility(View.VISIBLE);
-                    postVideo.setOnPreparedListener(this::onVideoPrepared);
-                    new LoadVideoFromFileTask(postVideo).execute(filePath);
+                    videoContainer.makeVisible();
+                    videoContainer.fromPath(filePath);
                 }
                 break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
         }
-    }
-
-    public void onVideoPrepared(MediaPlayer mp) {
-        videoPlayer = mp;
-        mp.setScreenOnWhilePlaying(true);
-
-        // Adjust the size of the video
-        // so it fits on the screen
-        int videoWidth = videoPlayer.getVideoWidth();
-        int videoHeight = videoPlayer.getVideoHeight();
-        float videoProportion = (float) videoWidth / (float) videoHeight;
-        int screenWidth = videoContainer.getWidth();
-        int screenHeight = videoContainer.getHeight();
-        if (initialWidth > -1)
-            screenWidth = initialWidth;
-        else
-            initialWidth = screenWidth;
-        if (initialHeight > -1)
-            screenHeight = initialHeight;
-        else
-            initialHeight = screenHeight;
-
-        float screenProportion = (float) screenWidth / (float) screenHeight;
-        android.view.ViewGroup.LayoutParams lp = postVideo.getLayoutParams();
-
-        if (videoProportion > screenProportion) {
-            lp.width = screenWidth;
-            lp.height = (int) ((float) screenWidth / videoProportion);
-        } else {
-            lp.width = (int) (videoProportion * (float) screenHeight);
-            lp.height = screenHeight;
-        }
-        postVideo.setLayoutParams(lp);
-
-        ViewGroup.LayoutParams containerLp = videoContainer.getLayoutParams();
-        //containerLp.height = postVideo.getLayoutParams().height;
-        videoContainer.setLayoutParams(containerLp);
-
-        videoPlayer.setLooping(true);
-
-        if (!videoPlayer.isPlaying())
-            videoPlayer.start();
     }
 }
