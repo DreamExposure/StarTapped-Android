@@ -31,10 +31,12 @@ public class TimeIndex {
 
     //Setters
     public void setMonth(int _month) {
-        if (month < 0 ) {
+        if (_month < 0) {
             month = 0;
-        } else if (month > 11) {
+        } else if (_month > 11) {
             month = 11;
+        } else {
+            month = _month;
         }
     }
 
@@ -56,6 +58,8 @@ public class TimeIndex {
         if (month == 0) {
             month = 11;
             year--;
+        } else {
+            month--;
         }
     }
 }
