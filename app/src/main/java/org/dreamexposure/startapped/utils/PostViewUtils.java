@@ -516,7 +516,7 @@ public class PostViewUtils {
 
     //Audio
     public static View generateAudioPostView(AudioPost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, AppCompatActivity activity) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.post_video_container, null);
+        View view = LayoutInflater.from(activity).inflate(R.layout.post_audio_container, null);
 
         //Load views...
         TextView blogUrlLatest = view.findViewById(R.id.blog_url_latest);
@@ -598,7 +598,7 @@ public class PostViewUtils {
     }
 
     public static View generateAudioPostView(AudioPost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, FragmentActivity fragment) {
-        View view = LayoutInflater.from(fragment).inflate(R.layout.post_video_container, null);
+        View view = LayoutInflater.from(fragment).inflate(R.layout.post_audio_container, null);
 
         //Load views...
         TextView blogUrlLatest = view.findViewById(R.id.blog_url_latest);

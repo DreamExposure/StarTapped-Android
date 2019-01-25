@@ -37,7 +37,7 @@ public class GetPostsForHubTask extends AsyncTask<Object, Void, NetworkCallStatu
         try {
             JSONObject requestJson = new JSONObject();
             requestJson.put("year", index.getYear());
-            requestJson.put("month", index.getMonth());
+            requestJson.put("month", index.getMonth() - 1);
 
             RequestBody requestBody = RequestBody.create(GlobalConst.JSON, requestJson.toString());
 

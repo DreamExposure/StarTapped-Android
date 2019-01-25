@@ -13,7 +13,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textAlignment="viewStart"
-        android:textColor="@color/Dark"
+        android:textColor="@color/Link"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="blog-url-latest" />
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="25dp"
         android:textAlignment="viewStart"
-        android:textColor="@color/Dark"
+        android:textColor="@color/Link"
         app:layout_constraintStart_toEndOf="@+id/reblog_icon"
         app:layout_constraintTop_toTopOf="@+id/reblog_icon"
         tools:text="blog-url" />
@@ -92,7 +92,7 @@
         android:clickable="true"
         android:focusable="true"
         android:textAlignment="textStart"
-        android:textColor="@color/Dark"
+        android:textColor="@color/Link"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider3"
         tools:text="Source: blog-url" />
@@ -122,13 +122,4 @@
         app:layout_constraintTop_toBottomOf="@+id/divider3"
         app:srcCompat="@drawable/reblog_256px" />
 
-    <Space
-        android:id="@+id/space"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/source" />
 </android.support.constraint.ConstraintLayout>

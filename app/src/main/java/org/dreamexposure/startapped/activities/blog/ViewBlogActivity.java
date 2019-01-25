@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import org.dreamexposure.startapped.enums.blog.BlogType;
 import org.dreamexposure.startapped.network.account.blog.GetAccountForBlogViewTask;
 import org.dreamexposure.startapped.network.blog.view.GetBlogViewTask;
 import org.dreamexposure.startapped.network.download.DownloadImageTask;
+import org.dreamexposure.startapped.network.post.GetPostsForBlogTask;
 import org.dreamexposure.startapped.network.relation.FollowBlogTask;
 import org.dreamexposure.startapped.network.relation.UnfollowBlogTask;
 import org.dreamexposure.startapped.objects.blog.Blog;
@@ -42,7 +44,7 @@ import org.dreamexposure.startapped.utils.MathUtils;
 import org.dreamexposure.startapped.utils.PostUtils;
 import org.dreamexposure.startapped.utils.PostViewUtils;
 import org.dreamexposure.startapped.utils.SettingsManager;
-import org.joda.time.DateTime;
+import org.dreamexposure.startapped.utils.ViewUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -56,12 +58,14 @@ import butterknife.ButterKnife;
 @SuppressLint("InflateParams")
 public class ViewBlogActivity extends AppCompatActivity implements TaskCallback {
     //TODO: Handle getting more posts when at bottom
-    //TODO: Display loading icon when getting posts (cuz it may take some time to load that data)
+    //TODO: Display loading icon when getting posts (when at bottom, refresh already has one)
 
     @BindView(R.id.blog_view_linear)
     LinearLayout rootLayout;
     @BindView(R.id.blog_view_relative)
     RelativeLayout parentLayout;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -72,6 +76,10 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
     private IBlog theBlog;
 
     private TimeIndex index;
+    private boolean isGenerating = false;
+    private boolean isRefreshing = false;
+
+    private boolean blockOn = false;
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -87,8 +95,9 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
         //Load the toolbar
         setSupportActionBar(toolbar);
 
-        DateTime now = DateTime.now();
-        index = new TimeIndex(now.getMonthOfYear(), now.getYear());
+        swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
+
+        index = new TimeIndex();
 
         //Get blog...
         new GetBlogViewTask(this, blogId).execute();
@@ -101,6 +110,7 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
                 IBlog blog = new Blog().fromJson(status.getBody().getJSONObject("blog"));
 
                 if (!blog.isAllowUnder18() && MathUtils.determineAge(SettingsManager.getManager().getSettings().getBirthday()) < 18) {
+                    blockOn = true;
                     //Minor trying to view adult only blog, block action...
                     View view = LayoutInflater.from(this).inflate(R.layout.adult_only_block, null);
 
@@ -124,6 +134,7 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
 
                     rootLayout.addView(view);
                 } else if (blog.isNsfw() && SettingsManager.getManager().getSettings().isSafeSearch()) {
+                    blockOn = true;
                     //User is using safe search... hide content and prompt to settings
                     View view = LayoutInflater.from(this).inflate(R.layout.nsfw_blog_block, null);
 
@@ -266,13 +277,15 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
 
                     rootLayout.addView(view);
                 }
+
+
+                if (!blockOn)
+                    getPosts();
             } else {
                 Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
             }
         } catch (JSONException ignore) {
         }
-
-        //TODO: Get posts from blog.
     }
 
     @SuppressLint("SetTextI18n")
@@ -290,12 +303,34 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
         }
     }
 
+    public void getPosts() {
+        if (!isGenerating) {
+            isGenerating = true;
+            GetPostsForBlogTask task = new GetPostsForBlogTask(this, blogId, index);
+            task.execute();
+        }
+    }
+
+    void onRefresh() {
+        if (!isRefreshing && !isGenerating) {
+            isRefreshing = true;
+            index = new TimeIndex();
+            getPosts();
+        }
+    }
+
     public void getPostsCallback(NetworkCallStatus status) {
         try {
             if (status.isSuccess()) {
                 JSONArray jPosts = status.getBody().getJSONArray("posts");
                 List<IPost> posts = PostUtils.getPostsFromArray(jPosts);
                 Collections.sort(posts);
+
+                if (isRefreshing) {
+                    if (rootLayout.getChildCount() > 1)
+                        rootLayout.removeViews(1, rootLayout.getChildCount() - 1);
+                }
+
                 for (IPost p : posts) {
                     //Skip posts not in range. Probably a parent post which will be handled correctly.
                     if (p.getTimestamp() > index.getStart().getMillis() && p.getTimestamp() < index.getStop().getMillis()) {
@@ -303,34 +338,48 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
                             View view = PostViewUtils.generatePostViewFromTree(p, posts, this);
 
                             rootLayout.addView(view);
+                            rootLayout.addView(ViewUtils.smallSpace(this));
                         } else {
                             if (p instanceof TextPost) {
                                 //Handle single post (no parent)
                                 View view = PostViewUtils.generateTextPostView((TextPost)p, null, true, true, this);
                                 rootLayout.addView(view);
+                                rootLayout.addView(ViewUtils.smallSpace(this));
                             } else if (p instanceof ImagePost) {
                                 //Handle single post (no parent)
                                 View view = PostViewUtils.generateImagePostView((ImagePost)p, null, true, true, this);
                                 rootLayout.addView(view);
+                                rootLayout.addView(ViewUtils.smallSpace(this));
                             } else if (p instanceof AudioPost) {
                                 //Handle single post (no parent)
                                 View view = PostViewUtils.generateAudioPostView((AudioPost)p, null, true, true, this);
                                 rootLayout.addView(view);
+                                rootLayout.addView(ViewUtils.smallSpace(this));
                             } else if (p instanceof VideoPost) {
                                 //Handle single post (no parent)
                                 View view = PostViewUtils.generateVideoPostView((VideoPost)p, null, true, true, this);
                                 rootLayout.addView(view);
+                                rootLayout.addView(ViewUtils.smallSpace(this));
                             }
                         }
                     }
                 }
 
-                index.backwardOneMonth();
+                if (!isRefreshing) {
+                    index.backwardOneMonth();
+                }
             } else {
                 Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
             }
         } catch (JSONException ignore) {
             Toast.makeText(this, R.string.error_bad_return, Toast.LENGTH_LONG).show();
+        }
+
+        isGenerating = false;
+
+        if (isRefreshing) {
+            isRefreshing = false;
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 

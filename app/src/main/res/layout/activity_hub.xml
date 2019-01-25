@@ -31,16 +31,25 @@
         app:srcCompat="@drawable/add_512px"
         app:useCompatPadding="true" />
 
-    <ScrollView
-        android:id="@+id/scroll_content"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar">
+        android:orientation="vertical"
+        android:layout_marginTop="?android:attr/actionBarSize">
 
-        <LinearLayout
-            android:id="@+id/linear_content"
+        <ScrollView
+            android:id="@+id/scroll_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:layout_height="match_parent"
+            android:background="@color/Dark">
+
+            <LinearLayout
+                android:id="@+id/linear_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 </RelativeLayout>

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -21,6 +22,7 @@ import org.dreamexposure.startapped.activities.settings.SettingsActivity;
 import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.dialogs.post.CreatePostDialogFragment;
 import org.dreamexposure.startapped.enums.TaskType;
+import org.dreamexposure.startapped.network.post.GetPostsForHubTask;
 import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 import org.dreamexposure.startapped.objects.post.AudioPost;
 import org.dreamexposure.startapped.objects.post.IPost;
@@ -31,7 +33,7 @@ import org.dreamexposure.startapped.objects.time.TimeIndex;
 import org.dreamexposure.startapped.utils.PostUtils;
 import org.dreamexposure.startapped.utils.PostViewUtils;
 import org.dreamexposure.startapped.utils.RequestPermissionHandler;
-import org.joda.time.DateTime;
+import org.dreamexposure.startapped.utils.ViewUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -43,6 +45,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class HubActivity extends AppCompatActivity implements TaskCallback {
+    //TODO: Handle getting more posts when at bottom
+    //TODO: Display loading icon when getting posts (when at bottom, refresh already has one)
+
     private RequestPermissionHandler mRequestPermissionHandler;
     String[] permissions = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -55,10 +60,15 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
     @BindView(R.id.linear_content)
     LinearLayout rootLayout;
 
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
+
     @BindView(R.id.action_create_post)
     FloatingActionButton createPostFab;
 
     private TimeIndex index;
+    private boolean isGenerating = false;
+    private boolean isRefreshing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +81,14 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
         toolbar.setTitle("Hub");
         setSupportActionBar(toolbar);
 
+        swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
+
         //Check permissions on start
         doPermissionsCheck();
 
-        DateTime now = DateTime.now();
-        index = new TimeIndex(now.getMonthOfYear(), now.getYear());
+        index = new TimeIndex();
 
-        //TODO: Get posts from blogs user is following.
+        getPosts();
     }
 
     @OnClick(R.id.action_create_post)
@@ -133,6 +144,10 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
                 JSONArray jPosts = status.getBody().getJSONArray("posts");
                 List<IPost> posts = PostUtils.getPostsFromArray(jPosts);
                 Collections.sort(posts);
+
+                if (isRefreshing)
+                    rootLayout.removeAllViews();
+
                 for (IPost p : posts) {
                     //Skip posts not in range. Probably a parent post which will be handled correctly.
                     if (p.getTimestamp() > index.getStart().getMillis() && p.getTimestamp() < index.getStop().getMillis()) {
@@ -140,40 +155,70 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
                             View view = PostViewUtils.generatePostViewFromTree(p, posts, this);
 
                             rootLayout.addView(view);
+                            rootLayout.addView(ViewUtils.smallSpace(this));
                         } else {
                             if (p instanceof TextPost) {
                                 //Handle single post (no parent)
                                 View view = PostViewUtils.generateTextPostView((TextPost)p, null, true, true, this);
                                 rootLayout.addView(view);
+                                rootLayout.addView(ViewUtils.smallSpace(this));
                             } else if (p instanceof ImagePost) {
                                 //Handle single post (no parent)
                                 View view = PostViewUtils.generateImagePostView((ImagePost)p, null, true, true, this);
                                 rootLayout.addView(view);
+                                rootLayout.addView(ViewUtils.smallSpace(this));
                             } else if (p instanceof AudioPost) {
                                 //Handle single post (no parent)
                                 View view = PostViewUtils.generateAudioPostView((AudioPost)p, null, true, true, this);
                                 rootLayout.addView(view);
+                                rootLayout.addView(ViewUtils.smallSpace(this));
                             } else if (p instanceof VideoPost) {
                                 //Handle single post (no parent)
                                 View view = PostViewUtils.generateVideoPostView((VideoPost)p, null, true, true, this);
                                 rootLayout.addView(view);
+                                rootLayout.addView(ViewUtils.smallSpace(this));
                             }
                         }
                     }
                 }
 
-                index.backwardOneMonth();
+                if (!isRefreshing) {
+                    index.backwardOneMonth();
+                }
             } else {
                 Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
             }
         } catch (JSONException ignore) {
             Toast.makeText(this, R.string.error_bad_return, Toast.LENGTH_LONG).show();
         }
+        isGenerating = false;
+
+        if (isRefreshing) {
+            isRefreshing = false;
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    private void getPosts() {
+        if (!isGenerating) {
+            isGenerating = true;
+            GetPostsForHubTask task = new GetPostsForHubTask(this, index);
+            task.execute();
+        }
+    }
+
+    void onRefresh() {
+        if (!isRefreshing && !isGenerating) {
+            isRefreshing = true;
+
+            index = new TimeIndex();
+
+            getPosts();
+        }
     }
 
     @Override
     public void taskCallback(NetworkCallStatus status) {
         if (status.getType() == TaskType.POST_GET_FOR_HUB) getPostsCallback(status);
-        //TODO: Handle post create
     }
 }

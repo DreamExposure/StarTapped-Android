@@ -179,6 +179,6 @@ public class Post implements IPost, Comparable<IPost> {
 
     @Override
     public int compareTo(@NonNull IPost iPost) {
-        return Long.compare(getTimestamp(), iPost.getTimestamp());
+        return Long.compare(iPost.getTimestamp(), this.getTimestamp());
     }
 }

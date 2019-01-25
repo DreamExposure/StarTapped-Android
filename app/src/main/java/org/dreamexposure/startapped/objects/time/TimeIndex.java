@@ -7,9 +7,10 @@ public class TimeIndex {
     private int month;
     private int year;
 
-    public TimeIndex(int _month, int _year) {
-        month = _month;
-        year = _year;
+    public TimeIndex() {
+        DateTime now = DateTime.now();
+        this.month = now.getMonthOfYear();
+        this.year = now.getYear();
     }
 
     //Getters
@@ -31,9 +32,9 @@ public class TimeIndex {
 
     //Setters
     public void setMonth(int _month) {
-        if (_month < 0) {
-            month = 0;
-        } else if (_month > 11) {
+        if (_month < 1) {
+            month = 1;
+        } else if (_month > 12) {
             month = 11;
         } else {
             month = _month;
@@ -46,8 +47,8 @@ public class TimeIndex {
 
     //Functions
     public void forwardOneMonth() {
-        if (month == 11) {
-            month = 0;
+        if (month == 12) {
+            month = 1;
             year++;
         } else {
             month++;
@@ -55,8 +56,8 @@ public class TimeIndex {
     }
 
     public void backwardOneMonth() {
-        if (month == 0) {
-            month = 11;
+        if (month == 1) {
+            month = 12;
             year--;
         } else {
             month--;
