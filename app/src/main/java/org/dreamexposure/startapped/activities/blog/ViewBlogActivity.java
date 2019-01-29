@@ -333,7 +333,7 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
 
                 for (IPost p : posts) {
                     //Skip posts not in range. Probably a parent post which will be handled correctly.
-                    if (p.getTimestamp() > index.getStart().getMillis() && p.getTimestamp() < index.getStop().getMillis()) {
+                    if (p.getTimestamp() > index.getStart().getMillis() && p.getTimestamp() < index.getStop().getMillis() && p.getOriginBlog().getBlogId().equals(blogId)) {
                         if (p.getParent() != null) {
                             View view = PostViewUtils.generatePostViewFromTree(p, posts, this);
 
