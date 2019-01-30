@@ -35,6 +35,7 @@ public class DownloadVideoTask extends AsyncTask<Object, Void, Boolean> {
         video.stopPlayback();
         if (result) {
             video.setVideoURI(uri);
+            video.seekTo(1);
         }
     }
 }
