@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import org.dreamexposure.startapped.R;
@@ -63,12 +64,16 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
 
+    @BindView(R.id.scroll_content)
+    ScrollView scrollView;
+
     @BindView(R.id.action_create_post)
     FloatingActionButton createPostFab;
 
     private TimeIndex index;
     private boolean isGenerating = false;
     private boolean isRefreshing = false;
+    private boolean scrollUp = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +92,8 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
         doPermissionsCheck();
 
         index = new TimeIndex();
+
+        scrollUp = true;
 
         getPosts();
     }
@@ -182,9 +189,12 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
                     }
                 }
 
-                if (!isRefreshing) {
+                if (scrollUp)
+                    scrollView.post(() -> scrollView.smoothScrollTo(0, 0));
+
+                if (!isRefreshing)
                     index.backwardOneMonth();
-                }
+
             } else {
                 Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -192,6 +202,7 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
             Toast.makeText(this, R.string.error_bad_return, Toast.LENGTH_LONG).show();
         }
         isGenerating = false;
+        scrollUp = false;
 
         if (isRefreshing) {
             isRefreshing = false;
@@ -212,6 +223,8 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
             isRefreshing = true;
 
             index = new TimeIndex();
+
+            scrollUp = true;
 
             getPosts();
         }

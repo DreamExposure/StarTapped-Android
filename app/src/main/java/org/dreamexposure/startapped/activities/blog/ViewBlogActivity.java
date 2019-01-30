@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +67,8 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
     RelativeLayout parentLayout;
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.blog_view_scroll)
+    ScrollView scrollView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -78,6 +81,7 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
     private TimeIndex index;
     private boolean isGenerating = false;
     private boolean isRefreshing = false;
+    private boolean scrollUp = false;
 
     private boolean blockOn = false;
 
@@ -98,6 +102,8 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
         swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
 
         index = new TimeIndex();
+
+        scrollUp = true;
 
         //Get blog...
         new GetBlogViewTask(this, blogId).execute();
@@ -315,6 +321,7 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
         if (!isRefreshing && !isGenerating) {
             isRefreshing = true;
             index = new TimeIndex();
+            scrollUp = true;
             getPosts();
         }
     }
@@ -365,9 +372,11 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
                     }
                 }
 
-                if (!isRefreshing) {
+                if (scrollUp)
+                    scrollView.post(() -> scrollView.smoothScrollTo(0, 0));
+
+                if (!isRefreshing)
                     index.backwardOneMonth();
-                }
             } else {
                 Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -376,6 +385,7 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
         }
 
         isGenerating = false;
+        scrollUp = false;
 
         if (isRefreshing) {
             isRefreshing = false;
