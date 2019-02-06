@@ -19,7 +19,7 @@
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/NoActionBarTheme"
         tools:ignore="GoogleAppIndexingWarning">
@@ -43,7 +43,7 @@
         <activity android:name=".activities.blog.self.BlogEditActivity" />
         <activity android:name=".activities.blog.ViewBlogActivity" />
         <activity android:name=".activities.blog.self.BlogCreateActivity" />
-        <activity android:name=".activities.account.ViewFollowingActivity"></activity>
+        <activity android:name=".activities.account.ViewFollowingActivity" />
     </application>
 
 </manifest>
