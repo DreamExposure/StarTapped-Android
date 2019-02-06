@@ -22,6 +22,7 @@
         android:id="@+id/blog_url_second"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
+        android:layout_marginStart="4dp"
         android:textAlignment="viewStart"
         android:textColor="@color/Link"
         app:layout_constraintStart_toEndOf="@+id/reblog_icon"
@@ -32,11 +33,12 @@
         android:id="@+id/reblog_icon"
         android:layout_width="25dp"
         android:layout_height="25dp"
+        android:layout_marginStart="4dp"
         android:contentDescription="@string/reblog_icon"
         android:scaleType="fitXY"
         app:layout_constraintStart_toEndOf="@+id/blog_url_latest"
         app:layout_constraintTop_toTopOf="@+id/blog_url_latest"
-        app:srcCompat="@drawable/reblog_256px" />
+        app:srcCompat="@drawable/ic_reblog" />
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/post_image"
@@ -125,7 +127,7 @@
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider3"
-        app:srcCompat="@drawable/bookmark_256px" />
+        app:srcCompat="@drawable/ic_bookmark" />
 
     <ImageView
         android:id="@+id/reblog_post"
@@ -136,6 +138,6 @@
         android:contentDescription="@string/reblog_post"
         app:layout_constraintEnd_toStartOf="@+id/bookmark_post"
         app:layout_constraintTop_toBottomOf="@+id/divider3"
-        app:srcCompat="@drawable/reblog_256px" />
+        app:srcCompat="@drawable/ic_reblog" />
 
 </android.support.constraint.ConstraintLayout>

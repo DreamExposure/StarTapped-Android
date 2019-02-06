@@ -52,7 +52,7 @@
         android:layout_height="40dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/edit_256px"
+        android:background="@drawable/ic_edit_filled"
         app:layout_constraintEnd_toEndOf="@+id/blog_background_image"
         app:layout_constraintTop_toTopOf="@+id/blog_background_image" />
 
@@ -60,7 +60,7 @@
         android:id="@+id/change_icon_button"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@drawable/edit_256px"
+        android:background="@drawable/ic_edit_filled"
         app:layout_constraintEnd_toEndOf="@+id/blog_icon_image"
         app:layout_constraintTop_toTopOf="@+id/blog_icon_image" />
 

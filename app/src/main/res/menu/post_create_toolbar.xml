@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_post"
-        android:icon="@drawable/check_256px"
+        android:icon="@drawable/ic_check"
         android:title="@string/post"
         app:showAsAction="ifRoom|withText" />
 </menu>

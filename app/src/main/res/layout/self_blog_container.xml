@@ -55,7 +55,7 @@
         android:layout_height="40dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/edit_256px"
+        android:background="@drawable/ic_edit_filled"
         android:fontFamily="sans-serif-condensed"
         android:textAlignment="center"
         android:textAllCaps="true"
@@ -146,6 +146,7 @@
         tools:text="18" />
 
     <Space
+        android:id="@+id/space2"
         android:layout_width="0dp"
         android:layout_height="40dp"
         app:layout_constraintEnd_toEndOf="parent"

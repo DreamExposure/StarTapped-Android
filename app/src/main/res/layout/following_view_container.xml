@@ -12,7 +12,11 @@
         android:background="@color/Light"
         android:clickable="true"
         android:focusable="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/space"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.felipecsl.gifimageview.library.GifImageView
             android:id="@+id/blog_icon_image"
@@ -42,6 +46,7 @@
     </LinearLayout>
 
     <Space
+        android:id="@+id/space"
         android:layout_width="0dp"
         android:layout_height="10dp"
         android:clickable="false"

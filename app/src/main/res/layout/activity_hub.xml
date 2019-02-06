@@ -28,7 +28,7 @@
         android:visibility="visible"
         app:backgroundTint="@color/Primary"
         app:elevation="6dp"
-        app:srcCompat="@drawable/add_512px"
+        app:srcCompat="@drawable/ic_add"
         app:useCompatPadding="true" />
 
     <android.support.v4.widget.SwipeRefreshLayout
