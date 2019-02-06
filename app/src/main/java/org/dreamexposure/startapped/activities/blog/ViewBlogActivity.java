@@ -81,6 +81,7 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
     private TimeIndex index;
     private boolean isGenerating = false;
     private boolean isRefreshing = false;
+    private boolean stopRequesting = false;
     private boolean scrollUp = false;
 
     private boolean blockOn = false;
@@ -310,7 +311,7 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
     }
 
     public void getPosts() {
-        if (!isGenerating) {
+        if (!isGenerating && !stopRequesting) {
             isGenerating = true;
             GetPostsForBlogTask task = new GetPostsForBlogTask(this, blogId, index);
             task.execute();
@@ -320,6 +321,7 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
     void onRefresh() {
         if (!isRefreshing && !isGenerating) {
             isRefreshing = true;
+            stopRequesting = false;
             index = new TimeIndex();
             scrollUp = true;
             getPosts();
@@ -333,6 +335,16 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
                 List<IPost> posts = PostUtils.getPostsFromArray(jPosts);
                 Collections.sort(posts);
 
+                if (posts.isEmpty()) {
+                    stopRequesting = true;
+                    return;
+                }
+
+                if (status.getBody().getJSONObject("range").getLong("latest") > 0) {
+                    index.setLatest(status.getBody().getJSONObject("range").getLong("latest"));
+                    index.setOldest(status.getBody().getJSONObject("range").getLong("oldest"));
+                }
+
                 if (isRefreshing) {
                     if (rootLayout.getChildCount() > 1)
                         rootLayout.removeViews(1, rootLayout.getChildCount() - 1);
@@ -340,7 +352,7 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
 
                 for (IPost p : posts) {
                     //Skip posts not in range. Probably a parent post which will be handled correctly.
-                    if (p.getTimestamp() > index.getStart().getMillis() && p.getTimestamp() < index.getStop().getMillis() && p.getOriginBlog().getBlogId().equals(blogId)) {
+                    if (p.getTimestamp() >= index.getOldest() && p.getTimestamp() <= index.getLatest() && p.getOriginBlog().getBlogId().equals(blogId)) {
                         if (p.getParent() != null) {
                             View view = PostViewUtils.generatePostViewFromTree(p, posts, this);
 
@@ -375,10 +387,14 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
                 if (scrollUp)
                     scrollView.post(() -> scrollView.smoothScrollTo(0, 0));
 
-                if (!isRefreshing)
-                    index.backwardOneMonth();
             } else {
-                Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
+                //Hit the epoch.
+                if (status.getCode() == 417) {
+                    Toast.makeText(this, R.string.no_more_posts, Toast.LENGTH_LONG).show();
+                    stopRequesting = true;
+                } else {
+                    Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         } catch (JSONException ignore) {
             Toast.makeText(this, R.string.error_bad_return, Toast.LENGTH_LONG).show();
@@ -391,6 +407,8 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
             isRefreshing = false;
             swipeRefreshLayout.setRefreshing(false);
         }
+
+        index.setBefore(index.getOldest() - 1);
     }
 
     @Override

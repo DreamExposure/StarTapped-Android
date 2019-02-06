@@ -40,8 +40,8 @@ public class GetPostsForBlogTask extends AsyncTask<Object, Void, NetworkCallStat
         try {
             JSONObject requestJson = new JSONObject();
             requestJson.put("blog_id", blogId.toString());
-            requestJson.put("year", index.getYear());
-            requestJson.put("month", index.getMonth() - 1);
+            requestJson.put("before", index.getBefore());
+            requestJson.put("limit", 20);
 
             RequestBody requestBody = RequestBody.create(GlobalConst.JSON, requestJson.toString());
 

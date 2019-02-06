@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +38,7 @@ import org.dreamexposure.startapped.utils.RequestPermissionHandler;
 import org.dreamexposure.startapped.utils.ViewUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Collections;
 import java.util.List;
@@ -73,6 +75,7 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
     private TimeIndex index;
     private boolean isGenerating = false;
     private boolean isRefreshing = false;
+    private boolean stopRequesting = false;
     private boolean scrollUp = false;
 
     @Override
@@ -152,12 +155,23 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
                 List<IPost> posts = PostUtils.getPostsFromArray(jPosts);
                 Collections.sort(posts);
 
+                if (posts.isEmpty()) {
+                    stopRequesting = true;
+                    return;
+                }
+
+                JSONObject range = status.getBody().getJSONObject("range");
+                if (range.getLong("latest") > 0) {
+                    index.setLatest(range.getLong("latest"));
+                    index.setOldest(range.getLong("oldest"));
+                }
+
                 if (isRefreshing)
                     rootLayout.removeAllViews();
 
                 for (IPost p : posts) {
                     //Skip posts not in range. Probably a parent post which will be handled correctly.
-                    if (p.getTimestamp() > index.getStart().getMillis() && p.getTimestamp() < index.getStop().getMillis()) {
+                    if (p.getTimestamp() >= index.getOldest() && p.getTimestamp() <= index.getLatest()) {
                         if (p.getParent() != null) {
                             View view = PostViewUtils.generatePostViewFromTree(p, posts, this);
 
@@ -192,13 +206,17 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
                 if (scrollUp)
                     scrollView.post(() -> scrollView.smoothScrollTo(0, 0));
 
-                if (!isRefreshing)
-                    index.backwardOneMonth();
-
             } else {
-                Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
+                //Hit the epoch.
+                if (status.getCode() == 417) {
+                    Toast.makeText(this, R.string.no_more_posts, Toast.LENGTH_LONG).show();
+                    stopRequesting = true;
+                } else {
+                    Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
-        } catch (JSONException ignore) {
+        } catch (JSONException e) {
+            Log.e(StarTappedApp.TAG, "Failed to handle JSON", e);
             Toast.makeText(this, R.string.error_bad_return, Toast.LENGTH_LONG).show();
         }
         isGenerating = false;
@@ -208,10 +226,12 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
             isRefreshing = false;
             swipeRefreshLayout.setRefreshing(false);
         }
+
+        index.setBefore(index.getOldest() - 1);
     }
 
     private void getPosts() {
-        if (!isGenerating) {
+        if (!isGenerating && !stopRequesting) {
             isGenerating = true;
             GetPostsForHubTask task = new GetPostsForHubTask(this, index);
             task.execute();
@@ -221,6 +241,7 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
     void onRefresh() {
         if (!isRefreshing && !isGenerating) {
             isRefreshing = true;
+            stopRequesting = false;
 
             index = new TimeIndex();
 

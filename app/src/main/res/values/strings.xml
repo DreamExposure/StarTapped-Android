@@ -65,4 +65,5 @@
 
     <string name="select_media_type_audio">Audio</string>
     <string name="error_bad_return">Something bad was returned. Please try again.</string>
+    <string name="no_more_posts">There\'s no more posts.</string>
 </resources>
