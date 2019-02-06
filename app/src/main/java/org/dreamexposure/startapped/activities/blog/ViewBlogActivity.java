@@ -58,7 +58,6 @@ import butterknife.ButterKnife;
 
 @SuppressLint("InflateParams")
 public class ViewBlogActivity extends AppCompatActivity implements TaskCallback {
-    //TODO: Handle getting more posts when at bottom
     //TODO: Display loading icon when getting posts (when at bottom, refresh already has one)
 
     @BindView(R.id.blog_view_linear)
@@ -101,6 +100,7 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
         setSupportActionBar(toolbar);
 
         swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(this::scrollChangeHandler);
 
         index = new TimeIndex();
 
@@ -310,24 +310,6 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
         }
     }
 
-    public void getPosts() {
-        if (!isGenerating && !stopRequesting) {
-            isGenerating = true;
-            GetPostsForBlogTask task = new GetPostsForBlogTask(this, blogId, index);
-            task.execute();
-        }
-    }
-
-    void onRefresh() {
-        if (!isRefreshing && !isGenerating) {
-            isRefreshing = true;
-            stopRequesting = false;
-            index = new TimeIndex();
-            scrollUp = true;
-            getPosts();
-        }
-    }
-
     public void getPostsCallback(NetworkCallStatus status) {
         try {
             if (status.isSuccess()) {
@@ -337,7 +319,7 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
 
                 if (posts.isEmpty()) {
                     stopRequesting = true;
-                    return;
+                    Toast.makeText(this, R.string.no_more_posts, Toast.LENGTH_LONG).show();
                 }
 
                 if (status.getBody().getJSONObject("range").getLong("latest") > 0) {
@@ -409,6 +391,31 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
         }
 
         index.setBefore(index.getOldest() - 1);
+    }
+
+    public void getPosts() {
+        if (!isGenerating && !stopRequesting) {
+            isGenerating = true;
+            GetPostsForBlogTask task = new GetPostsForBlogTask(this, blogId, index);
+            task.execute();
+        }
+    }
+
+    void onRefresh() {
+        if (!isRefreshing && !isGenerating) {
+            isRefreshing = true;
+            stopRequesting = false;
+            index = new TimeIndex();
+            scrollUp = true;
+            getPosts();
+        }
+    }
+
+    void scrollChangeHandler() {
+        if (scrollView.getChildAt(0).getBottom() <= (scrollView.getHeight() + scrollView.getScrollY())) {
+            //At bottom...
+            getPosts();
+        }
     }
 
     @Override

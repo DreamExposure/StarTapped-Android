@@ -48,7 +48,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class HubActivity extends AppCompatActivity implements TaskCallback {
-    //TODO: Handle getting more posts when at bottom
     //TODO: Display loading icon when getting posts (when at bottom, refresh already has one)
 
     private RequestPermissionHandler mRequestPermissionHandler;
@@ -90,6 +89,7 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
         setSupportActionBar(toolbar);
 
         swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(this::scrollChangeHandler);
 
         //Check permissions on start
         doPermissionsCheck();
@@ -157,7 +157,7 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
 
                 if (posts.isEmpty()) {
                     stopRequesting = true;
-                    return;
+                    Toast.makeText(this, R.string.no_more_posts, Toast.LENGTH_LONG).show();
                 }
 
                 JSONObject range = status.getBody().getJSONObject("range");
@@ -247,6 +247,13 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
 
             scrollUp = true;
 
+            getPosts();
+        }
+    }
+
+    void scrollChangeHandler() {
+        if (scrollView.getChildAt(0).getBottom() <= (scrollView.getHeight() + scrollView.getScrollY())) {
+            //At bottom...
             getPosts();
         }
     }
