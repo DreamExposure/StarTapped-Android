@@ -55,6 +55,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reblog_icon"
+        android:clickable="true"
+        android:linksClickable="true"
+        android:autoLink="all"
+        android:focusable="true"
         tools:text="Post Title" />
 
     <TextView
@@ -71,6 +75,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/post_title"
+        android:clickable="true"
+        android:linksClickable="true"
+        android:autoLink="all"
+        android:focusable="true"
         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Purus viverra accumsan in nisl nisi. Integer quis auctor elit sed vulputate mi sit amet mauris. Convallis aenean et tortor at risus viverra adipiscing at. Neque viverra justo nec ultrices dui sapien eget mi." />
 
     <View
