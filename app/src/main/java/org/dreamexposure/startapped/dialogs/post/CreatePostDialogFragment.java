@@ -248,7 +248,7 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
                     blogUrls.add(b.getBaseUrl());
                     if (!blogSelected) {
                         blogSelected = true;
-                        iconImage = b.getIconUrl();
+                        iconImage = b.getIconImage().getUrl();
                     }
                 }
 
@@ -263,7 +263,7 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         if (iCurrentSelection != i) {
                             iCurrentSelection = i;
-                            new DownloadImageTask(blogIcon).execute(blogs.get(iCurrentSelection).getIconUrl());
+                            new DownloadImageTask(blogIcon).execute(blogs.get(iCurrentSelection).getIconImage().getUrl());
                         }
                         iCurrentSelection = i;
                     }

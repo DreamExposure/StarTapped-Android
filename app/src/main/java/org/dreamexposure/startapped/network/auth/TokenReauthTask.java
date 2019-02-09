@@ -55,7 +55,7 @@ public class TokenReauthTask extends AsyncTask<Object, Void, NetworkCallStatus> 
 
             JSONObject responseBody = new JSONObject(response.body().string());
 
-            if (response.code() == 200) {
+            if (response.code() == 201) {
                 //Success, save credentials and return...
                 JSONObject credentials = responseBody.getJSONObject("credentials");
                 SettingsManager.getManager().getSettings().setAccessToken(credentials.getString("access_token"));
@@ -63,17 +63,17 @@ public class TokenReauthTask extends AsyncTask<Object, Void, NetworkCallStatus> 
                 SettingsManager.getManager().getSettings().setTokenExpire(credentials.getLong("expire"));
                 SettingsManager.getManager().saveSettings();
 
-                return new NetworkCallStatus(true, TaskType.AUTH_TOKEN_REAUTH).setCode(200).setMessage(responseBody.getString("message"));
-            } else if (response.code() == 201) {
-                //Success, credentials do not need to be refreshed..
                 return new NetworkCallStatus(true, TaskType.AUTH_TOKEN_REAUTH).setCode(201).setMessage(responseBody.getString("message"));
+            } else if (response.code() == 200) {
+                //Success, credentials do not need to be refreshed..
+                return new NetworkCallStatus(true, TaskType.AUTH_TOKEN_REAUTH).setCode(200).setMessage(responseBody.getString("message"));
             } else {
                 Log.d(StarTappedApp.TAG, response.code() + " " + responseBody.toString());
 
                 return new NetworkCallStatus(false, TaskType.AUTH_TOKEN_REAUTH).setCode(response.code()).setMessage(responseBody.getString("message"));
             }
         } catch (JSONException | IOException | IllegalStateException e) {
-            e.printStackTrace();
+            Log.e(StarTappedApp.TAG, "Error with Token refresh", e);
             return new NetworkCallStatus(false, TaskType.AUTH_TOKEN_REAUTH).setCode(1).setMessage("Error");
         }
     }

@@ -90,6 +90,7 @@ public class ImageUtils {
 
             JSONObject json = new JSONObject();
             json.put("type", mimeType);
+            json.put("name", file.getName());
             json.put("encoded", base);
 
             //Close streams

@@ -15,6 +15,7 @@ import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.StarTappedApp;
 import org.dreamexposure.startapped.async.load.LoadAudioFromFileTask;
 import org.dreamexposure.startapped.network.download.DownloadAudioTask;
+import org.dreamexposure.startapped.objects.file.UploadedFile;
 
 import java.io.File;
 
@@ -118,7 +119,7 @@ public class AudioContainer {
         playPauseAudioButton.setOnClickListener(v -> onAudioPlayButtonClick());
     }
 
-    public void fromURL(String url) {
+    public void fromURL(UploadedFile file) {
         audioPlayer.release();
         audioPlayer = new MediaPlayer();
         audioPlayer.setOnPreparedListener(mediaPlayer -> onAudioPrepared());
@@ -130,8 +131,8 @@ public class AudioContainer {
         //TODO: Show loading until done.
 
 
-        audioNameDisplay.setText(url.substring(url.lastIndexOf('/') + 1, url.length()));
-        new DownloadAudioTask(audioPlayer, url).execute();
+        audioNameDisplay.setText(file.getName());
+        new DownloadAudioTask(audioPlayer, file.getUrl()).execute();
     }
 
     public void fromPath(String path) {

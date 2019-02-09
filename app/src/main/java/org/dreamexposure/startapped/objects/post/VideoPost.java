@@ -1,6 +1,7 @@
 package org.dreamexposure.startapped.objects.post;
 
 import org.dreamexposure.startapped.enums.post.PostType;
+import org.dreamexposure.startapped.objects.file.UploadedFile;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,20 +14,20 @@ import org.json.JSONObject;
  * Contact: nova@dreamexposure.org
  */
 public class VideoPost extends Post {
-    private String videoUrl;
+    private UploadedFile video;
 
     public VideoPost() {
         setPostType(PostType.VIDEO);
     }
 
     //Getters
-    public String getVideoUrl() {
-        return videoUrl;
+    public UploadedFile getVideo() {
+        return video;
     }
 
     //Setters
-    public void setVideoUrl(String _videoUrl) {
-        videoUrl = _videoUrl;
+    public void setVideo(UploadedFile _video) {
+        video = _video;
     }
 
     @Override
@@ -34,7 +35,7 @@ public class VideoPost extends Post {
         JSONObject base = super.toJson();
 
         try {
-            base.put("video_url", videoUrl);
+            base.put("video", video.toJson());
         } catch (JSONException ignore) {
         }
 
@@ -46,7 +47,7 @@ public class VideoPost extends Post {
         super.fromJson(json);
 
         try {
-            videoUrl = json.getString("video_url");
+            video = new UploadedFile().fromJson(json.getJSONObject("video"));
         } catch (JSONException ignore) {
         }
 

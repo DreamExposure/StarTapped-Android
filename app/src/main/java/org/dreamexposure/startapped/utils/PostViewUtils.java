@@ -377,7 +377,7 @@ public class PostViewUtils {
             blogUrlSecond.setVisibility(View.GONE);
         }
 
-        imageContainer.fromUrl(post.getImageUrl());
+        imageContainer.fromUrl(post.getImage().getUrl());
 
         postTitle.setText(post.getTitle());
         postText.setText(post.getBody());
@@ -459,7 +459,7 @@ public class PostViewUtils {
             blogUrlSecond.setVisibility(View.GONE);
         }
 
-        imageContainer.fromUrl(post.getImageUrl());
+        imageContainer.fromUrl(post.getImage().getUrl());
 
         postTitle.setText(post.getTitle());
         postText.setText(post.getBody());
@@ -542,7 +542,7 @@ public class PostViewUtils {
         }
 
         container.setAutoPlay(false);
-        container.fromURL(post.getAudioUrl());
+        container.fromURL(post.getAudio());
 
         postTitle.setText(post.getTitle());
         postText.setText(post.getBody());
@@ -624,7 +624,7 @@ public class PostViewUtils {
         }
 
         container.setAutoPlay(false);
-        container.fromURL(post.getAudioUrl());
+        container.fromURL(post.getAudio());
 
         postTitle.setText(post.getTitle());
         postText.setText(post.getBody());
@@ -707,7 +707,7 @@ public class PostViewUtils {
         }
 
         container.setAutoPlay(false);
-        container.fromURL(post.getVideoUrl());
+        container.fromURL(post.getVideo().getUrl());
 
         postTitle.setText(post.getTitle());
         postText.setText(post.getBody());
@@ -789,7 +789,7 @@ public class PostViewUtils {
         }
 
         container.setAutoPlay(false);
-        container.fromURL(post.getVideoUrl());
+        container.fromURL(post.getVideo().getUrl());
 
         postTitle.setText(post.getTitle());
         postText.setText(post.getBody());

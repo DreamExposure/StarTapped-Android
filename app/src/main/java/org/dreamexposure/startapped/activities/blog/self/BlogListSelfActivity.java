@@ -131,8 +131,8 @@ public class BlogListSelfActivity extends AppCompatActivity implements TaskCallb
                     });
 
                     //Download images
-                    new DownloadImageTask(background).execute(blog.getBackgroundUrl());
-                    new DownloadImageTask(icon).execute(blog.getIconUrl());
+                    new DownloadImageTask(background).execute(blog.getBackgroundImage().getUrl());
+                    new DownloadImageTask(icon).execute(blog.getIconImage().getUrl());
 
                     rootLayout.addView(view);
                 }

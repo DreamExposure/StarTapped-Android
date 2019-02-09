@@ -1,6 +1,7 @@
 package org.dreamexposure.startapped.objects.post;
 
 import org.dreamexposure.startapped.enums.post.PostType;
+import org.dreamexposure.startapped.objects.file.UploadedFile;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,20 +14,20 @@ import org.json.JSONObject;
  * Contact: nova@dreamexposure.org
  */
 public class ImagePost extends Post {
-    private String imageUrl;
+    private UploadedFile image;
 
     public ImagePost() {
         setPostType(PostType.IMAGE);
     }
 
     //Getters
-    public String getImageUrl() {
-        return imageUrl;
+    public UploadedFile getImage() {
+        return image;
     }
 
     //Setters
-    public void setImageUrl(String _imageUrl) {
-        imageUrl = _imageUrl;
+    public void setImage(UploadedFile _image) {
+        image = _image;
     }
 
     @Override
@@ -34,7 +35,7 @@ public class ImagePost extends Post {
         JSONObject base = super.toJson();
 
         try {
-            base.put("image_url", imageUrl);
+            base.put("image", image.toJson());
         } catch (JSONException ignore) {
         }
 
@@ -46,7 +47,7 @@ public class ImagePost extends Post {
         super.fromJson(json);
 
         try {
-            imageUrl = json.getString("image_url");
+            image = new UploadedFile().fromJson(json.getJSONObject("image"));
         } catch (JSONException ignore) {
         }
 

@@ -194,8 +194,8 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
                         adultOnlyBadge.setVisibility(View.VISIBLE);
 
                     //Download images
-                    new DownloadImageTask(background).execute(blog.getBackgroundUrl());
-                    new DownloadImageTask(icon).execute(blog.getIconUrl());
+                    new DownloadImageTask(background).execute(blog.getBackgroundImage().getUrl());
+                    new DownloadImageTask(icon).execute(blog.getIconImage().getUrl());
 
                     if (blog.getType() == BlogType.PERSONAL) {
                         PersonalBlog pBlog = new PersonalBlog().fromJson(status.getBody().getJSONObject("blog"));

@@ -1,6 +1,7 @@
 package org.dreamexposure.startapped.objects.post;
 
 import org.dreamexposure.startapped.enums.post.PostType;
+import org.dreamexposure.startapped.objects.file.UploadedFile;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,20 +14,20 @@ import org.json.JSONObject;
  * Contact: nova@dreamexposure.org
  */
 public class AudioPost extends Post {
-    private String audioUrl;
+    private UploadedFile audio;
 
     public AudioPost() {
         setPostType(PostType.AUDIO);
     }
 
     //Getters
-    public String getAudioUrl() {
-        return audioUrl;
+    public UploadedFile getAudio() {
+        return audio;
     }
 
     //Setters
-    public void setAudioUrl(String _audioUrl) {
-        audioUrl = _audioUrl;
+    public void setAudio(UploadedFile _audio) {
+        audio = _audio;
     }
 
     @Override
@@ -34,7 +35,7 @@ public class AudioPost extends Post {
         JSONObject base = super.toJson();
 
         try {
-            base.put("audio_url", audioUrl);
+            base.put("audio", audio.toJson());
         } catch (JSONException ignore) {
         }
 
@@ -46,7 +47,7 @@ public class AudioPost extends Post {
         super.fromJson(json);
 
         try {
-            audioUrl = json.getString("audio_url");
+            audio = new UploadedFile().fromJson(json.getJSONObject("audio"));
         } catch (JSONException ignore) {
         }
 

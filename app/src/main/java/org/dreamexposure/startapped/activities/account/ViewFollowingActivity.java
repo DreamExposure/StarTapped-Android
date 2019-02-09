@@ -78,7 +78,7 @@ public class ViewFollowingActivity extends AppCompatActivity implements TaskCall
 
                         url.setText(blog.getBaseUrl());
 
-                        new DownloadImageTask(icon).execute(blog.getIconUrl());
+                        new DownloadImageTask(icon).execute(blog.getIconImage().getUrl());
 
                         linearContainer.addView(view);
                     }
