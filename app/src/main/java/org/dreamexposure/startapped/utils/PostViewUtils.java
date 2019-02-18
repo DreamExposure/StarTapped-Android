@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,7 +30,7 @@ import org.dreamexposure.startapped.objects.post.VideoPost;
 import java.util.LinkedList;
 import java.util.List;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings("WeakerAccess")
 @SuppressLint("InflateParams")
 public class PostViewUtils {
     //From tree
@@ -55,13 +57,13 @@ public class PostViewUtils {
         for (IPost p : postsInOrder) {
             View v = null;
             if (p instanceof TextPost) {
-                v = generateTextPostView((TextPost) p, null, false, false, activity);
+                v = generateTextPostView((TextPost) p, null, false, false, false, activity);
             } else if (p instanceof ImagePost) {
-                v = generateImagePostView((ImagePost) p, null, false, false, activity);
+                v = generateImagePostView((ImagePost) p, null, false, false, false, activity);
             } else if (p instanceof AudioPost) {
-                v = generateAudioPostView((AudioPost) p, null, false, false, activity);
+                v = generateAudioPostView((AudioPost) p, null, false, false, false, activity);
             } else if (p instanceof VideoPost) {
-                v = generateVideoPostView((VideoPost) p, null, false, false, activity);
+                v = generateVideoPostView((VideoPost) p, null, false, false, false, activity);
             }
             if (first == null)
                 first = v;
@@ -71,13 +73,13 @@ public class PostViewUtils {
         //Add bottom child...
         View child = null;
         if (lowest instanceof TextPost) {
-            child = generateTextPostView((TextPost) lowest, null, false, true, activity);
+            child = generateTextPostView((TextPost) lowest, null, false, true, true, activity);
         } else if (lowest instanceof ImagePost) {
-            child = generateImagePostView((ImagePost) lowest, null, false, true, activity);
+            child = generateImagePostView((ImagePost) lowest, null, false, true, true, activity);
         } else if (lowest instanceof AudioPost) {
-            child = generateAudioPostView((AudioPost) lowest, null, false, true, activity);
+            child = generateAudioPostView((AudioPost) lowest, null, false, true, true, activity);
         } else if (lowest instanceof VideoPost) {
-            child = generateVideoPostView((VideoPost) lowest, null, false, true, activity);
+            child = generateVideoPostView((VideoPost) lowest, null, false, true, true, activity);
         }
         root.addView(child);
 
@@ -135,13 +137,13 @@ public class PostViewUtils {
         for (IPost p : postsInOrder) {
             View v = null;
             if (p instanceof TextPost) {
-                v = generateTextPostView((TextPost) p, null, false, false, fragment);
+                v = generateTextPostView((TextPost) p, null, false, false, false, fragment);
             } else if (p instanceof ImagePost) {
-                v = generateImagePostView((ImagePost) p, null, false, false, fragment);
+                v = generateImagePostView((ImagePost) p, null, false, false, false, fragment);
             } else if (p instanceof AudioPost) {
-                v = generateAudioPostView((AudioPost) p, null, false, false, fragment);
+                v = generateAudioPostView((AudioPost) p, null, false, false, false, fragment);
             } else if (p instanceof VideoPost) {
-                v = generateVideoPostView((VideoPost) p, null, false, false, fragment);
+                v = generateVideoPostView((VideoPost) p, null, false, false, false, fragment);
             }
             if (first == null)
                 first = v;
@@ -151,13 +153,13 @@ public class PostViewUtils {
         //Add bottom child...
         View child = null;
         if (lowest instanceof TextPost) {
-            child = generateTextPostView((TextPost) lowest, null, false, true, fragment);
+            child = generateTextPostView((TextPost) lowest, null, false, true, true, fragment);
         } else if (lowest instanceof ImagePost) {
-            child = generateImagePostView((ImagePost) lowest, null, false, true, fragment);
+            child = generateImagePostView((ImagePost) lowest, null, false, true, true, fragment);
         } else if (lowest instanceof AudioPost) {
-            child = generateAudioPostView((AudioPost) lowest, null, false, true, fragment);
+            child = generateAudioPostView((AudioPost) lowest, null, false, true, true, fragment);
         } else if (lowest instanceof VideoPost) {
-            child = generateVideoPostView((VideoPost) lowest, null, false, true, fragment);
+            child = generateVideoPostView((VideoPost) lowest, null, false, true, true, fragment);
         }
         root.addView(child);
 
@@ -193,7 +195,8 @@ public class PostViewUtils {
     }
 
     //Text
-    public static View generateTextPostView(TextPost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, AppCompatActivity activity) {
+    @SuppressLint("SetTextI18n")
+    public static View generateTextPostView(TextPost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, boolean showTags, AppCompatActivity activity) {
         View view = LayoutInflater.from(activity).inflate(R.layout.post_text_container, null);
 
         //Load views...
@@ -203,6 +206,9 @@ public class PostViewUtils {
 
         TextView postTitle = view.findViewById(R.id.post_title);
         TextView postText = view.findViewById(R.id.post_text);
+
+        HorizontalScrollView postTagsScroll = view.findViewById(R.id.post_tags_scroll);
+        LinearLayout postTags = view.findViewById(R.id.post_tags);
 
         TextView source = view.findViewById(R.id.source);
         ImageView bookmarkPost = view.findViewById(R.id.bookmark_post);
@@ -220,6 +226,17 @@ public class PostViewUtils {
         postTitle.setText(post.getTitle());
         postText.setText(post.getBody());
 
+        for (String tag : post.getTags()) {
+            Button button = (Button) activity.getLayoutInflater().inflate(R.layout.post_tag_item, null);
+            button.setText("#" + tag.trim());
+
+            button.setOnClickListener(view12 -> {
+                //TODO: Move to search view
+            });
+
+            postTags.addView(button);
+        }
+
         source.setText(String.format(activity.getResources().getString(R.string.post_source), post.getOriginBlog().getBaseUrl()));
 
         if (!showTopBar) {
@@ -231,6 +248,9 @@ public class PostViewUtils {
             source.setVisibility(View.GONE);
             bookmarkPost.setVisibility(View.GONE);
             reblogPost.setVisibility(View.GONE);
+        }
+        if (post.tagsToString().length() <= 0 || !showTags) {
+            postTagsScroll.setVisibility(View.GONE);
         }
 
         //Set handlers for buttons...
@@ -267,11 +287,11 @@ public class PostViewUtils {
                 //TODO: Handle reblog
             });
         }
-
         return view;
     }
 
-    public static View generateTextPostView(TextPost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, FragmentActivity fragment) {
+    @SuppressLint("SetTextI18n")
+    public static View generateTextPostView(TextPost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, boolean showTags, FragmentActivity fragment) {
         View view = LayoutInflater.from(fragment).inflate(R.layout.post_text_container, null);
 
         //Load views...
@@ -281,6 +301,9 @@ public class PostViewUtils {
 
         TextView postTitle = view.findViewById(R.id.post_title);
         TextView postText = view.findViewById(R.id.post_text);
+
+        HorizontalScrollView postTagsScroll = view.findViewById(R.id.post_tags_scroll);
+        LinearLayout postTags = view.findViewById(R.id.post_tags);
 
         TextView source = view.findViewById(R.id.source);
         ImageView bookmarkPost = view.findViewById(R.id.bookmark_post);
@@ -298,6 +321,17 @@ public class PostViewUtils {
         postTitle.setText(post.getTitle());
         postText.setText(post.getBody());
 
+        for (String tag : post.getTags()) {
+            Button button = (Button) fragment.getLayoutInflater().inflate(R.layout.post_tag_item, null);
+            button.setText("#" + tag.trim());
+
+            button.setOnClickListener(view12 -> {
+                //TODO: Move to search view
+            });
+
+            postTags.addView(button);
+        }
+
         source.setText(String.format(fragment.getResources().getString(R.string.post_source), post.getOriginBlog().getBaseUrl()));
 
         if (!showTopBar) {
@@ -309,6 +343,9 @@ public class PostViewUtils {
             source.setVisibility(View.GONE);
             bookmarkPost.setVisibility(View.GONE);
             reblogPost.setVisibility(View.GONE);
+        }
+        if (post.tagsToString().length() <= 0 || !showTags) {
+            postTagsScroll.setVisibility(View.GONE);
         }
 
         //Set handlers for buttons...
@@ -350,7 +387,8 @@ public class PostViewUtils {
     }
 
     //Image
-    public static View generateImagePostView(ImagePost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, AppCompatActivity activity) {
+    @SuppressLint("SetTextI18n")
+    public static View generateImagePostView(ImagePost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, boolean showTags, AppCompatActivity activity) {
         View view = LayoutInflater.from(activity).inflate(R.layout.post_image_container, null);
 
         //Load views...
@@ -363,6 +401,9 @@ public class PostViewUtils {
 
         TextView postTitle = view.findViewById(R.id.post_title);
         TextView postText = view.findViewById(R.id.post_text);
+
+        HorizontalScrollView postTagsScroll = view.findViewById(R.id.post_tags_scroll);
+        LinearLayout postTags = view.findViewById(R.id.post_tags);
 
         TextView source = view.findViewById(R.id.source);
         ImageView bookmarkPost = view.findViewById(R.id.bookmark_post);
@@ -382,6 +423,17 @@ public class PostViewUtils {
         postTitle.setText(post.getTitle());
         postText.setText(post.getBody());
 
+        for (String tag : post.getTags()) {
+            Button button = (Button) activity.getLayoutInflater().inflate(R.layout.post_tag_item, null);
+            button.setText("#" + tag.trim());
+
+            button.setOnClickListener(view12 -> {
+                //TODO: Move to search view
+            });
+
+            postTags.addView(button);
+        }
+
         source.setText(String.format(activity.getResources().getString(R.string.post_source), post.getOriginBlog().getBaseUrl()));
 
         if (!showTopBar) {
@@ -393,6 +445,9 @@ public class PostViewUtils {
             source.setVisibility(View.GONE);
             bookmarkPost.setVisibility(View.GONE);
             reblogPost.setVisibility(View.GONE);
+        }
+        if (post.tagsToString().length() <= 0 || !showTags) {
+            postTagsScroll.setVisibility(View.GONE);
         }
 
         if (showTopBar) {
@@ -432,7 +487,8 @@ public class PostViewUtils {
         return view;
     }
 
-    public static View generateImagePostView(ImagePost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, FragmentActivity fragment) {
+    @SuppressLint("SetTextI18n")
+    public static View generateImagePostView(ImagePost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, boolean showTags, FragmentActivity fragment) {
         View view = LayoutInflater.from(fragment).inflate(R.layout.post_image_container, null);
 
         //Load views...
@@ -445,6 +501,9 @@ public class PostViewUtils {
 
         TextView postTitle = view.findViewById(R.id.post_title);
         TextView postText = view.findViewById(R.id.post_text);
+
+        HorizontalScrollView postTagsScroll = view.findViewById(R.id.post_tags_scroll);
+        LinearLayout postTags = view.findViewById(R.id.post_tags);
 
         TextView source = view.findViewById(R.id.source);
         ImageView bookmarkPost = view.findViewById(R.id.bookmark_post);
@@ -464,6 +523,17 @@ public class PostViewUtils {
         postTitle.setText(post.getTitle());
         postText.setText(post.getBody());
 
+        for (String tag : post.getTags()) {
+            Button button = (Button) fragment.getLayoutInflater().inflate(R.layout.post_tag_item, null);
+            button.setText("#" + tag.trim());
+
+            button.setOnClickListener(view12 -> {
+                //TODO: Move to search view
+            });
+
+            postTags.addView(button);
+        }
+
         source.setText(String.format(fragment.getResources().getString(R.string.post_source), post.getOriginBlog().getBaseUrl()));
 
         if (!showTopBar) {
@@ -475,6 +545,9 @@ public class PostViewUtils {
             source.setVisibility(View.GONE);
             bookmarkPost.setVisibility(View.GONE);
             reblogPost.setVisibility(View.GONE);
+        }
+        if (post.tagsToString().length() <= 0 || !showTags) {
+            postTagsScroll.setVisibility(View.GONE);
         }
 
         if (showTopBar) {
@@ -515,7 +588,8 @@ public class PostViewUtils {
     }
 
     //Audio
-    public static View generateAudioPostView(AudioPost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, AppCompatActivity activity) {
+    @SuppressLint("SetTextI18n")
+    public static View generateAudioPostView(AudioPost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, boolean showTags, AppCompatActivity activity) {
         View view = LayoutInflater.from(activity).inflate(R.layout.post_audio_container, null);
 
         //Load views...
@@ -527,6 +601,9 @@ public class PostViewUtils {
 
         TextView postTitle = view.findViewById(R.id.post_title);
         TextView postText = view.findViewById(R.id.post_text);
+
+        HorizontalScrollView postTagsScroll = view.findViewById(R.id.post_tags_scroll);
+        LinearLayout postTags = view.findViewById(R.id.post_tags);
 
         TextView source = view.findViewById(R.id.source);
         ImageView bookmarkPost = view.findViewById(R.id.bookmark_post);
@@ -547,6 +624,17 @@ public class PostViewUtils {
         postTitle.setText(post.getTitle());
         postText.setText(post.getBody());
 
+        for (String tag : post.getTags()) {
+            Button button = (Button) activity.getLayoutInflater().inflate(R.layout.post_tag_item, null);
+            button.setText("#" + tag.trim());
+
+            button.setOnClickListener(view12 -> {
+                //TODO: Move to search view
+            });
+
+            postTags.addView(button);
+        }
+
         source.setText(String.format(activity.getResources().getString(R.string.post_source), post.getOriginBlog().getBaseUrl()));
 
         if (!showTopBar) {
@@ -558,6 +646,9 @@ public class PostViewUtils {
             source.setVisibility(View.GONE);
             bookmarkPost.setVisibility(View.GONE);
             reblogPost.setVisibility(View.GONE);
+        }
+        if (post.tagsToString().length() <= 0 || !showTags) {
+            postTagsScroll.setVisibility(View.GONE);
         }
 
         if (showTopBar) {
@@ -597,7 +688,8 @@ public class PostViewUtils {
         return view;
     }
 
-    public static View generateAudioPostView(AudioPost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, FragmentActivity fragment) {
+    @SuppressLint("SetTextI18n")
+    public static View generateAudioPostView(AudioPost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, boolean showTags, FragmentActivity fragment) {
         View view = LayoutInflater.from(fragment).inflate(R.layout.post_audio_container, null);
 
         //Load views...
@@ -609,6 +701,9 @@ public class PostViewUtils {
 
         TextView postTitle = view.findViewById(R.id.post_title);
         TextView postText = view.findViewById(R.id.post_text);
+
+        HorizontalScrollView postTagsScroll = view.findViewById(R.id.post_tags_scroll);
+        LinearLayout postTags = view.findViewById(R.id.post_tags);
 
         TextView source = view.findViewById(R.id.source);
         ImageView bookmarkPost = view.findViewById(R.id.bookmark_post);
@@ -629,6 +724,17 @@ public class PostViewUtils {
         postTitle.setText(post.getTitle());
         postText.setText(post.getBody());
 
+        for (String tag : post.getTags()) {
+            Button button = (Button) fragment.getLayoutInflater().inflate(R.layout.post_tag_item, null);
+            button.setText("#" + tag.trim());
+
+            button.setOnClickListener(view12 -> {
+                //TODO: Move to search view
+            });
+
+            postTags.addView(button);
+        }
+
         source.setText(String.format(fragment.getResources().getString(R.string.post_source), post.getOriginBlog().getBaseUrl()));
 
         if (!showTopBar) {
@@ -640,6 +746,9 @@ public class PostViewUtils {
             source.setVisibility(View.GONE);
             bookmarkPost.setVisibility(View.GONE);
             reblogPost.setVisibility(View.GONE);
+        }
+        if (post.tagsToString().length() <= 0 || !showTags) {
+            postTagsScroll.setVisibility(View.GONE);
         }
 
         if (showTopBar) {
@@ -680,7 +789,8 @@ public class PostViewUtils {
     }
 
     //Video
-    public static View generateVideoPostView(VideoPost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, AppCompatActivity activity) {
+    @SuppressLint("SetTextI18n")
+    public static View generateVideoPostView(VideoPost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, boolean showTags, AppCompatActivity activity) {
         View view = LayoutInflater.from(activity).inflate(R.layout.post_video_container, null);
 
         //Load views...
@@ -692,6 +802,9 @@ public class PostViewUtils {
 
         TextView postTitle = view.findViewById(R.id.post_title);
         TextView postText = view.findViewById(R.id.post_text);
+
+        HorizontalScrollView postTagsScroll = view.findViewById(R.id.post_tags_scroll);
+        LinearLayout postTags = view.findViewById(R.id.post_tags);
 
         TextView source = view.findViewById(R.id.source);
         ImageView bookmarkPost = view.findViewById(R.id.bookmark_post);
@@ -712,6 +825,17 @@ public class PostViewUtils {
         postTitle.setText(post.getTitle());
         postText.setText(post.getBody());
 
+        for (String tag : post.getTags()) {
+            Button button = (Button) activity.getLayoutInflater().inflate(R.layout.post_tag_item, null);
+            button.setText("#" + tag.trim());
+
+            button.setOnClickListener(view12 -> {
+                //TODO: Move to search view
+            });
+
+            postTags.addView(button);
+        }
+
         source.setText(String.format(activity.getResources().getString(R.string.post_source), post.getOriginBlog().getBaseUrl()));
 
         if (!showTopBar) {
@@ -723,6 +847,9 @@ public class PostViewUtils {
             source.setVisibility(View.GONE);
             bookmarkPost.setVisibility(View.GONE);
             reblogPost.setVisibility(View.GONE);
+        }
+        if (post.tagsToString().length() <= 0 || !showTags) {
+            postTagsScroll.setVisibility(View.GONE);
         }
 
         if (showTopBar) {
@@ -762,7 +889,8 @@ public class PostViewUtils {
         return view;
     }
 
-    public static View generateVideoPostView(VideoPost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, FragmentActivity fragment) {
+    @SuppressLint("SetTextI18n")
+    public static View generateVideoPostView(VideoPost post, @Nullable IPost parent, boolean showTopBar, boolean showBottomBar, boolean showTags, FragmentActivity fragment) {
         View view = LayoutInflater.from(fragment).inflate(R.layout.post_video_container, null);
 
         //Load views...
@@ -774,6 +902,9 @@ public class PostViewUtils {
 
         TextView postTitle = view.findViewById(R.id.post_title);
         TextView postText = view.findViewById(R.id.post_text);
+
+        HorizontalScrollView postTagsScroll = view.findViewById(R.id.post_tags_scroll);
+        LinearLayout postTags = view.findViewById(R.id.post_tags);
 
         TextView source = view.findViewById(R.id.source);
         ImageView bookmarkPost = view.findViewById(R.id.bookmark_post);
@@ -794,6 +925,17 @@ public class PostViewUtils {
         postTitle.setText(post.getTitle());
         postText.setText(post.getBody());
 
+        for (String tag : post.getTags()) {
+            Button button = (Button) fragment.getLayoutInflater().inflate(R.layout.post_tag_item, null);
+            button.setText("#" + tag.trim());
+
+            button.setOnClickListener(view12 -> {
+                //TODO: Move to search view
+            });
+
+            postTags.addView(button);
+        }
+
         source.setText(String.format(fragment.getResources().getString(R.string.post_source), post.getOriginBlog().getBaseUrl()));
 
         if (!showTopBar) {
@@ -806,7 +948,9 @@ public class PostViewUtils {
             bookmarkPost.setVisibility(View.GONE);
             reblogPost.setVisibility(View.GONE);
         }
-
+        if (post.tagsToString().length() <= 0 || !showTags) {
+            postTagsScroll.setVisibility(View.GONE);
+        }
         if (showTopBar) {
             blogUrlLatest.setOnClickListener(view1 -> {
                 Intent intent = new Intent(fragment.getApplicationContext(), ViewBlogActivity.class);

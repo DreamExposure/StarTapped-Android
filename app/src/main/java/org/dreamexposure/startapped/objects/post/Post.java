@@ -6,9 +6,12 @@ import org.dreamexposure.startapped.enums.post.PostType;
 import org.dreamexposure.startapped.objects.blog.Blog;
 import org.dreamexposure.startapped.objects.blog.IBlog;
 import org.dreamexposure.startapped.objects.user.Account;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -34,6 +37,8 @@ public class Post implements IPost, Comparable<IPost> {
     private boolean nsfw;
 
     private UUID parent;
+
+    private List<String> tags = new ArrayList<>();
 
     //Getters
     public UUID getId() {
@@ -80,6 +85,19 @@ public class Post implements IPost, Comparable<IPost> {
     @Override
     public UUID getParent() {
         return parent;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public String tagsToString() {
+        if (!tags.isEmpty()) {
+            String t = tags.toString();
+            return t.substring(1, t.length() - 1); //Should cut off the []
+        } else {
+            return "";
+        }
     }
 
     //Setters
@@ -150,6 +168,12 @@ public class Post implements IPost, Comparable<IPost> {
             if (parent != null)
                 json.put("parent", parent);
 
+            JSONArray jTags = new JSONArray();
+            for (String t : tags) {
+                jTags.put(t);
+            }
+            json.put("tags", jTags);
+
         } catch (JSONException ignore) {
         }
 
@@ -170,6 +194,11 @@ public class Post implements IPost, Comparable<IPost> {
             nsfw = json.getBoolean("nsfw");
             if (json.has("parent"))
                 parent = UUID.fromString(json.getString("parent"));
+
+            JSONArray jTags = json.getJSONArray("tags");
+            for (int i = 0; i < jTags.length(); i++) {
+                tags.add(jTags.getString(i));
+            }
 
         } catch (JSONException ignore) {
         }

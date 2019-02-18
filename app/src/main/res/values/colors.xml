@@ -36,4 +36,6 @@
     <color name="PrimaryFaded">#80b5532d</color>
     <color name="DarkFaded">#801F2635</color>
 
+    <color name="DarkLightened">#4e5f85</color>
+
 </resources>

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -68,6 +69,7 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
     Button actionSelectImage;
     Button actionSelectAudio;
     Button actionSelectVideo;
+    Button actionAddTags;
 
     GifImageView blogIcon;
     AppCompatSpinner blogSelectSpinner;
@@ -86,11 +88,14 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
     final int IMAGE_CODE = 1122;
     final int AUDIO_CODE = 2233;
     final int VIDEO_CODE = 3344;
+    final int TAG_CODE = 4455;
     private final String[] audioType = {"mp3", ".wav"};
 
     private PostType postType = PostType.TEXT;
 
     private LinkedList<IBlog> blogs = new LinkedList<>();
+
+    private ArrayList<String> tags = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,6 +119,7 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
         actionSelectImage = mainView.findViewById(R.id.action_select_image);
         actionSelectAudio = mainView.findViewById(R.id.action_select_audio);
         actionSelectVideo = mainView.findViewById(R.id.action_select_video);
+        actionAddTags = mainView.findViewById(R.id.action_add_tags);
 
         blogIcon = mainView.findViewById(R.id.blog_icon_image);
         blogSelectSpinner = mainView.findViewById(R.id.pick_blog_spinner);
@@ -143,6 +149,7 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
         actionSelectImage.setOnClickListener(v -> onSelectImageClick());
         actionSelectAudio.setOnClickListener(v -> onSelectAudioClick());
         actionSelectVideo.setOnClickListener(v -> onSelectVideoClick());
+        actionAddTags.setOnClickListener(v -> onAddTagsClick());
 
         //Hide everything just in case...
         postImage.setVisibility(View.GONE);
@@ -177,33 +184,32 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_post:
-                //Create post!
-                Post post = new Post();
-                post.setPostType(postType);
-                post.setTitle(postTitle.getText().toString().trim());
-                post.setBody(postBody.getText().toString().trim());
-                post.setOriginBlog(blogs.get(blogSelectSpinner.getSelectedItemPosition()));
+        if (item.getItemId() == R.id.action_post) { //Create post!
+            Post post = new Post();
+            post.setPostType(postType);
+            post.setTitle(postTitle.getText().toString().trim());
+            post.setBody(postBody.getText().toString().trim());
+            post.setOriginBlog(blogs.get(blogSelectSpinner.getSelectedItemPosition()));
+            post.getTags().clear();
+            post.getTags().addAll(tags);
 
-                try {
-                    if (postType == PostType.IMAGE || postType == PostType.AUDIO || postType == PostType.VIDEO) {
-                        new PostCreateTask(this, post, ImageUtils.fileToBase64(new File(filePath))).execute();
-                        //TODO: Show loading animation...
-                    } else {
-                        new PostCreateTask(this, post).execute();
-                        //TODO: Show loading animation...
-                    }
-                } catch (Exception e) {
-                    Log.e(StarTappedApp.TAG, "Failed to handle post create", e);
-                    Toast.makeText(mainView.getContext(), "Failed to handle post create...", Toast.LENGTH_LONG).show();
+            try {
+                if (postType == PostType.IMAGE || postType == PostType.AUDIO || postType == PostType.VIDEO) {
+                    new PostCreateTask(this, post, ImageUtils.fileToBase64(new File(filePath))).execute();
+                    //TODO: Show loading animation...
+                } else {
+                    new PostCreateTask(this, post).execute();
+                    //TODO: Show loading animation...
                 }
-                return true;
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
+            } catch (Exception e) {
+                Log.e(StarTappedApp.TAG, "Failed to handle post create", e);
+                Toast.makeText(mainView.getContext(), "Failed to handle post create...", Toast.LENGTH_LONG).show();
+            }
+            return true;
         }
+        // If we got here, the user's action was not recognized.
+        // Invoke the superclass to handle it.
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -315,6 +321,18 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
                 .pickPhoto(this, VIDEO_CODE);
     }
 
+    void onAddTagsClick() {
+        AddTagsDialogFragment addTags = new AddTagsDialogFragment();
+
+        Bundle b = new Bundle();
+        b.putStringArrayList("tags", tags);
+        addTags.setArguments(b);
+        addTags.setTargetFragment(this, TAG_CODE);
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        addTags.show(ft, StarTappedApp.TAG);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -414,6 +432,11 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
 
                     videoContainer.makeVisible();
                     videoContainer.fromPath(filePath);
+                }
+                break;
+            case TAG_CODE:
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    tags = data.getStringArrayListExtra("tags");
                 }
                 break;
             default:

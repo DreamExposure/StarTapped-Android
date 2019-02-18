@@ -142,6 +142,24 @@
         android:focusable="true"
         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Purus viverra accumsan in nisl nisi. Integer quis auctor elit sed vulputate mi sit amet mauris. Convallis aenean et tortor at risus viverra adipiscing at. Neque viverra justo nec ultrices dui sapien eget mi." />
 
+    <HorizontalScrollView
+        android:id="@+id/post_tags_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/post_text">
+
+        <LinearLayout
+            android:id="@+id/post_tags"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+
     <View
         android:id="@+id/divider3"
         android:layout_width="0dp"
@@ -152,7 +170,7 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/post_text" />
+        app:layout_constraintTop_toBottomOf="@+id/post_tags_scroll" />
 
     <TextView
         android:id="@+id/source"

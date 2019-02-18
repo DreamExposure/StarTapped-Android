@@ -343,22 +343,22 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
                         } else {
                             if (p instanceof TextPost) {
                                 //Handle single post (no parent)
-                                View view = PostViewUtils.generateTextPostView((TextPost)p, null, true, true, this);
+                                View view = PostViewUtils.generateTextPostView((TextPost) p, null, true, true, true, this);
                                 rootLayout.addView(view);
                                 rootLayout.addView(ViewUtils.smallSpace(this));
                             } else if (p instanceof ImagePost) {
                                 //Handle single post (no parent)
-                                View view = PostViewUtils.generateImagePostView((ImagePost)p, null, true, true, this);
+                                View view = PostViewUtils.generateImagePostView((ImagePost) p, null, true, true, true, this);
                                 rootLayout.addView(view);
                                 rootLayout.addView(ViewUtils.smallSpace(this));
                             } else if (p instanceof AudioPost) {
                                 //Handle single post (no parent)
-                                View view = PostViewUtils.generateAudioPostView((AudioPost)p, null, true, true, this);
+                                View view = PostViewUtils.generateAudioPostView((AudioPost) p, null, true, true, true, this);
                                 rootLayout.addView(view);
                                 rootLayout.addView(ViewUtils.smallSpace(this));
                             } else if (p instanceof VideoPost) {
                                 //Handle single post (no parent)
-                                View view = PostViewUtils.generateVideoPostView((VideoPost)p, null, true, true, this);
+                                View view = PostViewUtils.generateVideoPostView((VideoPost) p, null, true, true, true, this);
                                 rootLayout.addView(view);
                                 rootLayout.addView(ViewUtils.smallSpace(this));
                             }

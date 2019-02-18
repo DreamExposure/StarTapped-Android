@@ -7,6 +7,7 @@ import org.dreamexposure.startapped.objects.blog.IBlog;
 import org.dreamexposure.startapped.objects.user.Account;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -41,6 +42,10 @@ public interface IPost extends Comparable<IPost> {
     boolean isNsfw();
 
     UUID getParent();
+
+    List<String> getTags();
+
+    String tagsToString();
 
     //Setters
     void setId(UUID _id);

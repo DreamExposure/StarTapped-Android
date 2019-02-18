@@ -61,7 +61,10 @@
     <string name="action_followers">Followers</string>
     <string name="post_create_body_hint">Go on, say something</string>
     <string name="post_create_title_hint">Title, if you want one</string>
+    <string name="post_add_tags_hint">Tags, if you want any</string>
+    <string name="post_add_tags">Add Tags</string>
     <string name="post">Post</string>
+    <string name="post_tags">Tags: %s</string>
 
     <string name="select_media_type_audio">Audio</string>
     <string name="error_bad_return">Something bad was returned. Please try again.</string>

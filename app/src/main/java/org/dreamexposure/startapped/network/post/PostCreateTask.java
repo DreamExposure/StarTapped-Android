@@ -10,6 +10,7 @@ import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 import org.dreamexposure.startapped.objects.post.IPost;
 import org.dreamexposure.startapped.utils.SettingsManager;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -80,7 +81,14 @@ public class PostCreateTask extends AsyncTask<Object, Void, NetworkCallStatus> {
                     break;
             }
 
-            //TODO: Post tag handling.
+            //Handle tags (Optional request params)
+            if (!post.getTags().isEmpty()) {
+                JSONArray jTags = new JSONArray();
+                for (String t : post.getTags()) {
+                    jTags.put(t);
+                }
+                requestJson.put("tags", jTags);
+            }
 
             RequestBody requestBody = RequestBody.create(GlobalConst.JSON, requestJson.toString());
 
