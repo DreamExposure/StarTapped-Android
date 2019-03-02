@@ -41,6 +41,7 @@ import org.dreamexposure.startapped.objects.post.ImagePost;
 import org.dreamexposure.startapped.objects.post.TextPost;
 import org.dreamexposure.startapped.objects.post.VideoPost;
 import org.dreamexposure.startapped.objects.time.TimeIndex;
+import org.dreamexposure.startapped.objects.user.Account;
 import org.dreamexposure.startapped.utils.MathUtils;
 import org.dreamexposure.startapped.utils.PostUtils;
 import org.dreamexposure.startapped.utils.PostViewUtils;
@@ -299,8 +300,8 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
     public void getBlogOwnerAge(NetworkCallStatus status) {
         try {
             if (status.isSuccess()) {
-                String birthday = status.getBody().getJSONObject("account").getString("birthday");
-                int age = MathUtils.determineAge(birthday);
+                Account acc = new Account().fromJson(status.getBody().getJSONObject("account"));
+                int age = acc.getAge();
                 ageBadge.setText(age + "");
             } else {
                 ageBadge.setVisibility(View.INVISIBLE);

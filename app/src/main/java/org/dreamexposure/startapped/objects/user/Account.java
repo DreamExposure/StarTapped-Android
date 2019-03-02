@@ -1,5 +1,6 @@
 package org.dreamexposure.startapped.objects.user;
 
+import org.dreamexposure.startapped.utils.MathUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,6 +21,7 @@ public class Account {
     private String email;
     private String phoneNumber;
     private String birthday;
+    private int age;
 
     private boolean safeSearch;
 
@@ -47,6 +49,10 @@ public class Account {
 
     public String getBirthday() {
         return birthday;
+    }
+
+    public int getAge() {
+        return age;
     }
 
     public boolean isSafeSearch() {
@@ -124,12 +130,26 @@ public class Account {
         try {
             accountId = UUID.fromString(json.getString("id"));
             username = json.getString("username");
-            email = json.getString("email");
-            phoneNumber = json.getString("phone_number");
-            birthday = json.getString("birthday");
+            if (json.has("email")) {
+                email = json.getString("email");
+            }
+            if (json.has("phone_number")) {
+                phoneNumber = json.getString("phone_number");
+            }
+            if (json.has("birthday")) {
+                birthday = json.getString("birthday");
+                age = MathUtils.determineAge(birthday);
+            }
+            if (json.has("age")) {
+                age = json.getInt("age");
+            }
             safeSearch = json.getBoolean("safe_search");
-            verified = json.getBoolean("verified");
-            emailConfirmed = json.getBoolean("email_confirmed");
+            if (json.has("verified")) {
+                verified = json.getBoolean("verified");
+            }
+            if (json.has("email_confirmed")) {
+                emailConfirmed = json.getBoolean("email_confirmed");
+            }
             admin = json.getBoolean("admin");
         } catch (JSONException ignore) {
         }
