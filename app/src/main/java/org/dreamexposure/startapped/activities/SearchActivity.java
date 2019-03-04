@@ -25,7 +25,7 @@ import org.dreamexposure.startapped.activities.blog.self.BlogListSelfActivity;
 import org.dreamexposure.startapped.activities.settings.SettingsActivity;
 import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.enums.TaskType;
-import org.dreamexposure.startapped.network.post.GetPostsForHubTask;
+import org.dreamexposure.startapped.network.post.GetPostsForSearchTask;
 import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 import org.dreamexposure.startapped.objects.post.AudioPost;
 import org.dreamexposure.startapped.objects.post.IPost;
@@ -40,6 +40,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,11 +61,15 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
     @BindView(R.id.scroll_content)
     ScrollView scrollView;
 
-    private TimeIndex index;
+    public TimeIndex index;
     private boolean isGenerating = false;
     private boolean isRefreshing = false;
     private boolean stopRequesting = false;
     private boolean scrollUp = false;
+    public boolean clear = false;
+
+    //Search stuffs
+    public List<String> currentTags = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +98,18 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
 
         scrollUp = true;
 
-        //TODO: Check if bundle contains tags to search, otherwise don't get posts until user searches
-        //getPosts();
+        boolean search = false;
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            if (b.containsKey("tags")) {
+                search = true;
+                currentTags.clear();
+                currentTags.addAll(b.getStringArrayList("tags"));
+            }
+        }
+
+        if (search)
+            getPosts();
     }
 
 
@@ -160,7 +175,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
                     index.setOldest(range.getLong("oldest"));
                 }
 
-                if (isRefreshing)
+                if (isRefreshing || clear)
                     rootLayout.removeAllViews();
 
                 for (IPost p : posts) {
@@ -215,6 +230,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         }
         isGenerating = false;
         scrollUp = false;
+        clear = false;
 
         if (isRefreshing) {
             isRefreshing = false;
@@ -224,25 +240,35 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         index.setBefore(index.getOldest() - 1);
     }
 
-    private void getPosts() {
+    public void getPosts() {
         if (!isGenerating && !stopRequesting) {
-            isGenerating = true;
-            //TODO: HANDLE POST GET FOR SEARCH
-            GetPostsForHubTask task = new GetPostsForHubTask(this, index);
-            //task.execute();
+            //Validate once more that there is something to search for...
+            if (currentTags.size() > 0) {
+                isGenerating = true;
+                GetPostsForSearchTask task = new GetPostsForSearchTask(this, index, currentTags);
+                task.execute();
+            } else {
+                Toast.makeText(this, R.string.search_nothing, Toast.LENGTH_LONG).show();
+            }
         }
     }
 
     void onRefresh() {
         if (!isRefreshing && !isGenerating) {
-            isRefreshing = true;
-            stopRequesting = false;
+            //Don't refresh if there is nothing to search for...
+            if (currentTags.size() > 0) {
+                isRefreshing = true;
+                stopRequesting = false;
 
-            index = new TimeIndex();
+                index = new TimeIndex();
 
-            scrollUp = true;
+                scrollUp = true;
 
-            getPosts();
+                getPosts();
+            } else {
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(this, R.string.search_nothing, Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -255,7 +281,6 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
 
     @Override
     public void taskCallback(NetworkCallStatus status) {
-        //TODO: Handle POST GET FOR SEARCH
-        if (status.getType() == TaskType.POST_GET_FOR_HUB) getPostsCallback(status);
+        if (status.getType() == TaskType.POST_GET_FOR_SEARCH) getPostsCallback(status);
     }
 }

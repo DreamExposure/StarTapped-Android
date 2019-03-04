@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.felipecsl.gifimageview.library.GifImageView;
 
 import org.dreamexposure.startapped.R;
+import org.dreamexposure.startapped.activities.SearchActivity;
 import org.dreamexposure.startapped.activities.blog.ViewBlogActivity;
 import org.dreamexposure.startapped.objects.container.AudioContainer;
 import org.dreamexposure.startapped.objects.container.ImageContainer;
@@ -26,7 +27,10 @@ import org.dreamexposure.startapped.objects.post.IPost;
 import org.dreamexposure.startapped.objects.post.ImagePost;
 import org.dreamexposure.startapped.objects.post.TextPost;
 import org.dreamexposure.startapped.objects.post.VideoPost;
+import org.dreamexposure.startapped.objects.time.TimeIndex;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -231,7 +235,20 @@ public class PostViewUtils {
             button.setText("#" + tag.trim());
 
             button.setOnClickListener(view12 -> {
-                //TODO: Move to search view
+                if (activity instanceof SearchActivity) {
+                    SearchActivity sa = (SearchActivity) activity;
+                    sa.currentTags.clear();
+                    sa.currentTags.add(tag.trim());
+                    sa.clear = true;
+                    sa.index = new TimeIndex();
+                    sa.getPosts();
+                } else {
+                    Intent intent = new Intent(activity, SearchActivity.class);
+                    Bundle b = new Bundle();
+                    b.putStringArrayList("tags", new ArrayList<>(Collections.singletonList(tag.trim())));
+                    intent.putExtras(b);
+                    activity.startActivity(intent);
+                }
             });
 
             postTags.addView(button);
@@ -326,7 +343,11 @@ public class PostViewUtils {
             button.setText("#" + tag.trim());
 
             button.setOnClickListener(view12 -> {
-                //TODO: Move to search view
+                Intent intent = new Intent(fragment, SearchActivity.class);
+                Bundle b = new Bundle();
+                b.putStringArrayList("tags", new ArrayList<>(Collections.singletonList(tag.trim())));
+                intent.putExtras(b);
+                fragment.startActivity(intent);
             });
 
             postTags.addView(button);
@@ -428,7 +449,20 @@ public class PostViewUtils {
             button.setText("#" + tag.trim());
 
             button.setOnClickListener(view12 -> {
-                //TODO: Move to search view
+                if (activity instanceof SearchActivity) {
+                    SearchActivity sa = (SearchActivity) activity;
+                    sa.currentTags.clear();
+                    sa.currentTags.add(tag.trim());
+                    sa.clear = true;
+                    sa.index = new TimeIndex();
+                    sa.getPosts();
+                } else {
+                    Intent intent = new Intent(activity, SearchActivity.class);
+                    Bundle b = new Bundle();
+                    b.putStringArrayList("tags", new ArrayList<>(Collections.singletonList(tag.trim())));
+                    intent.putExtras(b);
+                    activity.startActivity(intent);
+                }
             });
 
             postTags.addView(button);
@@ -528,7 +562,11 @@ public class PostViewUtils {
             button.setText("#" + tag.trim());
 
             button.setOnClickListener(view12 -> {
-                //TODO: Move to search view
+                Intent intent = new Intent(fragment, SearchActivity.class);
+                Bundle b = new Bundle();
+                b.putStringArrayList("tags", new ArrayList<>(Collections.singletonList(tag.trim())));
+                intent.putExtras(b);
+                fragment.startActivity(intent);
             });
 
             postTags.addView(button);
@@ -629,7 +667,20 @@ public class PostViewUtils {
             button.setText("#" + tag.trim());
 
             button.setOnClickListener(view12 -> {
-                //TODO: Move to search view
+                if (activity instanceof SearchActivity) {
+                    SearchActivity sa = (SearchActivity) activity;
+                    sa.currentTags.clear();
+                    sa.currentTags.add(tag.trim());
+                    sa.clear = true;
+                    sa.index = new TimeIndex();
+                    sa.getPosts();
+                } else {
+                    Intent intent = new Intent(activity, SearchActivity.class);
+                    Bundle b = new Bundle();
+                    b.putStringArrayList("tags", new ArrayList<>(Collections.singletonList(tag.trim())));
+                    intent.putExtras(b);
+                    activity.startActivity(intent);
+                }
             });
 
             postTags.addView(button);
@@ -729,7 +780,11 @@ public class PostViewUtils {
             button.setText("#" + tag.trim());
 
             button.setOnClickListener(view12 -> {
-                //TODO: Move to search view
+                Intent intent = new Intent(fragment, SearchActivity.class);
+                Bundle b = new Bundle();
+                b.putStringArrayList("tags", new ArrayList<>(Collections.singletonList(tag.trim())));
+                intent.putExtras(b);
+                fragment.startActivity(intent);
             });
 
             postTags.addView(button);
@@ -830,7 +885,20 @@ public class PostViewUtils {
             button.setText("#" + tag.trim());
 
             button.setOnClickListener(view12 -> {
-                //TODO: Move to search view
+                if (activity instanceof SearchActivity) {
+                    SearchActivity sa = (SearchActivity) activity;
+                    sa.currentTags.clear();
+                    sa.currentTags.add(tag.trim());
+                    sa.clear = true;
+                    sa.index = new TimeIndex();
+                    sa.getPosts();
+                } else {
+                    Intent intent = new Intent(activity, SearchActivity.class);
+                    Bundle b = new Bundle();
+                    b.putStringArrayList("tags", new ArrayList<>(Collections.singletonList(tag.trim())));
+                    intent.putExtras(b);
+                    activity.startActivity(intent);
+                }
             });
 
             postTags.addView(button);
@@ -930,7 +998,11 @@ public class PostViewUtils {
             button.setText("#" + tag.trim());
 
             button.setOnClickListener(view12 -> {
-                //TODO: Move to search view
+                Intent intent = new Intent(fragment, SearchActivity.class);
+                Bundle b = new Bundle();
+                b.putStringArrayList("tags", new ArrayList<>(Collections.singletonList(tag.trim())));
+                intent.putExtras(b);
+                fragment.startActivity(intent);
             });
 
             postTags.addView(button);
