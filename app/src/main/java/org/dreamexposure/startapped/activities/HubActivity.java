@@ -3,9 +3,14 @@ package org.dreamexposure.startapped.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -47,7 +52,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class HubActivity extends AppCompatActivity implements TaskCallback {
+public class HubActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, TaskCallback {
     //TODO: Display loading icon when getting posts (when at bottom, refresh already has one)
 
     private RequestPermissionHandler mRequestPermissionHandler;
@@ -82,12 +87,22 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hub);
         mRequestPermissionHandler = new RequestPermissionHandler();
-
         ButterKnife.bind(this);
 
+        //Toolbar setup
         toolbar.setTitle("Hub");
         setSupportActionBar(toolbar);
 
+        //Drawer setup...
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+
+        //Scroll view setup
         swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
         scrollView.getViewTreeObserver().addOnScrollChangedListener(this::scrollChangeHandler);
 
@@ -99,13 +114,6 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
         scrollUp = true;
 
         getPosts();
-    }
-
-    @OnClick(R.id.action_create_post)
-    void onCreatePostFabClick() {
-        CreatePostDialogFragment dialog = new CreatePostDialogFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        dialog.show(ft, StarTappedApp.TAG);
     }
 
     private void doPermissionsCheck() {
@@ -121,31 +129,62 @@ public class HubActivity extends AppCompatActivity implements TaskCallback {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_toolbar, menu);
+    @OnClick(R.id.action_create_post)
+    void onCreatePostFabClick() {
+        CreatePostDialogFragment dialog = new CreatePostDialogFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        dialog.show(ft, StarTappedApp.TAG);
+    }
 
-        return super.onCreateOptionsMenu(menu);
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_blogs:
-                startActivity(new Intent(this, BlogListSelfActivity.class));
-                return true;
-            case R.id.action_following:
-                startActivity(new Intent(this, ViewFollowingActivity.class));
-                return true;
-            case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.hub_toolbar, menu);
+        return true;
+    }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_hub) {
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        } else if (id == R.id.nav_search) {
+            //TODO: Handle going to search
+        } else if (id == R.id.nav_explore) {
+            //TODO: Handle going to explore
+        } else if (id == R.id.nav_blogs) {
+            startActivity(new Intent(this, BlogListSelfActivity.class));
+            finish();
+            return true;
+        } else if (id == R.id.nav_following) {
+            startActivity(new Intent(this, ViewFollowingActivity.class));
+            finish();
+            return true;
+        } else if (id == R.id.nav_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            finish();
+            return true;
         }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     public void getPostsCallback(NetworkCallStatus status) {

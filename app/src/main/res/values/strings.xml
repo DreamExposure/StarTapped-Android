@@ -69,4 +69,18 @@
     <string name="select_media_type_audio">Audio</string>
     <string name="error_bad_return">Something bad was returned. Please try again.</string>
     <string name="no_more_posts">There\'s no more posts.</string>
+
+    <string name="title_activity_hub_rewrite">Hub</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="menu_hub">Hub</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_explore">Explore</string>
+    <string name="menu_blogs">Your Blogs</string>
+    <string name="menu_following">Following</string>
+    <string name="menu_settings">Settings</string>
+    <string name="drawer_header_title">StarTapped</string>
+    <string name="drawer_header_subtitle">A Blogging Platform for All</string>
 </resources>

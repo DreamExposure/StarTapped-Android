@@ -40,7 +40,9 @@ dependencies {
 
     //My depends
     implementation 'com.squareup.okhttp3:okhttp:3.13.1'
-    implementation group: 'commons-io', name: 'commons-io', version: '20030203.000550'
+
+    //noinspection GradleDependency
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
     implementation 'commons-validator:commons-validator:1.6'
     implementation 'com.felipecsl:gifimageview:2.2.0'
     implementation 'joda-time:joda-time:2.10.1'

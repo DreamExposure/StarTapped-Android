@@ -9,8 +9,8 @@ import android.support.media.ExifInterface;
 import android.util.Log;
 
 import com.felipecsl.gifimageview.library.GifImageView;
+import com.google.android.gms.common.util.IOUtils;
 
-import org.apache.commons.io.IOUtils;
 import org.dreamexposure.startapped.utils.ImageUtils;
 
 import java.io.File;

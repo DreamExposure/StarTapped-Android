@@ -4,6 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -18,7 +23,10 @@ import android.widget.Toast;
 import com.felipecsl.gifimageview.library.GifImageView;
 
 import org.dreamexposure.startapped.R;
+import org.dreamexposure.startapped.activities.HubActivity;
+import org.dreamexposure.startapped.activities.account.ViewFollowingActivity;
 import org.dreamexposure.startapped.activities.blog.ViewBlogActivity;
+import org.dreamexposure.startapped.activities.settings.SettingsActivity;
 import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.enums.blog.BlogType;
@@ -36,7 +44,7 @@ import org.json.JSONException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BlogListSelfActivity extends AppCompatActivity implements TaskCallback {
+public class BlogListSelfActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, TaskCallback {
     @BindView(R.id.self_blog_linear)
     LinearLayout rootLayout;
     @BindView(R.id.toolbar)
@@ -51,13 +59,15 @@ public class BlogListSelfActivity extends AppCompatActivity implements TaskCallb
         toolbar.setTitle("Your Blogs");
         setSupportActionBar(toolbar);
 
-        //Load blogs...
-        new GetBlogsSelfTask(this).execute();
-    }
+        //Drawer setup...
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
 
-    @Override
-    protected void onResume() {
-        super.onResume();
         //Load blogs...
         new GetBlogsSelfTask(this).execute();
     }
@@ -144,6 +154,23 @@ public class BlogListSelfActivity extends AppCompatActivity implements TaskCallb
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        //Load blogs...
+        new GetBlogsSelfTask(this).execute();
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.blog_list_self_toolbar, menu);
         return super.onCreateOptionsMenu(menu);
@@ -151,17 +178,47 @@ public class BlogListSelfActivity extends AppCompatActivity implements TaskCallb
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_create_blog:
-                Intent intent = new Intent(this, BlogCreateActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
+        if (item.getItemId() == R.id.action_create_blog) {
+            Intent intent = new Intent(this, BlogCreateActivity.class);
+            startActivity(intent);
+            return true;
         }
+        // If we got here, the user's action was not recognized.
+        // Invoke the superclass to handle it.
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_hub) {
+            startActivity(new Intent(this, HubActivity.class));
+            finish();
+            return true;
+        } else if (id == R.id.nav_search) {
+            //TODO: Handle going to search
+        } else if (id == R.id.nav_explore) {
+            //TODO: Handle going to explore
+        } else if (id == R.id.nav_blogs) {
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        } else if (id == R.id.nav_following) {
+            startActivity(new Intent(this, ViewFollowingActivity.class));
+            finish();
+            return true;
+        } else if (id == R.id.nav_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            finish();
+            return true;
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override

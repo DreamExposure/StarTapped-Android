@@ -43,4 +43,13 @@
         <item name="android:colorControlActivated">@color/Light</item>
         <item name="android:colorControlNormal">@color/Primary</item>
     </style>
+
+    <style name="NoActionBarTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="NoActionBarTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="NoActionBarTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

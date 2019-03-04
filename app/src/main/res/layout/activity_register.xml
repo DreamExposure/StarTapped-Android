@@ -8,7 +8,7 @@
     tools:context=".activities.auth.RegisterActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/drawer_email_display"
         android:layout_width="0dp"
         android:layout_height="66dp"
         android:layout_marginTop="16dp"
@@ -38,7 +38,7 @@
         android:textColor="@color/Dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/drawer_email_display"
         tools:ignore="Autofill" />
 
     <EditText
