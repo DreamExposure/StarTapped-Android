@@ -240,6 +240,7 @@ public class PostViewUtils {
                     sa.currentTags.clear();
                     sa.currentTags.add(tag.trim());
                     sa.clear = true;
+                    sa.stopRequesting = false;
                     sa.index = new TimeIndex();
                     sa.getPosts();
                 } else {
@@ -454,6 +455,7 @@ public class PostViewUtils {
                     sa.currentTags.clear();
                     sa.currentTags.add(tag.trim());
                     sa.clear = true;
+                    sa.stopRequesting = false;
                     sa.index = new TimeIndex();
                     sa.getPosts();
                 } else {
@@ -672,6 +674,7 @@ public class PostViewUtils {
                     sa.currentTags.clear();
                     sa.currentTags.add(tag.trim());
                     sa.clear = true;
+                    sa.stopRequesting = false;
                     sa.index = new TimeIndex();
                     sa.getPosts();
                 } else {
@@ -890,6 +893,7 @@ public class PostViewUtils {
                     sa.currentTags.clear();
                     sa.currentTags.add(tag.trim());
                     sa.clear = true;
+                    sa.stopRequesting = false;
                     sa.index = new TimeIndex();
                     sa.getPosts();
                 } else {

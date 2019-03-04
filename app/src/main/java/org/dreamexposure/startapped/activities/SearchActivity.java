@@ -1,5 +1,7 @@
 package org.dreamexposure.startapped.activities;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import org.dreamexposure.startapped.R;
@@ -64,7 +67,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
     public TimeIndex index;
     private boolean isGenerating = false;
     private boolean isRefreshing = false;
-    private boolean stopRequesting = false;
+    public boolean stopRequesting = false;
     private boolean scrollUp = false;
     public boolean clear = false;
 
@@ -110,6 +113,35 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
 
         if (search)
             getPosts();
+
+        handleSearchIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleSearchIntent(intent);
+    }
+
+    private void handleSearchIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+            //Split and add to current tags....
+            currentTags.clear();
+
+            for (String tagRaw : query.split(",")) {
+                if (tagRaw.trim().length() > 0)
+                    currentTags.add(tagRaw.trim());
+            }
+
+            if (currentTags.size() > 0) {
+                stopRequesting = false;
+                clear = true;
+                index = new TimeIndex();
+
+                getPosts();
+            }
+        }
     }
 
 
@@ -123,10 +155,17 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.hub_toolbar, menu);
+        getMenuInflater().inflate(R.menu.search_toolbar, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 
