@@ -1,12 +1,9 @@
 package org.dreamexposure.startapped.activities;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -27,7 +24,6 @@ import org.dreamexposure.startapped.activities.account.ViewFollowingActivity;
 import org.dreamexposure.startapped.activities.blog.self.BlogListSelfActivity;
 import org.dreamexposure.startapped.activities.settings.SettingsActivity;
 import org.dreamexposure.startapped.async.TaskCallback;
-import org.dreamexposure.startapped.dialogs.post.CreatePostDialogFragment;
 import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.network.post.GetPostsForHubTask;
 import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
@@ -39,7 +35,6 @@ import org.dreamexposure.startapped.objects.post.VideoPost;
 import org.dreamexposure.startapped.objects.time.TimeIndex;
 import org.dreamexposure.startapped.utils.PostUtils;
 import org.dreamexposure.startapped.utils.PostViewUtils;
-import org.dreamexposure.startapped.utils.RequestPermissionHandler;
 import org.dreamexposure.startapped.utils.ViewUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,16 +45,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class HubActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, TaskCallback {
-    //TODO: Display loading icon when getting posts (when at bottom, refresh already has one)
-
-    private RequestPermissionHandler mRequestPermissionHandler;
-    String[] permissions = new String[]{
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.CAMERA};
+public class SearchActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, TaskCallback {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -73,9 +60,6 @@ public class HubActivity extends AppCompatActivity implements NavigationView.OnN
     @BindView(R.id.scroll_content)
     ScrollView scrollView;
 
-    @BindView(R.id.action_create_post)
-    FloatingActionButton createPostFab;
-
     private TimeIndex index;
     private boolean isGenerating = false;
     private boolean isRefreshing = false;
@@ -85,12 +69,11 @@ public class HubActivity extends AppCompatActivity implements NavigationView.OnN
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hub);
-        mRequestPermissionHandler = new RequestPermissionHandler();
+        setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
 
         //Toolbar setup
-        toolbar.setTitle("Hub");
+        toolbar.setTitle("Search");
         setSupportActionBar(toolbar);
 
         //Drawer setup...
@@ -106,34 +89,12 @@ public class HubActivity extends AppCompatActivity implements NavigationView.OnN
         swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
         scrollView.getViewTreeObserver().addOnScrollChangedListener(this::scrollChangeHandler);
 
-        //Check permissions on start
-        doPermissionsCheck();
-
         index = new TimeIndex();
 
         scrollUp = true;
 
-        getPosts();
-    }
-
-    private void doPermissionsCheck() {
-        mRequestPermissionHandler.requestPermission(this, permissions, 123, new RequestPermissionHandler.RequestPermissionListener() {
-            @Override
-            public void onSuccess() {
-            }
-
-            @Override
-            public void onFailed() {
-                Toast.makeText(HubActivity.this, "StarTapped may not function as intended without all permissions accepted!", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    @OnClick(R.id.action_create_post)
-    void onCreatePostFabClick() {
-        CreatePostDialogFragment dialog = new CreatePostDialogFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        dialog.show(ft, StarTappedApp.TAG);
+        //TODO: Check if bundle contains tags to search, otherwise don't get posts until user searches
+        //getPosts();
     }
 
 
@@ -162,18 +123,20 @@ public class HubActivity extends AppCompatActivity implements NavigationView.OnN
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (id == R.id.nav_hub) {
-            drawer.closeDrawer(GravityCompat.START);
-            return true;
+            finish();
         } else if (id == R.id.nav_search) {
-            startActivity(new Intent(this, SearchActivity.class));
+            drawer.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_explore) {
             //TODO: Handle going to explore
         } else if (id == R.id.nav_blogs) {
             startActivity(new Intent(this, BlogListSelfActivity.class));
+            finish();
         } else if (id == R.id.nav_following) {
             startActivity(new Intent(this, ViewFollowingActivity.class));
+            finish();
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
+            finish();
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -264,8 +227,9 @@ public class HubActivity extends AppCompatActivity implements NavigationView.OnN
     private void getPosts() {
         if (!isGenerating && !stopRequesting) {
             isGenerating = true;
+            //TODO: HANDLE POST GET FOR SEARCH
             GetPostsForHubTask task = new GetPostsForHubTask(this, index);
-            task.execute();
+            //task.execute();
         }
     }
 
@@ -291,6 +255,7 @@ public class HubActivity extends AppCompatActivity implements NavigationView.OnN
 
     @Override
     public void taskCallback(NetworkCallStatus status) {
+        //TODO: Handle POST GET FOR SEARCH
         if (status.getType() == TaskType.POST_GET_FOR_HUB) getPostsCallback(status);
     }
 }

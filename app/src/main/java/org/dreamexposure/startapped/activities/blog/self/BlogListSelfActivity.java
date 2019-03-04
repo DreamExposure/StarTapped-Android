@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.felipecsl.gifimageview.library.GifImageView;
 
 import org.dreamexposure.startapped.R;
-import org.dreamexposure.startapped.activities.HubActivity;
 import org.dreamexposure.startapped.activities.account.ViewFollowingActivity;
 import org.dreamexposure.startapped.activities.blog.ViewBlogActivity;
 import org.dreamexposure.startapped.activities.settings.SettingsActivity;
@@ -195,7 +194,6 @@ public class BlogListSelfActivity extends AppCompatActivity implements Navigatio
         int id = item.getItemId();
 
         if (id == R.id.nav_hub) {
-            startActivity(new Intent(this, HubActivity.class));
             finish();
             return true;
         } else if (id == R.id.nav_search) {

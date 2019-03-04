@@ -20,10 +20,11 @@
         android:supportsRtl="true"
         android:theme="@style/NoActionBarTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activities.SearchActivity"></activity>
         <activity
             android:name=".activities.HubActivity"
             android:label="@string/title_activity_hub_rewrite"
-            android:theme="@style/NoActionBarTheme.NoActionBar"></activity>
+            android:theme="@style/NoActionBarTheme.NoActionBar" />
         <activity
             android:name=".activities.SplashActivity"
             android:theme="@style/SplashTheme">

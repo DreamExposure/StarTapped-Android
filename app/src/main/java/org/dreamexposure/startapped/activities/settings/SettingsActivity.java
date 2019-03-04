@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import org.dreamexposure.startapped.R;
-import org.dreamexposure.startapped.activities.HubActivity;
+import org.dreamexposure.startapped.activities.SearchActivity;
 import org.dreamexposure.startapped.activities.account.ViewFollowingActivity;
 import org.dreamexposure.startapped.activities.auth.LoginActivity;
 import org.dreamexposure.startapped.activities.blog.self.BlogListSelfActivity;
@@ -92,29 +92,25 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (id == R.id.nav_hub) {
-            startActivity(new Intent(this, HubActivity.class));
             finish();
             return true;
         } else if (id == R.id.nav_search) {
-            //TODO: Handle going to search
+            startActivity(new Intent(this, SearchActivity.class));
+            finish();
         } else if (id == R.id.nav_explore) {
             //TODO: Handle going to explore
         } else if (id == R.id.nav_blogs) {
             startActivity(new Intent(this, BlogListSelfActivity.class));
             finish();
-            return true;
         } else if (id == R.id.nav_following) {
             startActivity(new Intent(this, ViewFollowingActivity.class));
             finish();
-            return true;
         } else if (id == R.id.nav_settings) {
-            DrawerLayout drawer = findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
             return true;
         }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
