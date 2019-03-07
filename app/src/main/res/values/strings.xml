@@ -87,4 +87,5 @@
     <string name="search_nothing">You can\'t search for nothing</string>
     <string name="search_toolbar">Search StarTapped</string>
     <string name="search_hint">Search StarTapped</string>
+    <string name="menu_bookmarks">Bookmarks</string>
 </resources>

@@ -59,7 +59,6 @@ import butterknife.ButterKnife;
 
 @SuppressLint("InflateParams")
 public class ViewBlogActivity extends AppCompatActivity implements TaskCallback {
-    //TODO: Display loading icon when getting posts (when at bottom, refresh already has one)
 
     @BindView(R.id.blog_view_linear)
     LinearLayout rootLayout;

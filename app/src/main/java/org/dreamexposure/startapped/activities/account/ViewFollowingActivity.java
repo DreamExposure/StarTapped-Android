@@ -103,6 +103,9 @@ public class ViewFollowingActivity extends AppCompatActivity implements Navigati
         } else if (id == R.id.nav_following) {
             drawer.closeDrawer(GravityCompat.START);
             return true;
+        } else if (id == R.id.nav_bookmarks) {
+            startActivity(new Intent(this, ViewBookmarksActivity.class));
+            finish();
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             finish();

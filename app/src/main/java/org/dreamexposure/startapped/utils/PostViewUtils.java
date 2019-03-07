@@ -13,12 +13,15 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.felipecsl.gifimageview.library.GifImageView;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.activities.SearchActivity;
 import org.dreamexposure.startapped.activities.blog.ViewBlogActivity;
+import org.dreamexposure.startapped.network.bookmark.AddBookmarkTask;
+import org.dreamexposure.startapped.network.bookmark.RemoveBookmarkTask;
 import org.dreamexposure.startapped.objects.container.AudioContainer;
 import org.dreamexposure.startapped.objects.container.ImageContainer;
 import org.dreamexposure.startapped.objects.container.VideoContainer;
@@ -299,7 +302,21 @@ public class PostViewUtils {
                 activity.startActivity(intent);
             });
             bookmarkPost.setOnClickListener(view1 -> {
-                //TODO: Handle bookmark
+                if (post.isBookmarked()) {
+                    //Remove bookmark...
+                    new RemoveBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(false);
+                        Toast.makeText(activity, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                } else {
+                    //Add bookmark...
+                    new AddBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(true);
+                        Toast.makeText(activity, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                }
             });
             reblogPost.setOnClickListener(view1 -> {
                 //TODO: Handle reblog
@@ -398,7 +415,21 @@ public class PostViewUtils {
                 fragment.startActivity(intent);
             });
             bookmarkPost.setOnClickListener(view1 -> {
-                //TODO: Handle bookmark
+                if (post.isBookmarked()) {
+                    //Remove bookmark...
+                    new RemoveBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(false);
+                        Toast.makeText(fragment, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                } else {
+                    //Add bookmark...
+                    new AddBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(true);
+                        Toast.makeText(fragment, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                }
             });
             reblogPost.setOnClickListener(view1 -> {
                 //TODO: Handle reblog
@@ -513,7 +544,21 @@ public class PostViewUtils {
                 activity.startActivity(intent);
             });
             bookmarkPost.setOnClickListener(view1 -> {
-                //TODO: Handle bookmark
+                if (post.isBookmarked()) {
+                    //Remove bookmark...
+                    new RemoveBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(false);
+                        Toast.makeText(activity, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                } else {
+                    //Add bookmark...
+                    new AddBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(true);
+                        Toast.makeText(activity, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                }
             });
             reblogPost.setOnClickListener(view1 -> {
                 //TODO: Handle reblog
@@ -617,7 +662,21 @@ public class PostViewUtils {
                 fragment.startActivity(intent);
             });
             bookmarkPost.setOnClickListener(view1 -> {
-                //TODO: Handle bookmark
+                if (post.isBookmarked()) {
+                    //Remove bookmark...
+                    new RemoveBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(false);
+                        Toast.makeText(fragment, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                } else {
+                    //Add bookmark...
+                    new AddBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(true);
+                        Toast.makeText(fragment, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                }
             });
             reblogPost.setOnClickListener(view1 -> {
                 //TODO: Handle reblog
@@ -732,7 +791,21 @@ public class PostViewUtils {
                 activity.startActivity(intent);
             });
             bookmarkPost.setOnClickListener(view1 -> {
-                //TODO: Handle bookmark
+                if (post.isBookmarked()) {
+                    //Remove bookmark...
+                    new RemoveBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(false);
+                        Toast.makeText(activity, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                } else {
+                    //Add bookmark...
+                    new AddBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(true);
+                        Toast.makeText(activity, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                }
             });
             reblogPost.setOnClickListener(view1 -> {
                 //TODO: Handle reblog
@@ -836,7 +909,21 @@ public class PostViewUtils {
                 fragment.startActivity(intent);
             });
             bookmarkPost.setOnClickListener(view1 -> {
-                //TODO: Handle bookmark
+                if (post.isBookmarked()) {
+                    //Remove bookmark...
+                    new RemoveBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(false);
+                        Toast.makeText(fragment, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                } else {
+                    //Add bookmark...
+                    new AddBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(true);
+                        Toast.makeText(fragment, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                }
             });
             reblogPost.setOnClickListener(view1 -> {
                 //TODO: Handle reblog
@@ -951,7 +1038,21 @@ public class PostViewUtils {
                 activity.startActivity(intent);
             });
             bookmarkPost.setOnClickListener(view1 -> {
-                //TODO: Handle bookmark
+                if (post.isBookmarked()) {
+                    //Remove bookmark...
+                    new RemoveBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(false);
+                        Toast.makeText(activity, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                } else {
+                    //Add bookmark...
+                    new AddBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(true);
+                        Toast.makeText(activity, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                }
             });
             reblogPost.setOnClickListener(view1 -> {
                 //TODO: Handle reblog
@@ -1054,7 +1155,21 @@ public class PostViewUtils {
                 fragment.getApplicationContext().startActivity(intent);
             });
             bookmarkPost.setOnClickListener(view1 -> {
-                //TODO: Handle bookmark
+                if (post.isBookmarked()) {
+                    //Remove bookmark...
+                    new RemoveBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(false);
+                        Toast.makeText(fragment, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                } else {
+                    //Add bookmark...
+                    new AddBookmarkTask(status -> {
+                        if (status.isSuccess())
+                            post.setBookmarked(true);
+                        Toast.makeText(fragment, status.getMessage(), Toast.LENGTH_SHORT).show();
+                    }, post.getId()).execute();
+                }
             });
             reblogPost.setOnClickListener(view1 -> {
                 //TODO: Handle reblog

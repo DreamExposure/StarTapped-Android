@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.StarTappedApp;
+import org.dreamexposure.startapped.activities.account.ViewBookmarksActivity;
 import org.dreamexposure.startapped.activities.account.ViewFollowingActivity;
 import org.dreamexposure.startapped.activities.blog.self.BlogListSelfActivity;
 import org.dreamexposure.startapped.activities.settings.SettingsActivity;
@@ -187,6 +188,9 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
             finish();
         } else if (id == R.id.nav_following) {
             startActivity(new Intent(this, ViewFollowingActivity.class));
+            finish();
+        } else if (id == R.id.nav_bookmarks) {
+            startActivity(new Intent(this, ViewBookmarksActivity.class));
             finish();
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));

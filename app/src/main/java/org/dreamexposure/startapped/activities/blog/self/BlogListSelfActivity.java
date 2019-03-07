@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.felipecsl.gifimageview.library.GifImageView;
 
 import org.dreamexposure.startapped.R;
+import org.dreamexposure.startapped.activities.SearchActivity;
+import org.dreamexposure.startapped.activities.account.ViewBookmarksActivity;
 import org.dreamexposure.startapped.activities.account.ViewFollowingActivity;
 import org.dreamexposure.startapped.activities.blog.ViewBlogActivity;
 import org.dreamexposure.startapped.activities.settings.SettingsActivity;
@@ -193,28 +195,28 @@ public class BlogListSelfActivity extends AppCompatActivity implements Navigatio
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (id == R.id.nav_hub) {
             finish();
             return true;
         } else if (id == R.id.nav_search) {
-            //TODO: Handle going to search
+            startActivity(new Intent(this, SearchActivity.class));
+            finish();
         } else if (id == R.id.nav_explore) {
             //TODO: Handle going to explore
         } else if (id == R.id.nav_blogs) {
-            DrawerLayout drawer = findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
             return true;
         } else if (id == R.id.nav_following) {
             startActivity(new Intent(this, ViewFollowingActivity.class));
             finish();
-            return true;
+        } else if (id == R.id.nav_bookmarks) {
+            startActivity(new Intent(this, ViewBookmarksActivity.class));
+            finish();
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             finish();
-            return true;
         }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

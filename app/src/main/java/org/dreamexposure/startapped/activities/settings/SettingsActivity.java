@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.activities.SearchActivity;
+import org.dreamexposure.startapped.activities.account.ViewBookmarksActivity;
 import org.dreamexposure.startapped.activities.account.ViewFollowingActivity;
 import org.dreamexposure.startapped.activities.auth.LoginActivity;
 import org.dreamexposure.startapped.activities.blog.self.BlogListSelfActivity;
@@ -106,6 +107,9 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             finish();
         } else if (id == R.id.nav_following) {
             startActivity(new Intent(this, ViewFollowingActivity.class));
+            finish();
+        } else if (id == R.id.nav_bookmarks) {
+            startActivity(new Intent(this, ViewBookmarksActivity.class));
             finish();
         } else if (id == R.id.nav_settings) {
             drawer.closeDrawer(GravityCompat.START);

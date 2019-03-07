@@ -43,6 +43,8 @@ public interface IPost extends Comparable<IPost> {
 
     UUID getParent();
 
+    boolean isBookmarked();
+
     List<String> getTags();
 
     String tagsToString();
@@ -69,6 +71,8 @@ public interface IPost extends Comparable<IPost> {
     void setNsfw(boolean _nsfw);
 
     void setParent(UUID _parent);
+
+    void setBookmarked(boolean _bookmarked);
 
     JSONObject toJson();
 
