@@ -4,13 +4,19 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.safetynet.SafetyNet;
+
 import org.dreamexposure.startapped.R;
+import org.dreamexposure.startapped.StarTappedApp;
 import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.network.blog.self.CreateBlogTask;
@@ -47,8 +53,27 @@ public class BlogCreateActivity extends AppCompatActivity implements TaskCallbac
     @OnClick(R.id.blog_create_button)
     public void handleCreateClick() {
         //handle creation task..
-        if (!TextUtils.isEmpty(blogUrl.getText().toString().trim()))
-            new CreateBlogTask(this, blogUrl.getText().toString().trim()).execute();
+        if (TextUtils.isEmpty(blogUrl.getText().toString().trim()))
+            return;
+
+        // Showing reCAPTCHA dialog
+        SafetyNet.getClient(this).verifyWithRecaptcha("6LcJQ4IUAAAAAKjXoXfktNxWUe4F7S5HiEZJVwS5")
+                .addOnSuccessListener(this, response -> {
+                    Log.d(StarTappedApp.TAG, "onSuccess");
+                    if (!response.getTokenResult().isEmpty()) {
+                        String token = response.getTokenResult();
+                        new CreateBlogTask(this, blogUrl.getText().toString().trim(), token).execute();
+                    }
+                })
+                .addOnFailureListener(this, e -> {
+                    if (e instanceof ApiException) {
+                        ApiException apiException = (ApiException) e;
+                        Log.d(StarTappedApp.TAG, "Error message: " +
+                                CommonStatusCodes.getStatusCodeString(apiException.getStatusCode()));
+                    } else {
+                        Log.d(StarTappedApp.TAG, "Unknown type of error: " + e.getMessage());
+                    }
+                });
     }
 
     @Override
@@ -59,15 +84,13 @@ public class BlogCreateActivity extends AppCompatActivity implements TaskCallbac
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_cancel:
-                //Cancel creation, go past Go, do not collect $200. Go to self blog list.
-                finish();
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.action_cancel) {
+            //Cancel creation, go past Go, do not collect $200. Go to self blog list.
+            finish();
         }
+        // If we got here, the user's action was not recognized.
+        // Invoke the superclass to handle it.
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

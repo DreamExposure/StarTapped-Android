@@ -31,10 +31,12 @@ import okhttp3.Response;
 public class CreateBlogTask extends AsyncTask<String, Void, NetworkCallStatus> {
     private TaskCallback callback;
     private String url;
+    private String gCap;
 
-    public CreateBlogTask(TaskCallback _callback, String _url) {
+    public CreateBlogTask(TaskCallback _callback, String _url, String _gCap) {
         callback = _callback;
         url = _url;
+        gCap = _gCap;
     }
 
     @Override
@@ -47,6 +49,7 @@ public class CreateBlogTask extends AsyncTask<String, Void, NetworkCallStatus> {
             JSONObject requestJson = new JSONObject();
             requestJson.put("url", url);
             requestJson.put("type", BlogType.PERSONAL.name());
+            requestJson.put("gcap", gCap);
 
 
             RequestBody requestBody = RequestBody.create(GlobalConst.JSON, requestJson.toString());
