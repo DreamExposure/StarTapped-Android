@@ -149,7 +149,7 @@ public class BlogEditActivity extends AppCompatActivity implements TaskCallback 
 
                 //Download images
                 new DownloadImageTask(background).execute(iBlog.getBackgroundImage().getUrl());
-                new DownloadImageTask(icon).execute(iBlog.getBackgroundImage().getUrl());
+                new DownloadImageTask(icon).execute(iBlog.getIconImage().getUrl());
             } else {
                 Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
             }
