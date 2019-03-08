@@ -60,7 +60,6 @@ public class ViewBookmarksActivity extends AppCompatActivity implements Navigati
     private boolean isGenerating = false;
     private boolean isRefreshing = false;
     private boolean stopRequesting = false;
-    private boolean scrollUp = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +82,6 @@ public class ViewBookmarksActivity extends AppCompatActivity implements Navigati
         //Scroll view setup
         swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
         scrollView.getViewTreeObserver().addOnScrollChangedListener(this::scrollChangeHandler);
-
-        scrollUp = true;
 
         index = new TimeIndex();
 
@@ -187,9 +184,6 @@ public class ViewBookmarksActivity extends AppCompatActivity implements Navigati
                     }
                 }
 
-                if (scrollUp)
-                    scrollView.post(() -> scrollView.smoothScrollTo(0, 0));
-
             } else {
                 //Hit the epoch.
                 if (status.getCode() == 417) {
@@ -204,7 +198,6 @@ public class ViewBookmarksActivity extends AppCompatActivity implements Navigati
         }
 
         isGenerating = false;
-        scrollUp = false;
 
         if (isRefreshing) {
             isRefreshing = false;
@@ -227,7 +220,6 @@ public class ViewBookmarksActivity extends AppCompatActivity implements Navigati
             isRefreshing = true;
             stopRequesting = false;
             index = new TimeIndex();
-            scrollUp = true;
             getPosts();
         }
     }

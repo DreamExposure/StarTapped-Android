@@ -45,8 +45,6 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginTop="8dp"
-        android:clickable="true"
-        android:focusable="true"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +55,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/Dark"
-            android:clickable="false"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +65,7 @@
             android:id="@+id/post_video"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:clickable="false"
+
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -91,10 +88,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/video_container"
-        android:clickable="true"
         android:linksClickable="true"
         android:autoLink="all"
-        android:focusable="true"
         tools:text="Post Title" />
 
     <TextView
@@ -111,10 +106,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/post_title"
-        android:clickable="true"
         android:linksClickable="true"
         android:autoLink="all"
-        android:focusable="true"
         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Purus viverra accumsan in nisl nisi. Integer quis auctor elit sed vulputate mi sit amet mauris. Convallis aenean et tortor at risus viverra adipiscing at. Neque viverra justo nec ultrices dui sapien eget mi." />
 
     <HorizontalScrollView
@@ -153,8 +146,6 @@
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:clickable="true"
-        android:focusable="true"
         android:textAlignment="textStart"
         android:textColor="@color/Link"
         app:layout_constraintStart_toStartOf="parent"
@@ -167,9 +158,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:clickable="true"
         android:contentDescription="@string/bookmark_post"
-        android:focusable="true"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider3"

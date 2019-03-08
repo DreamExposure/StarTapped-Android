@@ -69,7 +69,6 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
     private boolean isGenerating = false;
     private boolean isRefreshing = false;
     public boolean stopRequesting = false;
-    private boolean scrollUp = false;
     public boolean clear = false;
 
     //Search stuffs
@@ -99,8 +98,6 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         scrollView.getViewTreeObserver().addOnScrollChangedListener(this::scrollChangeHandler);
 
         index = new TimeIndex();
-
-        scrollUp = true;
 
         boolean search = false;
         Bundle b = getIntent().getExtras();
@@ -255,9 +252,6 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
                     }
                 }
 
-                if (scrollUp)
-                    scrollView.post(() -> scrollView.smoothScrollTo(0, 0));
-
             } else {
                 //Hit the epoch.
                 if (status.getCode() == 417) {
@@ -272,7 +266,6 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
             Toast.makeText(this, R.string.error_bad_return, Toast.LENGTH_LONG).show();
         }
         isGenerating = false;
-        scrollUp = false;
         clear = false;
 
         if (isRefreshing) {
@@ -304,8 +297,6 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
                 stopRequesting = false;
 
                 index = new TimeIndex();
-
-                scrollUp = true;
 
                 getPosts();
             } else {

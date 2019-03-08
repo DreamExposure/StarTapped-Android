@@ -55,10 +55,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reblog_icon"
-        android:clickable="true"
         android:linksClickable="true"
         android:autoLink="all"
-        android:focusable="true"
         tools:text="Post Title" />
 
     <TextView
@@ -69,8 +67,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:autoLink="all"
-        android:clickable="true"
-        android:focusable="true"
         android:linksClickable="true"
         android:textAlignment="textStart"
         android:textColor="@color/Dark"
@@ -117,8 +113,6 @@
         android:layout_height="30dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:clickable="true"
-        android:focusable="true"
         android:textAlignment="textStart"
         android:textColor="@color/Link"
         app:layout_constraintStart_toStartOf="parent"
@@ -131,9 +125,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
-        android:clickable="true"
         android:contentDescription="@string/bookmark_post"
-        android:focusable="true"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider3"

@@ -79,7 +79,6 @@ public class HubActivity extends AppCompatActivity implements NavigationView.OnN
     private boolean isGenerating = false;
     private boolean isRefreshing = false;
     private boolean stopRequesting = false;
-    private boolean scrollUp = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +108,6 @@ public class HubActivity extends AppCompatActivity implements NavigationView.OnN
         doPermissionsCheck();
 
         index = new TimeIndex();
-
-        scrollUp = true;
 
         getPosts();
     }
@@ -235,9 +232,6 @@ public class HubActivity extends AppCompatActivity implements NavigationView.OnN
                     }
                 }
 
-                if (scrollUp)
-                    scrollView.post(() -> scrollView.smoothScrollTo(0, 0));
-
             } else {
                 //Hit the epoch.
                 if (status.getCode() == 417) {
@@ -252,8 +246,6 @@ public class HubActivity extends AppCompatActivity implements NavigationView.OnN
             Toast.makeText(this, R.string.error_bad_return, Toast.LENGTH_LONG).show();
         }
         isGenerating = false;
-        scrollUp = false;
-
         if (isRefreshing) {
             isRefreshing = false;
             swipeRefreshLayout.setRefreshing(false);
@@ -276,8 +268,6 @@ public class HubActivity extends AppCompatActivity implements NavigationView.OnN
             stopRequesting = false;
 
             index = new TimeIndex();
-
-            scrollUp = true;
 
             getPosts();
         }

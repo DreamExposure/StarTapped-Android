@@ -81,7 +81,6 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
     private boolean isGenerating = false;
     private boolean isRefreshing = false;
     private boolean stopRequesting = false;
-    private boolean scrollUp = false;
 
     private boolean blockOn = false;
 
@@ -103,8 +102,6 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
         scrollView.getViewTreeObserver().addOnScrollChangedListener(this::scrollChangeHandler);
 
         index = new TimeIndex();
-
-        scrollUp = true;
 
         //Get blog...
         new GetBlogViewTask(this, blogId).execute();
@@ -366,9 +363,6 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
                     }
                 }
 
-                if (scrollUp)
-                    scrollView.post(() -> scrollView.smoothScrollTo(0, 0));
-
             } else {
                 //Hit the epoch.
                 if (status.getCode() == 417) {
@@ -383,7 +377,6 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
         }
 
         isGenerating = false;
-        scrollUp = false;
 
         if (isRefreshing) {
             isRefreshing = false;
@@ -406,7 +399,6 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
             isRefreshing = true;
             stopRequesting = false;
             index = new TimeIndex();
-            scrollUp = true;
             getPosts();
         }
     }
