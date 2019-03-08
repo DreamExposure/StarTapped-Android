@@ -92,6 +92,7 @@ public class SearchActivity extends AppCompatActivity implements NavigationView.
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_search);
 
         //Scroll view setup
         swipeRefreshLayout.setOnRefreshListener(this::onRefresh);

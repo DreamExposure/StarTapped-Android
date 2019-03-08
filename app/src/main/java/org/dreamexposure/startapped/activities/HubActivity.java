@@ -99,6 +99,7 @@ public class HubActivity extends AppCompatActivity implements NavigationView.OnN
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_hub);
 
         //Scroll view setup
         swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
@@ -110,6 +111,14 @@ public class HubActivity extends AppCompatActivity implements NavigationView.OnN
         index = new TimeIndex();
 
         getPosts();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Re-sync drawer...
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(R.id.nav_hub);
     }
 
     private void doPermissionsCheck() {

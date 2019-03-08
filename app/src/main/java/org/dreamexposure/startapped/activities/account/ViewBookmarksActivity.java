@@ -78,6 +78,7 @@ public class ViewBookmarksActivity extends AppCompatActivity implements Navigati
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_bookmarks);
 
         //Scroll view setup
         swipeRefreshLayout.setOnRefreshListener(this::onRefresh);

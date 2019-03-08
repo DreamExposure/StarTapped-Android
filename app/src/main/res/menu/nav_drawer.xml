@@ -18,21 +18,27 @@
             android:title="@string/menu_explore" />
     </group>
 
-    <item android:title="@string/settings_account">
+    <item
+        android:title="@string/settings_account"
+        android:checkable="false">
         <menu>
             <item
+                android:checkable="true"
                 android:id="@+id/nav_blogs"
                 android:icon="@drawable/baseline_list_24"
                 android:title="@string/menu_blogs" />
             <item
+                android:checkable="true"
                 android:id="@+id/nav_following"
                 android:icon="@drawable/baseline_forward_24"
                 android:title="@string/menu_following" />
             <item
+                android:checkable="true"
                 android:id="@+id/nav_bookmarks"
                 android:icon="@drawable/ic_bookmark"
                 android:title="@string/menu_bookmarks" />
             <item
+                android:checkable="true"
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_menu_send"
                 android:title="@string/menu_settings" />

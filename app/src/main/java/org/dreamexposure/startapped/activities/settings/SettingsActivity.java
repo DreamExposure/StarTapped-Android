@@ -54,6 +54,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_settings);
 
         //Setup toolbar
         toolbar.setTitle("Settings");

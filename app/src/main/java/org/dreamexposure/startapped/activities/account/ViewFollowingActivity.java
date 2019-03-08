@@ -60,6 +60,7 @@ public class ViewFollowingActivity extends AppCompatActivity implements Navigati
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_following);
 
 
         //Everything else

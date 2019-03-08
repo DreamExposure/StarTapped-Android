@@ -68,6 +68,7 @@ public class BlogListSelfActivity extends AppCompatActivity implements Navigatio
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_blogs);
 
         //Load blogs...
         new GetBlogsSelfTask(this).execute();
