@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/NoActionBarTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.account.ViewBookmarksActivity"></activity>
+        <activity android:name=".activities.account.ViewBookmarksActivity" />
         <!-- Splash Activity -->
         <activity
             android:name=".activities.SplashActivity"
@@ -30,13 +30,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Authorization Activities -->
+        </activity>
+        <!-- Authorization Activities -->
         <activity
             android:name=".activities.auth.LoginActivity"
             android:theme="@style/NoActionBarTheme" />
         <activity
             android:name=".activities.auth.RegisterActivity"
-            android:theme="@style/NoActionBarTheme" /> <!-- Top Level Activities -->
+            android:theme="@style/NoActionBarTheme" />
+        <!-- Top Level Activities -->
         <activity
             android:name=".activities.HubActivity"
             android:label="@string/title_activity_hub_rewrite"
@@ -51,13 +53,16 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
-        </activity> <!-- Settings Activities -->
+        </activity>
+        <!-- Settings Activities -->
         <activity android:name=".activities.settings.SettingsActivity" />
-        <activity android:name=".activities.settings.AccountSettingsActivity" /> <!-- Account Related Activities -->
+        <activity android:name=".activities.settings.AccountSettingsActivity" />
+        <!-- Account Related Activities -->
         <activity android:name=".activities.blog.self.BlogListSelfActivity" />
         <activity android:name=".activities.blog.self.BlogEditActivity" />
         <activity android:name=".activities.blog.self.BlogCreateActivity" />
-        <activity android:name=".activities.account.ViewFollowingActivity" /> <!-- Various Other Activities -->
+        <activity android:name=".activities.account.ViewFollowingActivity" />
+        <!-- Various Other Activities -->
         <activity android:name=".activities.blog.ViewBlogActivity" />
     </application>
 
