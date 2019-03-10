@@ -2,6 +2,7 @@ package org.dreamexposure.startapped.activities.auth;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -43,6 +44,8 @@ public class RegisterActivity extends AppCompatActivity implements TaskCallback 
 
     private int year, month, day;
 
+    private ProgressDialog progress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +58,11 @@ public class RegisterActivity extends AppCompatActivity implements TaskCallback 
         month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
         showDate(year, month + 1, day);
+
+        progress = new ProgressDialog(this);
+        progress.setTitle("Creating Account");
+        progress.setMessage("Please wait while we create your account...");
+        progress.setCancelable(false);
     }
 
     @OnClick(R.id.signInButton)
@@ -76,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity implements TaskCallback 
                     Log.d(StarTappedApp.TAG, "onSuccess");
 
                     if (!response.getTokenResult().isEmpty()) {
-                        //TODO: Show loading animation....
+                        progress.show();
 
 
                         String user = signUpUsername.getText().toString();
@@ -134,6 +142,7 @@ public class RegisterActivity extends AppCompatActivity implements TaskCallback 
     @Override
     public void taskCallback(NetworkCallStatus status) {
         if (status.getType() == TaskType.AUTH_REGISTER) {
+            progress.dismiss();
             if (status.isSuccess()) {
                 Intent intent = new Intent(this, HubActivity.class);
                 startActivity(intent);

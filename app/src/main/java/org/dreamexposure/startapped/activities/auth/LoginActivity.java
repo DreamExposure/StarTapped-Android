@@ -1,5 +1,6 @@
 package org.dreamexposure.startapped.activities.auth;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -38,12 +39,18 @@ public class LoginActivity extends AppCompatActivity implements TaskCallback {
     @BindView(R.id.signUpButton)
     Button signUpButton;
 
+    ProgressDialog progress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        progress = new ProgressDialog(this);
+        progress.setTitle("Signing In");
+        progress.setMessage("Please wait while we sign you in...");
+        progress.setCancelable(false);
     }
 
     @OnClick(R.id.signUpButton)
@@ -65,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallback {
                     Log.d(StarTappedApp.TAG, "onSuccess");
 
                     if (!response.getTokenResult().isEmpty()) {
-                        //TODO: Show loading animation....
+                        progress.show();
 
 
                         String email = signInEmail.getText().toString();
@@ -92,6 +99,7 @@ public class LoginActivity extends AppCompatActivity implements TaskCallback {
     @Override
     public void taskCallback(NetworkCallStatus status) {
         if (status.getType() == TaskType.AUTH_LOGIN) {
+            progress.dismiss();
             if (status.isSuccess()) {
                 Intent intent = new Intent(this, HubActivity.class);
                 startActivity(intent);

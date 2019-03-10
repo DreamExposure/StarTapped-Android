@@ -2,6 +2,7 @@ package org.dreamexposure.startapped.dialogs.post;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -97,6 +98,8 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
 
     private ArrayList<String> tags = new ArrayList<>();
 
+    ProgressDialog dialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,6 +159,12 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
         videoContainer.makeGone();
         audioContainer.makeGone();
 
+        //Create the dialog...
+        dialog = new ProgressDialog(this.getContext());
+        dialog.setTitle("Uploading");
+        dialog.setMessage("Please wait while your post uploads...");
+        dialog.setCancelable(false);
+
         return mainView;
     }
 
@@ -196,10 +205,10 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
             try {
                 if (postType == PostType.IMAGE || postType == PostType.AUDIO || postType == PostType.VIDEO) {
                     new PostCreateTask(this, post, ImageUtils.fileToBase64(new File(filePath))).execute();
-                    //TODO: Show loading animation...
+                    dialog.show();
                 } else {
                     new PostCreateTask(this, post).execute();
-                    //TODO: Show loading animation...
+                    dialog.show();
                 }
             } catch (Exception e) {
                 Log.e(StarTappedApp.TAG, "Failed to handle post create", e);
@@ -220,6 +229,7 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
                     setupBlogSelection(status);
                 break;
             case POST_CREATE:
+                dialog.dismiss();
                 if (status.isSuccess()) {
                     Toast.makeText(mainView.getContext(), status.getMessage(), Toast.LENGTH_SHORT).show();
                     dismiss();
