@@ -2,6 +2,7 @@ package org.dreamexposure.startapped.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -301,8 +302,15 @@ public class PostViewUtils {
                 intent.putExtras(b);
                 activity.startActivity(intent);
             });
+
+            if (post.isBookmarked())
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Primary)));
+            else
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Dark)));
+
             bookmarkPost.setOnClickListener(view1 -> {
                 if (post.isBookmarked()) {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Dark)));
                     //Remove bookmark...
                     new RemoveBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -310,6 +318,7 @@ public class PostViewUtils {
                         Toast.makeText(activity, status.getMessage(), Toast.LENGTH_SHORT).show();
                     }, post.getId()).execute();
                 } else {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Primary)));
                     //Add bookmark...
                     new AddBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -414,8 +423,15 @@ public class PostViewUtils {
                 intent.putExtras(b);
                 fragment.startActivity(intent);
             });
+
+            if (post.isBookmarked())
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Primary)));
+            else
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Dark)));
+
             bookmarkPost.setOnClickListener(view1 -> {
                 if (post.isBookmarked()) {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Dark)));
                     //Remove bookmark...
                     new RemoveBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -423,6 +439,7 @@ public class PostViewUtils {
                         Toast.makeText(fragment, status.getMessage(), Toast.LENGTH_SHORT).show();
                     }, post.getId()).execute();
                 } else {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Primary)));
                     //Add bookmark...
                     new AddBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -543,8 +560,15 @@ public class PostViewUtils {
                 intent.putExtras(b);
                 activity.startActivity(intent);
             });
+
+            if (post.isBookmarked())
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Primary)));
+            else
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Dark)));
+
             bookmarkPost.setOnClickListener(view1 -> {
                 if (post.isBookmarked()) {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Dark)));
                     //Remove bookmark...
                     new RemoveBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -552,6 +576,7 @@ public class PostViewUtils {
                         Toast.makeText(activity, status.getMessage(), Toast.LENGTH_SHORT).show();
                     }, post.getId()).execute();
                 } else {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Primary)));
                     //Add bookmark...
                     new AddBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -661,8 +686,15 @@ public class PostViewUtils {
                 intent.putExtras(b);
                 fragment.startActivity(intent);
             });
+
+            if (post.isBookmarked())
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Primary)));
+            else
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Dark)));
+
             bookmarkPost.setOnClickListener(view1 -> {
                 if (post.isBookmarked()) {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Dark)));
                     //Remove bookmark...
                     new RemoveBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -670,6 +702,7 @@ public class PostViewUtils {
                         Toast.makeText(fragment, status.getMessage(), Toast.LENGTH_SHORT).show();
                     }, post.getId()).execute();
                 } else {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Primary)));
                     //Add bookmark...
                     new AddBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -790,8 +823,15 @@ public class PostViewUtils {
                 intent.putExtras(b);
                 activity.startActivity(intent);
             });
+
+            if (post.isBookmarked())
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Primary)));
+            else
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Dark)));
+
             bookmarkPost.setOnClickListener(view1 -> {
                 if (post.isBookmarked()) {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Dark)));
                     //Remove bookmark...
                     new RemoveBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -799,6 +839,7 @@ public class PostViewUtils {
                         Toast.makeText(activity, status.getMessage(), Toast.LENGTH_SHORT).show();
                     }, post.getId()).execute();
                 } else {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Primary)));
                     //Add bookmark...
                     new AddBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -908,8 +949,15 @@ public class PostViewUtils {
                 intent.putExtras(b);
                 fragment.startActivity(intent);
             });
+
+            if (post.isBookmarked())
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Primary)));
+            else
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Dark)));
+
             bookmarkPost.setOnClickListener(view1 -> {
                 if (post.isBookmarked()) {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Dark)));
                     //Remove bookmark...
                     new RemoveBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -917,6 +965,7 @@ public class PostViewUtils {
                         Toast.makeText(fragment, status.getMessage(), Toast.LENGTH_SHORT).show();
                     }, post.getId()).execute();
                 } else {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Primary)));
                     //Add bookmark...
                     new AddBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -1037,8 +1086,15 @@ public class PostViewUtils {
                 intent.putExtras(b);
                 activity.startActivity(intent);
             });
+
+            if (post.isBookmarked())
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Primary)));
+            else
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Dark)));
+
             bookmarkPost.setOnClickListener(view1 -> {
                 if (post.isBookmarked()) {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Dark)));
                     //Remove bookmark...
                     new RemoveBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -1046,6 +1102,7 @@ public class PostViewUtils {
                         Toast.makeText(activity, status.getMessage(), Toast.LENGTH_SHORT).show();
                     }, post.getId()).execute();
                 } else {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(activity.getResources().getColor(R.color.Primary)));
                     //Add bookmark...
                     new AddBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -1154,8 +1211,15 @@ public class PostViewUtils {
                 intent.putExtras(b);
                 fragment.getApplicationContext().startActivity(intent);
             });
+
+            if (post.isBookmarked())
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Primary)));
+            else
+                bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Dark)));
+
             bookmarkPost.setOnClickListener(view1 -> {
                 if (post.isBookmarked()) {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Dark)));
                     //Remove bookmark...
                     new RemoveBookmarkTask(status -> {
                         if (status.isSuccess())
@@ -1163,6 +1227,7 @@ public class PostViewUtils {
                         Toast.makeText(fragment, status.getMessage(), Toast.LENGTH_SHORT).show();
                     }, post.getId()).execute();
                 } else {
+                    bookmarkPost.setImageTintList(ColorStateList.valueOf(fragment.getResources().getColor(R.color.Primary)));
                     //Add bookmark...
                     new AddBookmarkTask(status -> {
                         if (status.isSuccess())
