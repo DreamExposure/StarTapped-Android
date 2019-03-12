@@ -40,6 +40,18 @@
         app:layout_constraintTop_toTopOf="@+id/blog_url_latest"
         app:srcCompat="@drawable/ic_reblog" />
 
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/blog_url_latest" />
+
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/post_image"
         android:layout_width="0dp"
@@ -50,7 +62,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/blog_url_latest"
+        app:layout_constraintTop_toBottomOf="@+id/divider4"
         tools:src="@tools:sample/backgrounds/scenic[17]"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
@@ -155,5 +167,12 @@
         app:layout_constraintEnd_toStartOf="@+id/bookmark_post"
         app:layout_constraintTop_toBottomOf="@+id/divider3"
         app:srcCompat="@drawable/ic_reblog" />
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reblog_post" />
 
 </android.support.constraint.ConstraintLayout>

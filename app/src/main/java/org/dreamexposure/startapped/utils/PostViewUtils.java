@@ -95,12 +95,14 @@ public class PostViewUtils {
             TextView blogUrlLatest = first.findViewById(R.id.blog_url_latest);
             TextView blogUrlSecond = first.findViewById(R.id.blog_url_second);
             ImageView reblogIcon = first.findViewById(R.id.reblog_icon);
+            View divider = first.findViewById(R.id.divider4);
 
             blogUrlLatest.setText(lowest.getOriginBlog().getBaseUrl());
             blogUrlSecond.setText(postsInOrder.get(0).getOriginBlog().getBaseUrl());
             blogUrlLatest.setVisibility(View.VISIBLE);
             blogUrlSecond.setVisibility(View.VISIBLE);
             reblogIcon.setVisibility(View.VISIBLE);
+            divider.setVisibility(View.VISIBLE);
 
             //Set handlers for url click...
             blogUrlLatest.setOnClickListener(v -> {
@@ -175,12 +177,14 @@ public class PostViewUtils {
             TextView blogUrlLatest = first.findViewById(R.id.blog_url_latest);
             TextView blogUrlSecond = first.findViewById(R.id.blog_url_second);
             ImageView reblogIcon = first.findViewById(R.id.reblog_icon);
+            View divider = first.findViewById(R.id.divider4);
 
             blogUrlLatest.setText(lowest.getOriginBlog().getBaseUrl());
             blogUrlSecond.setText(postsInOrder.get(0).getOriginBlog().getBaseUrl());
             blogUrlLatest.setVisibility(View.VISIBLE);
             blogUrlSecond.setVisibility(View.VISIBLE);
             reblogIcon.setVisibility(View.VISIBLE);
+            divider.setVisibility(View.VISIBLE);
 
             //Set handlers for url click...
             blogUrlLatest.setOnClickListener(v -> {
@@ -211,6 +215,7 @@ public class PostViewUtils {
         TextView blogUrlLatest = view.findViewById(R.id.blog_url_latest);
         TextView blogUrlSecond = view.findViewById(R.id.blog_url_second);
         ImageView reblogIcon = view.findViewById(R.id.reblog_icon);
+        View divider = view.findViewById(R.id.divider4);
 
         TextView postTitle = view.findViewById(R.id.post_title);
         TextView postText = view.findViewById(R.id.post_text);
@@ -265,6 +270,7 @@ public class PostViewUtils {
             blogUrlLatest.setVisibility(View.GONE);
             blogUrlSecond.setVisibility(View.GONE);
             reblogIcon.setVisibility(View.GONE);
+            divider.setVisibility(View.GONE);
         }
         if (!showBottomBar) {
             source.setVisibility(View.GONE);
@@ -342,6 +348,7 @@ public class PostViewUtils {
         TextView blogUrlLatest = view.findViewById(R.id.blog_url_latest);
         TextView blogUrlSecond = view.findViewById(R.id.blog_url_second);
         ImageView reblogIcon = view.findViewById(R.id.reblog_icon);
+        View divider = view.findViewById(R.id.divider4);
 
         TextView postTitle = view.findViewById(R.id.post_title);
         TextView postText = view.findViewById(R.id.post_text);
@@ -386,6 +393,7 @@ public class PostViewUtils {
             blogUrlLatest.setVisibility(View.GONE);
             blogUrlSecond.setVisibility(View.GONE);
             reblogIcon.setVisibility(View.GONE);
+            divider.setVisibility(View.GONE);
         }
         if (!showBottomBar) {
             source.setVisibility(View.GONE);
@@ -465,6 +473,7 @@ public class PostViewUtils {
         TextView blogUrlLatest = view.findViewById(R.id.blog_url_latest);
         TextView blogUrlSecond = view.findViewById(R.id.blog_url_second);
         ImageView reblogIcon = view.findViewById(R.id.reblog_icon);
+        View divider = view.findViewById(R.id.divider4);
 
         GifImageView postImage = view.findViewById(R.id.post_image);
         ImageContainer imageContainer = new ImageContainer(postImage, activity.getSupportFragmentManager(), true);
@@ -524,6 +533,7 @@ public class PostViewUtils {
             blogUrlLatest.setVisibility(View.GONE);
             blogUrlSecond.setVisibility(View.GONE);
             reblogIcon.setVisibility(View.GONE);
+            divider.setVisibility(View.GONE);
         }
         if (!showBottomBar) {
             source.setVisibility(View.GONE);
@@ -601,6 +611,7 @@ public class PostViewUtils {
         TextView blogUrlLatest = view.findViewById(R.id.blog_url_latest);
         TextView blogUrlSecond = view.findViewById(R.id.blog_url_second);
         ImageView reblogIcon = view.findViewById(R.id.reblog_icon);
+        View divider = view.findViewById(R.id.divider4);
 
         GifImageView postImage = view.findViewById(R.id.post_image);
         ImageContainer imageContainer = new ImageContainer(postImage, fragment.getSupportFragmentManager(), true);
@@ -650,6 +661,7 @@ public class PostViewUtils {
             blogUrlLatest.setVisibility(View.GONE);
             blogUrlSecond.setVisibility(View.GONE);
             reblogIcon.setVisibility(View.GONE);
+            divider.setVisibility(View.GONE);
         }
         if (!showBottomBar) {
             source.setVisibility(View.GONE);
@@ -728,6 +740,7 @@ public class PostViewUtils {
         TextView blogUrlLatest = view.findViewById(R.id.blog_url_latest);
         TextView blogUrlSecond = view.findViewById(R.id.blog_url_second);
         ImageView reblogIcon = view.findViewById(R.id.reblog_icon);
+        View divider = view.findViewById(R.id.divider4);
 
         AudioContainer container = new AudioContainer(view, activity);
 
@@ -787,6 +800,7 @@ public class PostViewUtils {
             blogUrlLatest.setVisibility(View.GONE);
             blogUrlSecond.setVisibility(View.GONE);
             reblogIcon.setVisibility(View.GONE);
+            divider.setVisibility(View.GONE);
         }
         if (!showBottomBar) {
             source.setVisibility(View.GONE);
@@ -864,6 +878,7 @@ public class PostViewUtils {
         TextView blogUrlLatest = view.findViewById(R.id.blog_url_latest);
         TextView blogUrlSecond = view.findViewById(R.id.blog_url_second);
         ImageView reblogIcon = view.findViewById(R.id.reblog_icon);
+        View divider = view.findViewById(R.id.divider4);
 
         AudioContainer container = new AudioContainer(view, fragment);
 
@@ -913,6 +928,7 @@ public class PostViewUtils {
             blogUrlLatest.setVisibility(View.GONE);
             blogUrlSecond.setVisibility(View.GONE);
             reblogIcon.setVisibility(View.GONE);
+            divider.setVisibility(View.GONE);
         }
         if (!showBottomBar) {
             source.setVisibility(View.GONE);
@@ -991,6 +1007,7 @@ public class PostViewUtils {
         TextView blogUrlLatest = view.findViewById(R.id.blog_url_latest);
         TextView blogUrlSecond = view.findViewById(R.id.blog_url_second);
         ImageView reblogIcon = view.findViewById(R.id.reblog_icon);
+        View divider = view.findViewById(R.id.divider4);
 
         VideoContainer container = new VideoContainer(view);
 
@@ -1050,6 +1067,7 @@ public class PostViewUtils {
             blogUrlLatest.setVisibility(View.GONE);
             blogUrlSecond.setVisibility(View.GONE);
             reblogIcon.setVisibility(View.GONE);
+            divider.setVisibility(View.GONE);
         }
         if (!showBottomBar) {
             source.setVisibility(View.GONE);
@@ -1127,6 +1145,7 @@ public class PostViewUtils {
         TextView blogUrlLatest = view.findViewById(R.id.blog_url_latest);
         TextView blogUrlSecond = view.findViewById(R.id.blog_url_second);
         ImageView reblogIcon = view.findViewById(R.id.reblog_icon);
+        View divider = view.findViewById(R.id.divider4);
 
         VideoContainer container = new VideoContainer(view);
 
@@ -1176,6 +1195,7 @@ public class PostViewUtils {
             blogUrlLatest.setVisibility(View.GONE);
             blogUrlSecond.setVisibility(View.GONE);
             reblogIcon.setVisibility(View.GONE);
+            divider.setVisibility(View.GONE);
         }
         if (!showBottomBar) {
             source.setVisibility(View.GONE);
