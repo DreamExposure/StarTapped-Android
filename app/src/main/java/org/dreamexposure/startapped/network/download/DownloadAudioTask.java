@@ -20,7 +20,7 @@ public class DownloadAudioTask extends AsyncTask<Object, Void, Boolean> {
         try {
             audioPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             audioPlayer.setDataSource(url);
-            audioPlayer.prepare();
+            audioPlayer.prepareAsync();
             return true;
         } catch (Exception ignore) {
         }

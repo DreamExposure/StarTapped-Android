@@ -30,6 +30,7 @@ public class AudioContainer {
 
     private boolean muted = false;
     private boolean autoPlay = false;
+    private boolean prepared = false;
 
     private Handler handler = new Handler();
     private AppCompatActivity activity;
@@ -194,7 +195,7 @@ public class AudioContainer {
 
     //Functions
     private void onAudioPlayButtonClick() {
-        if (audioPlayer != null) {
+        if (audioPlayer != null && prepared) {
             if (audioPlayer.isPlaying()) {
                 playPauseAudioButton.setBackground(StarTappedApp.getContext().getResources().getDrawable(R.drawable.baseline_pause_24));
 
@@ -210,20 +211,23 @@ public class AudioContainer {
     }
 
     private void onAudioMuteButtonClick() {
-        if (muted) {
-            muted = false;
-            muteUnmuteAudioButton.setBackground(StarTappedApp.getContext().getResources().getDrawable(R.drawable.baseline_volume_up_24));
+        if (prepared) {
+            if (muted) {
+                muted = false;
+                muteUnmuteAudioButton.setBackground(StarTappedApp.getContext().getResources().getDrawable(R.drawable.baseline_volume_up_24));
 
-            audioPlayer.setVolume(1, 1);
-        } else {
-            muted = true;
-            muteUnmuteAudioButton.setBackground(StarTappedApp.getContext().getResources().getDrawable(R.drawable.baseline_volume_off_24));
+                audioPlayer.setVolume(1, 1);
+            } else {
+                muted = true;
+                muteUnmuteAudioButton.setBackground(StarTappedApp.getContext().getResources().getDrawable(R.drawable.baseline_volume_off_24));
 
-            audioPlayer.setVolume(0, 0);
+                audioPlayer.setVolume(0, 0);
+            }
         }
     }
 
     private void onAudioPrepared() {
+        prepared = true;
         //TODO: Hide loading icon...
 
         audioProgressBar.setMax(audioPlayer.getDuration() / 1000);

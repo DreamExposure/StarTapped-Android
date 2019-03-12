@@ -37,7 +37,7 @@ public class LoadAudioFromFileTask extends AsyncTask<String, Void, Boolean>
                         audioPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                         Uri uri = Uri.parse(audioPath);
                         audioPlayer.setDataSource(StarTappedApp.getInstance().getApplicationContext(), uri);
-                        audioPlayer.prepare();
+                        audioPlayer.prepareAsync();
                         return true;
                     } catch (Exception e) {
                         Log.e(StarTappedApp.TAG, "Failed to load audio", e);
