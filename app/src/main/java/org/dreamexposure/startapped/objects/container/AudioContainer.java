@@ -2,14 +2,15 @@ package org.dreamexposure.startapped.objects.container;
 
 import android.media.MediaPlayer;
 import android.os.Handler;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentActivity;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.StarTappedApp;

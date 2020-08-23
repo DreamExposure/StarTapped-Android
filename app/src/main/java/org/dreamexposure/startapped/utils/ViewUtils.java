@@ -1,10 +1,11 @@
 package org.dreamexposure.startapped.utils;
 
 import android.annotation.SuppressLint;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import org.dreamexposure.startapped.R;
 

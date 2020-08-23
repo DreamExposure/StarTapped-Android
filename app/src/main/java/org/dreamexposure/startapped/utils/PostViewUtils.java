@@ -4,9 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.felipecsl.gifimageview.library.GifImageView;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.activities.SearchActivity;
@@ -475,7 +474,7 @@ public class PostViewUtils {
         ImageView reblogIcon = view.findViewById(R.id.reblog_icon);
         View divider = view.findViewById(R.id.divider4);
 
-        GifImageView postImage = view.findViewById(R.id.post_image);
+        ImageView postImage = view.findViewById(R.id.post_image);
         ImageContainer imageContainer = new ImageContainer(postImage, activity.getSupportFragmentManager(), true);
 
         TextView postTitle = view.findViewById(R.id.post_title);
@@ -613,7 +612,7 @@ public class PostViewUtils {
         ImageView reblogIcon = view.findViewById(R.id.reblog_icon);
         View divider = view.findViewById(R.id.divider4);
 
-        GifImageView postImage = view.findViewById(R.id.post_image);
+        ImageView postImage = view.findViewById(R.id.post_image);
         ImageContainer imageContainer = new ImageContainer(postImage, fragment.getSupportFragmentManager(), true);
 
         TextView postTitle = view.findViewById(R.id.post_title);

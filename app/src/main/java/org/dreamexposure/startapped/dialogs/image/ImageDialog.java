@@ -2,17 +2,19 @@ package org.dreamexposure.startapped.dialogs.image;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
-import com.felipecsl.gifimageview.library.GifImageView;
+import androidx.fragment.app.DialogFragment;
+
+import com.bumptech.glide.Glide;
 
 import org.dreamexposure.startapped.R;
-import org.dreamexposure.startapped.async.load.LoadImageFromFileTask;
-import org.dreamexposure.startapped.network.download.DownloadImageTask;
+
+import java.io.File;
 
 /**
  * @author NovaFox161
@@ -29,7 +31,7 @@ public class ImageDialog extends DialogFragment {
     String filePath;
     String fileUrl;
 
-    GifImageView imageView;
+    ImageView imageView;
 
 
     @Override
@@ -60,9 +62,9 @@ public class ImageDialog extends DialogFragment {
         imageView = mainView.findViewById(R.id.dialog_image);
 
         if (filePath != null)
-            new LoadImageFromFileTask(imageView).execute(filePath);
+            Glide.with(mainView).load(new File(filePath)).into(imageView);
         else if (fileUrl != null)
-            new DownloadImageTask(imageView).execute(fileUrl);
+            Glide.with(mainView).load(fileUrl).into(imageView);
 
         return mainView;
     }

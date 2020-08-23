@@ -4,21 +4,23 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.felipecsl.gifimageview.library.GifImageView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.bumptech.glide.Glide;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.StarTappedApp;
@@ -26,7 +28,6 @@ import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.enums.blog.BlogType;
 import org.dreamexposure.startapped.network.account.blog.GetAccountForBlogViewTask;
 import org.dreamexposure.startapped.network.blog.view.GetBlogViewTask;
-import org.dreamexposure.startapped.network.download.DownloadImageTask;
 import org.dreamexposure.startapped.network.post.GetPostsForBlogTask;
 import org.dreamexposure.startapped.network.relation.FollowBlogTask;
 import org.dreamexposure.startapped.network.relation.UnfollowBlogTask;
@@ -165,8 +166,8 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
                     View view = LayoutInflater.from(this).inflate(R.layout.view_blog_container, null);
                     view.setBackgroundColor(Color.parseColor(blog.getBackgroundColor()));
                     parentLayout.setBackgroundColor(Color.parseColor(blog.getBackgroundColor()));
-                    GifImageView background = view.findViewById(R.id.blog_background_image);
-                    GifImageView icon = view.findViewById(R.id.blog_icon_image);
+                    ImageView background = view.findViewById(R.id.blog_background_image);
+                    ImageView icon = view.findViewById(R.id.blog_icon_image);
                     TextView url = view.findViewById(R.id.blog_url);
                     TextView title = view.findViewById(R.id.blog_title);
                     TextView desc = view.findViewById(R.id.blog_description);
@@ -191,8 +192,8 @@ public class ViewBlogActivity extends AppCompatActivity implements TaskCallback 
                         adultOnlyBadge.setVisibility(View.VISIBLE);
 
                     //Download images
-                    new DownloadImageTask(background).execute(blog.getBackgroundImage().getUrl());
-                    new DownloadImageTask(icon).execute(blog.getIconImage().getUrl());
+                    Glide.with(view).load(blog.getBackgroundImage().getUrl()).into(background);
+                    Glide.with(view).load(blog.getIconImage().getUrl()).into(icon);
 
                     if (blog.getType() == BlogType.PERSONAL) {
                         PersonalBlog pBlog = new PersonalBlog().fromJson(status.getBody().getJSONObject("blog"));

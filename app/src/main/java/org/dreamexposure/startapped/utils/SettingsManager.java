@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 /**
@@ -56,7 +57,7 @@ public class SettingsManager {
             try {
                 InputStream is = StarTappedApp.getContext().openFileInput(FILENAME);
 
-                JSONObject rawSettings = new JSONObject(IOUtils.toString(is, "UTF-8"));
+                JSONObject rawSettings = new JSONObject(IOUtils.toString(is, StandardCharsets.UTF_8));
 
                 settings = new UserSettings(rawSettings);
 

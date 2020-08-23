@@ -6,10 +6,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.AppCompatSpinner;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -20,9 +16,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.felipecsl.gifimageview.library.GifImageView;
+import androidx.appcompat.widget.AppCompatSpinner;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.bumptech.glide.Glide;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.StarTappedApp;
@@ -30,7 +32,6 @@ import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.enums.blog.BlogType;
 import org.dreamexposure.startapped.enums.post.PostType;
 import org.dreamexposure.startapped.network.blog.self.GetBlogsSelfTask;
-import org.dreamexposure.startapped.network.download.DownloadImageTask;
 import org.dreamexposure.startapped.network.post.PostCreateTask;
 import org.dreamexposure.startapped.objects.blog.GroupBlog;
 import org.dreamexposure.startapped.objects.blog.IBlog;
@@ -41,6 +42,7 @@ import org.dreamexposure.startapped.objects.container.VideoContainer;
 import org.dreamexposure.startapped.objects.network.NetworkCallStatus;
 import org.dreamexposure.startapped.objects.post.Post;
 import org.dreamexposure.startapped.utils.ImageUtils;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,10 +74,10 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
     Button actionSelectVideo;
     Button actionAddTags;
 
-    GifImageView blogIcon;
+    ImageView blogIcon;
     AppCompatSpinner blogSelectSpinner;
 
-    GifImageView postImage;
+    ImageView postImage;
     ImageContainer imageContainer;
 
     VideoContainer videoContainer;
@@ -181,7 +183,7 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
+    public void onDismiss(@NotNull DialogInterface dialog) {
         if (videoContainer.getVideoPlayer() != null)
             videoContainer.getVideoPlayer().release();
         if (audioContainer.getAudioPlayer() != null) {
@@ -205,11 +207,10 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
             try {
                 if (postType == PostType.IMAGE || postType == PostType.AUDIO || postType == PostType.VIDEO) {
                     new PostCreateTask(this, post, ImageUtils.fileToBase64(new File(filePath))).execute();
-                    dialog.show();
                 } else {
                     new PostCreateTask(this, post).execute();
-                    dialog.show();
                 }
+                dialog.show();
             } catch (Exception e) {
                 Log.e(StarTappedApp.TAG, "Failed to handle post create", e);
                 Toast.makeText(mainView.getContext(), "Failed to handle post create...", Toast.LENGTH_LONG).show();
@@ -279,7 +280,7 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         if (iCurrentSelection != i) {
                             iCurrentSelection = i;
-                            new DownloadImageTask(blogIcon).execute(blogs.get(iCurrentSelection).getIconImage().getUrl());
+                            Glide.with(mainView).load(blogs.get(iCurrentSelection).getIconImage().getUrl()).into(blogIcon);
                         }
                         iCurrentSelection = i;
                     }
@@ -288,7 +289,7 @@ public class CreatePostDialogFragment extends DialogFragment implements TaskCall
                     }
                 });
 
-                new DownloadImageTask(blogIcon).execute(iconImage);
+                Glide.with(mainView).load(iconImage).into(blogIcon);
             }
         } catch (JSONException ignore) {
         }

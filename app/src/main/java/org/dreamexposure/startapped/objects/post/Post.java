@@ -1,6 +1,6 @@
 package org.dreamexposure.startapped.objects.post;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.dreamexposure.startapped.enums.post.PostType;
 import org.dreamexposure.startapped.objects.blog.Blog;

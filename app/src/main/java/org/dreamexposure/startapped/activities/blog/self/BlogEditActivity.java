@@ -4,26 +4,26 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.felipecsl.gifimageview.library.GifImageView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.bumptech.glide.Glide;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.async.TaskCallback;
-import org.dreamexposure.startapped.async.load.LoadImageFromFileTask;
 import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.enums.blog.BlogType;
 import org.dreamexposure.startapped.network.blog.self.UpdateBlogTask;
 import org.dreamexposure.startapped.network.blog.view.GetBlogViewTask;
-import org.dreamexposure.startapped.network.download.DownloadImageTask;
 import org.dreamexposure.startapped.objects.blog.Blog;
 import org.dreamexposure.startapped.objects.blog.GroupBlog;
 import org.dreamexposure.startapped.objects.blog.IBlog;
@@ -53,9 +53,9 @@ public class BlogEditActivity extends AppCompatActivity implements TaskCallback 
 
     //Get all the android views
     @BindView(R.id.blog_background_image)
-    GifImageView background;
+    ImageView background;
     @BindView(R.id.blog_icon_image)
-    GifImageView icon;
+    ImageView icon;
     @BindView(R.id.blog_url)
     TextView url;
     @BindView(R.id.blog_title)
@@ -148,8 +148,8 @@ public class BlogEditActivity extends AppCompatActivity implements TaskCallback 
                 }
 
                 //Download images
-                new DownloadImageTask(background).execute(iBlog.getBackgroundImage().getUrl());
-                new DownloadImageTask(icon).execute(iBlog.getIconImage().getUrl());
+                Glide.with(this).load(iBlog.getBackgroundImage().getUrl()).into(background);
+                Glide.with(this).load(iBlog.getIconImage().getUrl()).into(icon);
             } else {
                 Toast.makeText(this, status.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -273,7 +273,7 @@ public class BlogEditActivity extends AppCompatActivity implements TaskCallback 
                     }
 
                     //Display image
-                    new LoadImageFromFileTask(background).execute(backgroundImagePath);
+                    Glide.with(this).load(new File(backgroundImagePath)).into(background);
                 }
                 break;
             case ICON_CODE:
@@ -290,7 +290,7 @@ public class BlogEditActivity extends AppCompatActivity implements TaskCallback 
                     }
 
                     //Display image
-                    new LoadImageFromFileTask(icon).execute(iconImagePath);
+                    Glide.with(this).load(new File(iconImagePath)).into(icon);
                 }
                 break;
             default:

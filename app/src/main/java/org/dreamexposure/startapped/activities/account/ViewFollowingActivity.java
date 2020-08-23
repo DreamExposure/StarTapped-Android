@@ -2,21 +2,23 @@ package org.dreamexposure.startapped.activities.account;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.felipecsl.gifimageview.library.GifImageView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.navigation.NavigationView;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.activities.SearchActivity;
@@ -25,7 +27,6 @@ import org.dreamexposure.startapped.activities.blog.self.BlogListSelfActivity;
 import org.dreamexposure.startapped.activities.settings.SettingsActivity;
 import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.enums.TaskType;
-import org.dreamexposure.startapped.network.download.DownloadImageTask;
 import org.dreamexposure.startapped.network.relation.GetFollowingBlogsTask;
 import org.dreamexposure.startapped.objects.blog.Blog;
 import org.dreamexposure.startapped.objects.blog.IBlog;
@@ -127,7 +128,7 @@ public class ViewFollowingActivity extends AppCompatActivity implements Navigati
 
                         View view = LayoutInflater.from(this).inflate(R.layout.following_view_container, null);
                         LinearLayout contentContainer = view.findViewById(R.id.content_container);
-                        GifImageView icon = view.findViewById(R.id.blog_icon_image);
+                        ImageView icon = view.findViewById(R.id.blog_icon_image);
                         TextView url = view.findViewById(R.id.blog_url);
 
                         contentContainer.setOnClickListener(v -> {
@@ -140,7 +141,7 @@ public class ViewFollowingActivity extends AppCompatActivity implements Navigati
 
                         url.setText(blog.getBaseUrl());
 
-                        new DownloadImageTask(icon).execute(blog.getIconImage().getUrl());
+                        Glide.with(view).load(blog.getIconImage().getUrl()).into(icon);
 
                         linearContainer.addView(view);
                     }

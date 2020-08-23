@@ -1,10 +1,11 @@
 package org.dreamexposure.startapped.objects.container;
 
 import android.media.MediaPlayer;
-import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.VideoView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.async.load.LoadVideoFromFileTask;

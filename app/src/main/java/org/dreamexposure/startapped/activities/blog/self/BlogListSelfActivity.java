@@ -4,23 +4,25 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.felipecsl.gifimageview.library.GifImageView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.navigation.NavigationView;
 
 import org.dreamexposure.startapped.R;
 import org.dreamexposure.startapped.activities.SearchActivity;
@@ -32,7 +34,6 @@ import org.dreamexposure.startapped.async.TaskCallback;
 import org.dreamexposure.startapped.enums.TaskType;
 import org.dreamexposure.startapped.enums.blog.BlogType;
 import org.dreamexposure.startapped.network.blog.self.GetBlogsSelfTask;
-import org.dreamexposure.startapped.network.download.DownloadImageTask;
 import org.dreamexposure.startapped.objects.blog.Blog;
 import org.dreamexposure.startapped.objects.blog.IBlog;
 import org.dreamexposure.startapped.objects.blog.PersonalBlog;
@@ -88,8 +89,8 @@ public class BlogListSelfActivity extends AppCompatActivity implements Navigatio
                     //Get all the android views
                     View view = LayoutInflater.from(this).inflate(R.layout.self_blog_container, null);
                     view.setBackgroundColor(Color.parseColor(blog.getBackgroundColor()));
-                    GifImageView background = view.findViewById(R.id.blog_background_image);
-                    GifImageView icon = view.findViewById(R.id.blog_icon_image);
+                    ImageView background = view.findViewById(R.id.blog_background_image);
+                    ImageView icon = view.findViewById(R.id.blog_icon_image);
                     TextView url = view.findViewById(R.id.blog_url);
                     TextView title = view.findViewById(R.id.blog_title);
                     TextView desc = view.findViewById(R.id.blog_description);
@@ -143,8 +144,8 @@ public class BlogListSelfActivity extends AppCompatActivity implements Navigatio
                     });
 
                     //Download images
-                    new DownloadImageTask(background).execute(blog.getBackgroundImage().getUrl());
-                    new DownloadImageTask(icon).execute(blog.getIconImage().getUrl());
+                    Glide.with(view).load(blog.getBackgroundImage().getUrl()).into(background);
+                    Glide.with(view).load(blog.getIconImage().getUrl()).into(icon);
 
                     rootLayout.addView(view);
                 }

@@ -1,19 +1,21 @@
 package org.dreamexposure.startapped.objects.container;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.widget.ImageView;
 
-import com.felipecsl.gifimageview.library.GifImageView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.bumptech.glide.Glide;
 
 import org.dreamexposure.startapped.StarTappedApp;
-import org.dreamexposure.startapped.async.load.LoadImageFromFileTask;
 import org.dreamexposure.startapped.dialogs.image.ImageDialog;
-import org.dreamexposure.startapped.network.download.DownloadImageTask;
+
+import java.io.File;
 
 @SuppressWarnings("unused")
 public class ImageContainer {
-    private GifImageView imageView;
+    private ImageView imageView;
 
     private String fileUrl = null;
     private String filePath = null;
@@ -22,7 +24,7 @@ public class ImageContainer {
 
     private FragmentManager manager;
 
-    public ImageContainer(GifImageView _imageView, FragmentManager _manager, boolean _useDialog) {
+    public ImageContainer(ImageView _imageView, FragmentManager _manager, boolean _useDialog) {
         imageView = _imageView;
 
         manager = _manager;
@@ -37,18 +39,19 @@ public class ImageContainer {
         fileUrl = url;
         filePath = null;
 
-        new DownloadImageTask(imageView).execute(fileUrl);
+        //TODO: May need to get reference to enclosing activity
+        Glide.with(StarTappedApp.getApplication()).load(fileUrl).into(imageView);
     }
 
     public void fromFile(String file) {
         filePath = file;
         fileUrl = null;
 
-        new LoadImageFromFileTask(imageView).execute(filePath);
+        Glide.with(StarTappedApp.getApplication()).load(new File(filePath)).into(imageView);
     }
 
     //Getters
-    public GifImageView getImageView() {
+    public ImageView getImageView() {
         return imageView;
     }
 
